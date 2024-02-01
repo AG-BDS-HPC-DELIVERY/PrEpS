@@ -1,0 +1,353 @@
+= PrEpS (Prolog and Epilog for Slurm)
+
+== About the Project
+
+PrEpS (**Pr**olog and **Ep**ilog for **S**lurm) is a comprehensive but extensible framework for performing Prolog/Epilog execution inside the Slurm workload scheduler.
+
+Slurm Prolog/Epilog Reference:
+https://slurm.schedmd.com/prolog_epilog.html[SchedMD: Prolog / Epilog]
+
+PrEpS is divided into several distinct, complementary packages:
+
+|===
+|Package|Purpose
+
+|CPU Frequency
+|Manage CPU frequency
+
+|Filesystems
+|Manage filesystems
+
+|NVIDIA
+|Manage GPU configuration
+
+|Operating System
+|Manage Operating System components
+
+|Transparent Huge Pages
+|Manage Transparent Huge Pages (THP) configuration
+
+|tuned
+|Manage tuned profiles
+|===
+
+[NOTE]
+====
+PrEpS is capable of handling both execution under `root` account and execution under submitting user account. Second option requires `sudo` to be properly configured in order to allow standard users to perform all necessary actions.
+====
+
+=== Packages
+
+==== CPU Frequency
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Module|Acceptable Values|Purpose
+
+|set_boost
+|`0` +
+`1`
+|Set CPU boost (Intel Turbo Boost / AMD Core Performance Boost)
+
+|set_frequency_min_max
+|`<FREQ_MIN>:<FREQ_MAX>`
+|Set CPU frequency Min./Max.
+
+|set_frequency
+|`<FREQ>`
+|Set CPU frequency
+
+|set_governor
+|`<GOVERNOR>`
+|Set CPU governor
+|===
+
+==== Filesystems
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Module|Acceptable Values|Purpose
+
+|check_mountpoints
+|`MOUNTPOINT[,MOUNTPOINT]`
+|Check mountpoints
+
+|cleanup_tmpdirs
+|`TMPDIR[,TMPDIR]`
+|Cleanup temporary directory
+|===
+
+==== NVIDIA
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Module|Acceptable Values|Purpose
+
+|check_pending_retirements
+|`Yes` +
+`No`
+|Check pending retirements
+
+|check_residual_user_processes
+|`Yes` +
+`No`
+|Check residual user processes
+
+|cleanup_mps_processes
+|`Yes` +
+`No`
+|Cleanup residual MPS processes
+
+|reload_dcgm_service
+|`MAX_ACTIVE_TIME_IN_SECONDS`
+|Reload DCGM service if runtime exceeded max. active time
+
+|run_dcgm_diag
+|`1` +
+`2` +
+`3`
+|Run DCGM diagnostic with specified level
+
+|set_persistence_mode
+|`0` +
+`1`
+|Set persistence mode
+
+|set_applications_clocks
+|`MEMORY,GRAPHICS`
+|Set applications clocks
+
+|set_uvm_ats_mode
+|`0` +
+`1`
+|Set UVM ATS mode
+|===
+
+==== Operating System
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Module|Acceptable Values|Purpose
+
+|check_residual_user_processes
+|`Yes` +
+`No`
+|Check residual user processes
+
+|cleanup-ipc
+|`Yes` +
+`No`
+|Cleanup existing Inter-Process Communications
+
+|cleanup_residual_user_processes
+|`Yes` +
+`No`
+|Cleanup residual user processes
+
+|cleanup_memory_caches
+|`Yes` +
+`No`
+|Cleanup memory caches
+
+|cleanup_shared_memory_segments
+|`Yes` +
+`No`
+|Cleanup residual shared memory segments
+
+|set_numa_balancing
+|`0` +
+`1`
+|Set NUMA balancing
+
+|set_user_limits
+|`OPTION=VALUE[,OPTION=VALUE]`
+|Set user limits
+
+|start_failed_systemd_units
+|`Yes` +
+`No`
+|Start failed systemd units
+
+|start_systemd_units
+|`UNIT[,UNIT]`
+|Start systemd units
+
+|stop_systemd_units
+|`UNIT[,UNIT]`
+|Stop systemd units
+|===
+
+==== Transparent Huge Pages (THP)
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Module|Acceptable Values|Purpose
+
+|set_thp
+|`always` +
+`madvise` +
+`never`
+|Set Transparent Huge Pages (THP) mode
+
+|set_thp_shmem
+|`always` +
+`deny` +
+`force` +
+`madvise` +
+`never`
+|Set Transparent Huge Pages for SHMEM (THP SHMEM) mode
+|===
+
+==== tuned
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Module|Acceptable Values|Purpose
+
+|enable_tuned_profile
+|`PROFILE`
+|Apply tuned profile
+|===
+
+== Getting Started
+
+=== Prerequisites
+
+* Functional Slurm workload manager
+
+=== Installation
+
+* Clone Git repository:
++
+----
+git clone https://github.com/AG-BDS-HPC-DELIVERY/PrEpS/preps.git
+----
+* Grant proper access rights to the PrEpS directory tree:
++
+----
+chmod --recursive g=u,g-w,o=g <PREPS_PREFIX>
+----
+* Grant executive access rights to the PrEpS binary:
++
+----
+chmod a+x <PREPS_PREFIX>/bin/preps
+----
+
+=== Configuration
+
+* Define PrEpS executable binary as the target for Prolog/Epilog inside Slurm configuration file `slurm.conf`:
++
+----
+################################################
+#               EPILOG & PROLOG                #
+################################################
+Epilog=<PREPS_PREFIX>/bin/preps
+Prolog=<PREPS_PREFIX>/bin/preps
+----
++
+[NOTE]
+====
+The PrEpS installation directory must be located on a shared filesystem in order to be accessible from every compute node.
+====
+* Launch Slurm reconfiguration:
++
+----
+scontrol reconfig
+----
+* Check that the Prolog/Epilog are properly configured:
++
+----
+scontrol show config  | awk '/^Epilog\s+=/ || /^Prolog\s+=/'
+----
+
+== Usage
+
+* Execution options:
++
+----
+<PREPS_PREFIX>/bin/preps -help
+----
++
+The help message displays the executable options as well as the suported environment variables:
++
+----
+PrEpS (Prolog & Epilog for Slurm)
+
+Usage: preps [-log-level LEVEL]
+
+Options:
+  -log-level LEVEL    Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | CRITICAL}
+
+Environment Variables:
+  PREPS_CONFIG_FILE    Absolute Path to Alternate Configuration File
+  PREPS_LOG_LEVEL      Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | CRITICAL}
+
+----
+
+=== Log Level Selection
+
+The log level is defined according to the following elements **in decreasing level of priority**:
+
+. Value from the `PREPS_LOG_LEVEL` environment variable.
++
+-> Scope: Job-specific.
++
+WARNING: SLURMD prolog/epilog does not honor extra environment variables. This mechanism is therefore not supported in this specific context.
+. Value from the `-log-level` argument to the PrEpS executable.
++
+-> Scope: Global.
+. Default value inside the PrEpS executable:
++
+----
+LOG_LEVEL="${PREPS_LOG_LEVEL:-ERROR}"
+----
++
+-> Scope: Global.
++
+NOTE: Default log level is set to `ERROR` in order to minimize the size of the logfile.
+
+=== Configuration File Selection
+
+The configuration file is selected according to the following elements **in decreasing level of priority**:
+
+. Configuration file specified through the `PREPS_CONFIG_FILE` environment variable.
++
+-> Scope: Job-specific.
++
+WARNING: SLURMD prolog/epilog does not honor extra environment variables. This mechanism is therefore not supported in this specific context.
+. Configuration file inside the job submission directory, named after the target Slurm partition:
++
+----
+${SLURM_JOB_WORK_DIR}/${SLURM_JOB_PARTITION}.conf
+----
+. Default configuration file inside the job submission directory:
++
+----
+${SLURM_JOB_WORK_DIR}/default.conf
+----
+. Configuration file inside the configuration directory, named after the Slurm partition:
++
+----
+<PREPS_PREFIX>/etc/${SLURM_JOB_PARTITION}.conf
+----
++
+-> Scope: Global.
+. Defaut configuration file inside the configuration directory:
++
+----
+<PREPS_PREFIX>/etc/default.conf
+----
++
+-> Scope: Global.

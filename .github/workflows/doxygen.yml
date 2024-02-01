@@ -1,0 +1,47 @@
+name: Doxygen
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  pages: write
+
+jobs:
+  build:
+    concurrency:
+      cancel-in-progress: true
+      group: ci-${{ github.ref }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - name: Set Timezone
+      uses: szenius/set-timezone@v1.2
+      with:
+        timezoneLinux: "Europe/Paris"
+    - name: Doxygen
+      uses: mattnotmitt/doxygen-action@v1.9.5
+      with:
+        doxyfile-path: './etc/doxygen/Doxyfile'
+        working-directory: '.'
+    - name: Upload Artifact
+      #uses: actions/upload-artifact@v3
+      uses: actions/upload-pages-artifact@v2
+      with:
+        name: 'github-pages'
+        path: './share/doc/html/'
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v2
+      with:
+        artifact_name: 'github-pages'

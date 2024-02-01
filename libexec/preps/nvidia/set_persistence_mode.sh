@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+preps::nvidia::set_persistence_mode() {
+	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
+	local -i rc=0
+	local mode="${1}"
+	if [[ -z "${mode}" ]]; then
+		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [Persistence Mode]"
+	fi
+    if ${NVSMI_EXECBIN} --persistence-mode "${mode}" &>/dev/null; then
+		main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Set Persistence Mode: [${mode}]"
+	else
+		main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Failed to Set Persistence Mode: [${mode}] - Return Code: [$?]"
+		rc=1
+	fi
+	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+	return ${rc}
+}
+

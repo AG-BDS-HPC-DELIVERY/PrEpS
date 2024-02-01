@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+preps::nvidia::reload_dcgm_service() {
+	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
+	local -i rc=0
+	local unit="dcgm.service"
+	local max_active_time="${1}"
+	if [[ -z "${max_active_time}" ]]; then
+		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [Max. Active Time]"
+	fi
+	if systemctl is-active "${unit}" &>/dev/null; then
+		local timestamp1 && timestamp1="$(awk '{printf "%.0f", $1}' "/proc/uptime")"
+		local timestamp2 && timestamp2="$(systemctl show ${unit} --property=ActiveEnterTimestampMonotonic | awk -F '=' '{printf "%.0f", $2/(1000*1000)}')"
+		local active_time="$(( timestamp1 - timestamp2 ))"
+		if (( active_time > max_active_time )); then
+			main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Actual Runtime: [${active_time}] Greater Than Maximum Runtime: [${max_active_time}] - Restarting Service: [${unit}]"
+			if ${SUDO} systemctl restart "${unit}" &>/dev/null; then
+				main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Restarted Service: [${unit}]"
+			else
+				main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Failed to Restart Service: [${unit}] - Return Code: [$?]"
+				rc=1
+			fi
+		else
+			main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Actual Runtime: [${active_time}] Less Than Maximum Runtime: [${max_active_time}] - Skipping Service Restart: [${unit}]"
+		fi
+	else
+		main::log_event -level "${LOGGER_LEVEL_WARN}" -message "Systemd Unit Not Active: [${unit}] - Skipping Healthcheck"
+	fi
+	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+	return ${rc}
+}
