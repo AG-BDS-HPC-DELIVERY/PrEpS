@@ -142,7 +142,7 @@ The package offers the following modules:
 `No`
 |Check residual user processes
 
-|cleanup-ipc
+|cleanup_ipc
 |`Yes` +
 `No`
 |Cleanup existing Inter-Process Communications
