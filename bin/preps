@@ -62,7 +62,7 @@ main::log_event() {
 main::help() {
 	cat <<- eof >&1
 
-PrEpS (Prolog & Epilog for Slurm)
+Prolog/Epilog for Slurm (PrEpS)
 
 Usage: $(basename "${BASH_SOURCE[0]}") [-log-level LEVEL]
 
@@ -117,7 +117,6 @@ LOG_LEVEL="${!LOG_LEVEL}"
 
 # Startup Message
 main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Starting PrEpS"
-
 
 # Configuration File
 if [[ -n "${PREPS_CONFIG_FILE}" ]]; then
