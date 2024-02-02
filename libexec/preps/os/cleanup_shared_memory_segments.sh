@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::cleanup_shared_memory_segments()
+## @brief Cleanup Shared Memory Segments
+## @return Return Code
+## @retval 0 Removed User-Owned Shared Memory Segment
+## @retval 1 Failed to Remove User-Owned Shared Memory Segment
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::cleanup_shared_memory_segments() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

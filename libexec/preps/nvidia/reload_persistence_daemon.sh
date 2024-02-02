@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::nvidia::reload_persistence_daemon()
+## @brief Reload Persistence Daemon
+## @param max_active_time Maximum Daemon Active Time
+## @return Return Code
+## @retval 0 Persistence Daemon Has Been Successfully Reloaded
+## @retval 1 Persistence Daemon Could Not Be Reloaded
+## @ingroup nvidia
+#-------------------------------------------------------------------------------
 preps::nvidia::reload_persistence_daemon() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

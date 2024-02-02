@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::cleanup_ipc()
+## @brief Cleanup IPC
+## @return Return Code
+## @retval 0 Removed User-Owned IPC
+## @retval 1 Failed to Remove User-Owned IPC
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::cleanup_ipc() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

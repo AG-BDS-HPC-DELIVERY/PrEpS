@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::cleanup_residual_user_processes()
+## @brief Cleanup Residual User Processes
+## @return Return Code
+## @retval 0 Killed Residual User Processes
+## @retval 1 Failed to Kill Residual User Processes
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::cleanup_residual_user_processes() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	if (( SLURM_JOB_UID > 1000 )); then

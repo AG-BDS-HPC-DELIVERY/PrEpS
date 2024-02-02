@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::thp::set_thp_shmem()
+## @brief Set Transparent Huge Pages (THP) SHMEM
+## @param thp Transparent Huge Pages SHMEM Configuration
+## @return Return Code
+## @retval 0 Successfully Set Transparent Huge Pages SHMEM
+## @retval 1 Failed to Set Transparent Huge Pages SHMEM
+## @ingroup thp
+#-------------------------------------------------------------------------------
 preps::thp::set_thp_shmem() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -r thp_shmem_enabled="/sys/kernel/mm/transparent_hugepage/shmem_enabled"

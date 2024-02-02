@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::start_systemd_units()
+## @brief Start systemd Units
+## @param units Comma-Separated List of systemd Units: unit[,unit]
+## @return Return Code
+## @retval 0 Successfully Started systemd Units
+## @retval 1 Failed to Start systemd Units
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::start_systemd_units() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

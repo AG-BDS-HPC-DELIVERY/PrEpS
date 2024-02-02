@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::nvidia::set_uvm_ats_mode()
+## @brief Set UVM ATS Mode
+## @param ats_mode ATS Mode
+## @return Return Code
+## @retval 0 Successfully Set UVM ATS Mode
+## @retval 1 Failed to Set UVM ATS Mode
+## @ingroup nvidia
+#-------------------------------------------------------------------------------
 preps::nvidia::set_uvm_ats_mode() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local module_uvm && module_uvm="$(find /usr/lib/modules -name nvidia-uvm.ko.xz -type f)"

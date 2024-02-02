@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::check_residual_user_processes()
+## @brief Check Residual User Processes
+## @return Return Code
+## @retval 0 No Residual User Processes Found
+## @retval 1 Residual User Processes Found
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::check_residual_user_processes() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

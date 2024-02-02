@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::dump_sysconfig()
+## @brief Dump System Configuration
+## @return Return Code
+## @retval 0 Dumped System Configuration
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::dump_sysconfig() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local dumpfile && dumpfile="${SLURM_JOB_WORK_DIR}/system-config.${SLURM_JOB_ID}.$(hostname).yml"

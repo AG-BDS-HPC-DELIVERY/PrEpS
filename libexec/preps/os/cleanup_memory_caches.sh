@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::cleanup_memory_caches()
+## @brief Cleanup Memory Caches
+## @return Return Code
+## @retval 0 Dropped Memory Caches
+## @retval 1 Failed to Drop Memory Caches
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::cleanup_memory_caches() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

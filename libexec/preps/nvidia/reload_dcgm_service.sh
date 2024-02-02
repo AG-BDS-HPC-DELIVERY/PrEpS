@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::nvidia::reload_dcgm_service()
+## @brief Reload DCGM Service
+## @return Return Code
+## @retval 0 DCGM Service Has Been Successfully Reloaded
+## @retval 1 DCGM Service Could Not Be Reloaded
+## @ingroup nvidia
+#-------------------------------------------------------------------------------
 preps::nvidia::reload_dcgm_service() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

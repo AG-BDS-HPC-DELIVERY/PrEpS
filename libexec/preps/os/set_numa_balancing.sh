@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::set_numa_balancing()
+## @brief Set NUMA Balancing
+## @param balancing NUMA Balancing
+## @return Return Code
+## @retval 0 Successfully Set NUMA Balancing
+## @retval 1 Failed to Set NUMA Balancing
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::set_numa_balancing() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

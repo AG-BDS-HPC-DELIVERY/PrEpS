@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::nvidia::reload_driver()
+## @brief Reload NVIDIA Driver
+## @return Return Code
+## @retval 0 NVIDIA Driver Has Been Successfully Reloaded
+## @retval 1 NVIDIA Driver Could Not Be Reloaded
+## @ingroup nvidia
+#-------------------------------------------------------------------------------
 preps::nvidia::reload_driver() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	# Kernel Modules

@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::nvidia::set_applications_clocks()
+## @brief Set Applications Clocks
+## @param applications_clocks Applications Clocks (<MEMORY>:<GRAPHICS>)
+## @return Return Code
+## @retval 0 Successfully Set Applications Clocks
+## @retval 1 Failed to Set Applications Clocks
+## @ingroup nvidia
+#-------------------------------------------------------------------------------
 preps::nvidia::set_applications_clocks() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

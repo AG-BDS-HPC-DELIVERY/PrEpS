@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::cpufreq::set_governor()
+## @brief Set CPU Power Governor
+## @param governor CPU Power Governor
+## @return Return Code
+## @retval 0 Successfully Set CPU Power Governor
+## @retval 1 Failed to Set CPU Power Governor
+## @ingroup cpufreq
+#-------------------------------------------------------------------------------
 preps::cpufreq::set_governor() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

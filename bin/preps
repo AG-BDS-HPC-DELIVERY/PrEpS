@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 
-#===============================================================================
-# PrEpS (Prolog & Epilog for Slurm)
-#===============================================================================
+#-------------------------------------------------------------------------------
+## @file
+## @author Nicolas Tallet <nicolas.2.tallet@eviden.com>
+## @par URL https://github.com/AG-BDS-HPC-DELIVERY/PrEpS
+## @par Purpose
+## Comprehensive and Extensive Framework for Prolog/Epilog in Slurm
+## @defgroup cpufreq CPU Frequency Management
+## @defgroup fs Shared and Local Filesystems Management
+## @defgroup nvidia NVIDIA GPU Subsystems Management
+## @defgroup os Operating System Management
+## @defgroup thp Transparent Huge Pages (THP) Management
+## @defgroup tunes tuned Profile Management
+#-------------------------------------------------------------------------------
 
 #===============================================================================
 # Environment
@@ -65,6 +75,15 @@ eof
 	exit 0
 }
 
+# Modules
+while IFS= read -d '' -r -u 9 modulefile; do
+	module="$(awk 'match($0, /^(preps::.*)\(\)/, a) {print a[1]}' "${modulefile}")"
+	if [[ -z "${module}" ]] || [[ "$(type -t "${module}" 2>/dev/null)" != "function" ]]; then
+		# shellcheck source=/dev/null
+		source "${modulefile}" &>/dev/null || \
+			{ main::log_event -level "${LOGGER_LEVEL_WARN}" -message "Failed to Load Module: [${module}] from Modulefile: [${modulefile}] - Skipping Module"; }
+	fi
+done 9< <(find "${PREPS_LIBEXECDIR}"/ -name "*.sh" -print0)
 # Options
 while (( $# > 0 )); do
 	case "${1}" in
@@ -75,8 +94,11 @@ while (( $# > 0 )); do
 			LOG_LEVEL="${2}"
 			shift
 			;;
-		*)
+		-*)
 			main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Option: [${1}]"
+			;;
+		*)
+			break
 			;;
 	esac
 	shift
@@ -86,7 +108,7 @@ done
 LOG_LEVEL="${PREPS_LOG_LEVEL:-ERROR}"
 if [[ "${LOG_LEVEL}" != "TRACE" && "${LOG_LEVEL}" != "DEBUG" \
 		&& "${LOG_LEVEL}" != "INFO" && "${LOG_LEVEL}" != "WARN" && "${LOG_LEVEL}" != "ERROR" ]]; then
-	main::event-log -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Log Level: [${LOG_LEVEL}]"
+	main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Log Level: [${LOG_LEVEL}]"
 fi
 LOG_LEVEL="LOGGER_LEVEL_${LOG_LEVEL}"
 LOG_LEVEL="${!LOG_LEVEL}"
@@ -94,23 +116,14 @@ LOG_LEVEL="${!LOG_LEVEL}"
 # Startup Message
 main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Starting PrEpS"
 
-# Modules
-while IFS= read -d '' -r -u 9 modulefile; do
-	module="$(awk 'match($0, /(preps::[\-a-z]+::[\_a_z]+)\(\)\s+\{/, a) {print a[1]}' "${modulefile}")"
-	if [[ -z "${module}" ]] || [[ "$(type -t "${module}" 2>/dev/null)" != "function" ]]; then
-		# shellcheck source=/dev/null
-		source "${modulefile}" &>/dev/null || \
-			{ main::log_event -level "${LOGGER_LEVEL_WARN}" -message "Failed to Load Module: [${module}] from Modulefile: [${modulefile}] - Skipping Module"; }
-	fi
-done 9< <(find "${PREPS_LIBEXECDIR}/" -name "*.sh" -print0)
 
 # Configuration File
 if [[ -n "${PREPS_CONFIG_FILE}" ]]; then
 	if [[ -f "${PREPS_CONFIG_FILE}" ]]; then
 		configfile="${PREPS_CONFIG_FILE}"
-		main::event-log -level "${LOGGER_LEVEL_DEBUG}" -message "Processing User-Specific Configuration File: [${PREPS_CONFIG_FILE}]"
+		main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "Processing User-Specific Configuration File: [${PREPS_CONFIG_FILE}]"
 	else
-		main::event-log -level "${LOGGER_LEVEL_CRIT}" -message "Invalid User-Specific Configuration File: [${PREPS_CONFIG_FILE}]"
+		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid User-Specific Configuration File: [${PREPS_CONFIG_FILE}]"
 	fi
 else
 	for directory in "${SLURM_JOB_WORK_DIR}" "${PREPS_CONFIGDIR}"; do

@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::tuned::enable_profile()
+## @brief Enable tuned Profile
+## @param profile tuned Profile
+## @return Return Code
+## @retval 0 Successfully Enabled tuned Profile
+## @retval 1 Failed to Enable tuned Profile
+## @ingroup tuned
+#-------------------------------------------------------------------------------
 preps::tuned::enable_profile() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -r tuned_execbin="/usr/sbin/tuned-adm"

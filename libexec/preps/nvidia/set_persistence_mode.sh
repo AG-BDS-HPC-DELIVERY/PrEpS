@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::nvidia::set_persistence_mode()
+## @brief Set Persistence Mode
+## @return Return Code
+## @retval 0 Successfully Set Persistence Mode
+## @retval 1 Failed to Set Persistence Mode
+## @ingroup nvidia
+#-------------------------------------------------------------------------------
 preps::nvidia::set_persistence_mode() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn preps::os::set_user_limits()
+## @brief Set User Limits
+## @param limits Comma-Separated List of User Limits: limit=value[,limit=value]
+## @return Return Code
+## @retval 0 Successfully Set User Limits
+## @retval 1 Failed to Set User Limits
+## @ingroup os
+#-------------------------------------------------------------------------------
 preps::os::set_user_limits() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
@@ -10,11 +20,11 @@ preps::os::set_user_limits() {
 	local limit
 	for limit in "${limits[@]}"; do
 		local option value
-        IFS="=" read -r option value <<<"${limit}"
-        if [[ -z "${option}" ]] || [[ -z "${value}" ]]; then
-	    	main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Failed to Parse Limit: [${limit}]"
-        fi
-        main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "ulimit -${option} ${value}"
+		IFS="=" read -r option value <<<"${limit}"
+		if [[ -z "${option}" ]] || [[ -z "${value}" ]]; then
+			main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Failed to Parse Limit: [${limit}]"
+		fi
+		main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "ulimit -${option} ${value}"
 		#(( rc = rc + $? ))
 	done
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
