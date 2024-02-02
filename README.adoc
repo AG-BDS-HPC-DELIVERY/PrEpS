@@ -1,8 +1,8 @@
-= PrEpS (Prolog and Epilog for Slurm)
+= **Pr**olog/**Ep**ilog for **S**lurm (PrEpS)
 
 == About the Project
 
-PrEpS (**Pr**olog and **Ep**ilog for **S**lurm) is a comprehensive but extensible framework for performing Prolog/Epilog execution inside the Slurm workload scheduler.
+**Pr**olog/**Ep**ilog for **S**lurm (PrEpS) is a comprehensive but extensible framework for performing Prolog/Epilog execution inside the Slurm workload scheduler.
 
 Slurm Prolog/Epilog Reference:
 https://slurm.schedmd.com/prolog_epilog.html[SchedMD: Prolog / Epilog]
