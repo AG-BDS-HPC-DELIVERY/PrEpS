@@ -12,7 +12,7 @@
 apis::cpupower::set_frequency_min() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-freqmin|--frequency-min)
+			-freqmin|--frequency_min)
 				local frequency_min="${2}"
 				shift
 				;;

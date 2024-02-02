@@ -3,8 +3,8 @@
 #-------------------------------------------------------------------------------
 ## @file
 ## @fn apis::nvsmi::set_applications_clocks()
-## @brief Set Applications Clocks: <MEMORY>,<GRAPHICS>
-## @param applications-clocks Applications Clocks: <MEMORY>,<GRAPHICS>
+## @brief Set Applications Clocks: Memory/Graphics
+## @param applications_clocks Applications Clocks: MEMORY,GRAPHICS
 ## @param id GPU ID
 ## @return Return Code
 ## @retval NVIDIA SMI Command Return Code
@@ -13,7 +13,7 @@
 apis::nvsmi::set_applications_clocks() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-appclocks|--applications-clocks)
+			-appclocks|--applications_clocks)
 				local applications_clocks="${2}"
 				shift
 				;;
