@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn apis::nvsmi::get_applications_clocks()
+## @brief Get Applications Clocks
+## @param id GPU ID
+## @return Return Code
+## @retval 0
+## @ingroup nvsmi
+#-------------------------------------------------------------------------------
 apis::nvsmi::get_applications_clocks() {
 	while (( $# > 0 )); do
 		case "${1}" in

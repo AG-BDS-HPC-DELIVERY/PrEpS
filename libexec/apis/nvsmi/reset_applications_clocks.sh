@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn apis::nvsmi::reset_applications_clocks()
+## @brief Reset Applications Clocks
+## @param id GPU ID
+## @return Return Code
+## @retval NVIDIA SMI Command Return Code
+## @ingroup nvsmi
+#-------------------------------------------------------------------------------
 apis::nvsmi::reset_applications_clocks() {
 	while (( $# > 0 )); do
 		case "${1}" in

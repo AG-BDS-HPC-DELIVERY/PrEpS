@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn apis::nvsmi::get_gpu_indexes()
+## @brief Get GPU Indexes
+## @return Return Code
+## @retval 0
+## @ingroup nvsmi
+#-------------------------------------------------------------------------------
 apis::nvsmi::get_gpu_indexes() {
 	local gpu_indexes
 	if (( $(apis::nvsmi::gpu_count_get) > 0 )); then

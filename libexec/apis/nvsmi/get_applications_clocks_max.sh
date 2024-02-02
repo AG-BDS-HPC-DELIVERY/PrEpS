@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn apis::nvsmi::get_applications_clocks_max()
+## @brief Get Max. Applications Clocks
+## @param id GPU ID
+## @return Return Code
+## @retval 0
+## @ingroup nvsmi
+#-------------------------------------------------------------------------------
 apis::nvsmi::get_applications_clocks_max() {
 	while (( $# > 0 )); do
 		case "${1}" in

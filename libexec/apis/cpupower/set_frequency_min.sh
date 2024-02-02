@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn apis::cpupower::set_frequency_min()
+## @brief Set Min. CPU Frequency
+## @param frequency-min Min. CPU Frequency
+## @return Return Code
+## @retval cpupower Command Return Code
+## @ingroup cpupower
+#-------------------------------------------------------------------------------
 apis::cpupower::set_frequency_min() {
 	while (( $# > 0 )); do
 		case "${1}" in

@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn apis::cpupower::set_governor()
+## @brief Set Governor
+## @param governor Governor
+## @return Return Code
+## @retval cpupower Command Return Code
+## @ingroup cpupower
+#-------------------------------------------------------------------------------
 apis::cpupower::set_governor() {
 	while (( $# > 0 )); do
 		case "${1}" in

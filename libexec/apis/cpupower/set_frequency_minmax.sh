@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#-------------------------------------------------------------------------------
+## @file
+## @fn apis::cpupower::set_frequency_minmax()
+## @brief Set Min. and Max. CPU Frequency
+## @param frequency-max Max. CPU Frequency
+## @param frequency-min Min. CPU Frequency
+## @return Return Code
+## @retval cpupower Command Return Code
+## @ingroup cpupower
+#-------------------------------------------------------------------------------
 apis::cpupower::set_frequency_minmax() {
 	while (( $# > 0 )); do
 		case "${1}" in

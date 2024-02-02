@@ -7,8 +7,10 @@
 ## @par Purpose
 ## Comprehensive and Extensive Framework for Prolog/Epilog in Slurm
 ## @defgroup cpufreq CPU Frequency Management
+## @defgroup cpupower API for cpupower
 ## @defgroup fs Shared and Local Filesystems Management
 ## @defgroup nvidia NVIDIA GPU Subsystems Management
+## @defgroup nvsmi API for NVIDIA SMI
 ## @defgroup os Operating System Management
 ## @defgroup thp Transparent Huge Pages (THP) Management
 ## @defgroup tunes tuned Profile Management
