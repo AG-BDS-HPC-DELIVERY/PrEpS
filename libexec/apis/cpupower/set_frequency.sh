@@ -12,7 +12,7 @@
 apis::cpupower::set_frequency() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-freq|--frequency)
+			-frequency)
 				local frequency="${2}"
 				shift
 				;;

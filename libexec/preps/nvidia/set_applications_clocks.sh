@@ -4,7 +4,7 @@
 ## @file
 ## @fn preps::nvidia::set_applications_clocks()
 ## @brief Set Applications Clocks
-## @param applications_clocks Applications Clocks (<MEMORY>:<GRAPHICS>)
+## @param applications_clocks Applications Clocks: MEMORY:GRAPHICS
 ## @return Return Code
 ## @retval 0 Successfully Set Applications Clocks
 ## @retval 1 Failed to Set Applications Clocks
@@ -18,10 +18,9 @@ preps::nvidia::set_applications_clocks() {
 		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [Applications Clocks]"
 	fi
 	local id
-	for id in $(apis::nvsmi::gpu_indexes_get); do
-		if [[ "$(apis::nvsmi::applications_clocks_get _id "${id}")" != "${applications_clocks}" ]]; then
-			apis::nvsmi::applications-clocks-set _applications_clocks "${applications_clocks}" _id "${id}"
-			if (( $? == 0 )); then
+	for id in $(apis::nvsmi::get_gpu_indexes); do
+		if [[ "$(apis::nvsmi::get_applications_clocks -id "${id}")" != "${applications_clocks}" ]]; then
+			if apis::nvsmi::set_applications_clocks -applications_clocks "${applications_clocks}" -id "${id}"; then
 				main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Configured Applications Clocks: [${applications_clocks}] for NVIDIA GPU: [${id}]"
 			else
 				main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Failed to Configure Applications Clocks: [${applications_clocks}] for NVIDIA GPU: [${id}] - Return Code: [$?]"

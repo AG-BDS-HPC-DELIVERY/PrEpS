@@ -13,11 +13,11 @@
 apis::cpupower::set_frequency_minmax() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-freqmax|--frequency_max)
+			-frequency_max)
 				local frequency_max="${2}"
 				shift
 				;;
-			-freqmin|--frequency_min)
+			-frequency_min)
 				local frequency_min="${2}"
 				shift
 				;;

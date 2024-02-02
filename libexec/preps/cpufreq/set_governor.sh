@@ -21,7 +21,7 @@ preps::cpufreq::set_governor() {
 		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Governor Value: [${governor}]"
 	fi
 	if [[ "$(apis::cpupower::get_governor)" != "${governor}" ]]; then
-		if apis::cpupower::set_governor _governor "${governor}"; then
+		if apis::cpupower::set_governor -governor "${governor}"; then
 			main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Set CPU Governor: [${governor}]"
 		else
 			main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Failed to Set CPU Governor: [${governor}] - Return Code: [$?]"

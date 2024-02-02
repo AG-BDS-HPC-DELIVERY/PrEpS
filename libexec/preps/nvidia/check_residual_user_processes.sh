@@ -12,7 +12,7 @@
 preps::nvidia::check_residual_user_processes() {
 	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
-	if (( $(apis::nvsmi::gpu_count_get) > 0 )); then
+	if (( $(apis::nvsmi::get_gpu_count) > 0 )); then
 		local processes
 		readarray -t processes < <(${NVSMI_EXECBIN} --format=csv,noheader --query-compute-apps=pid,name 2>/dev/null | awk '!/nvidia-cuda-mps-server/')
 		if (( ${#processes[@]} > 0 )); then

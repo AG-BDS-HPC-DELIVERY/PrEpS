@@ -18,7 +18,7 @@ preps::cpufreq::set_frequency() {
 		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [Frequency Max.]"
 	fi
 	if [[ "$(apis::cpupower::get_governor)" == "userspace" ]] && [[ "$(apis::cpupower::get_frequency)" != "${frequency}" ]]; then
-		if apis::cpupower::set_frequency _frequency "${frequency}"; then
+		if apis::cpupower::set_frequency -frequency "${frequency}"; then
 			main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Set CPU Frequency: [${frequency}]"
 		else
 			main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Failed to Set CPU Frequency: [${frequency}] - Return Code: [$?]"

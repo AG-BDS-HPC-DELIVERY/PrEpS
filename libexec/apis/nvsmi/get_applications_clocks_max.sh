@@ -12,7 +12,7 @@
 apis::nvsmi::get_applications_clocks_max() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-i | --id)
+			-id)
 				local id="${2}"
 				shift
 				;;

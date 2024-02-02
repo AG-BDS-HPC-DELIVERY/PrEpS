@@ -25,8 +25,8 @@ preps::cpufreq::set_frequency_min_max() {
 	if (( frequency_min > frequency_max )); then
 		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Arguments: [Frequency Min.] Is Greater Than [Frequency Max.]"
 	fi
-	if [[ "$(apis::cpupower::get-frequency_max)" != "${frequency_max}" ]] || [[ "$(apis::cpupower::get_frequency_min)" != "${frequency_min}" ]]; then
-		if apis::cpupower::set-frequency-minmax -frequency_max "${frequency_max}" _frequency_min "${frequency_min}"; then
+	if [[ "$(apis::cpupower::get_frequency_max)" != "${frequency_max}" ]] || [[ "$(apis::cpupower::get_frequency_min)" != "${frequency_min}" ]]; then
+		if apis::cpupower::set_frequency_minmax -frequency_max "${frequency_max}" -frequency_min "${frequency_min}"; then
 			main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Set CPU Frequency Min.: [${frequency_min}] / Max.: [${frequency_max}]"
 		else
 			main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Failed to Set CPU Frequency Min.: [${frequency_min}] / Max.: [${frequency_max}] - Return Code: [$?]"
