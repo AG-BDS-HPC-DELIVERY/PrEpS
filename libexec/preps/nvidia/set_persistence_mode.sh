@@ -4,6 +4,7 @@
 ## @file
 ## @fn preps::nvidia::set_persistence_mode()
 ## @brief Set Persistence Mode
+## @param mode Persistence Mode
 ## @return Return Code
 ## @retval 0 Successfully Set Persistence Mode
 ## @retval 1 Failed to Set Persistence Mode

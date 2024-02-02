@@ -4,7 +4,7 @@
 ## @file
 ## @fn apis::cpupower::set_frequency_min()
 ## @brief Set Min. CPU Frequency
-## @param frequency-min Min. CPU Frequency
+## @param frequency_min Min. CPU Frequency
 ## @return Return Code
 ## @retval cpupower Command Return Code
 ## @ingroup cpupower
