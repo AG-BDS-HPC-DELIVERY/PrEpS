@@ -12,7 +12,7 @@
 apis::nvsmi::reset_applications_clocks() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-id)
+			-id|--id)
 				local id="${2}"
 				shift
 				;;

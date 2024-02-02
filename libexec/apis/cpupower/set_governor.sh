@@ -12,7 +12,7 @@
 apis::cpupower::set_governor() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-governor)
+			-gov|--governor)
 				local governor="${2}"
 				shift
 				;;

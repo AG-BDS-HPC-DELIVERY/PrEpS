@@ -12,7 +12,7 @@
 apis::cpupower::set_frequency_max() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-frequency-max)
+			-freqmax|--frequency-max)
 				local frequency_max="${2}"
 				shift
 				;;

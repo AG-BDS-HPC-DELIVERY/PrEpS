@@ -13,11 +13,11 @@
 apis::nvsmi::set_applications_clocks() {
 	while (( $# > 0 )); do
 		case "${1}" in
-			-applications-clocks)
+			-appclocks|--applications-clocks)
 				local applications_clocks="${2}"
 				shift
 				;;
-			-id)
+			-id|--id)
 				local id="${2}"
 				shift
 				;;
