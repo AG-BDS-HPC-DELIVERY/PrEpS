@@ -17,13 +17,13 @@ apis::cpupower::set_frequency() {
 				shift
 				;;
 			*)
-				main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Option: [${1}]"
+				main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
 				;;
 		esac
 		shift
 	done
 	if [[ -z "${frequency}" ]]; then
-		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [Frequency]"
+		main::log_event -level "FATAL" -message "Missing Argument: [Frequency]"
 	fi
 	${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --freq "${frequency}" &>/dev/null
 	return $?

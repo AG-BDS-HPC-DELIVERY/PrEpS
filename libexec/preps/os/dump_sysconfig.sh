@@ -9,7 +9,7 @@
 ## @ingroup os
 #-------------------------------------------------------------------------------
 preps::os::dump_sysconfig() {
-	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
+	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local dumpfile && dumpfile="${SLURM_JOB_WORK_DIR}/system-config.${SLURM_JOB_ID}.$(hostname).yml"
 	# Header
 	cat >"${dumpfile}" <<- eof
@@ -86,7 +86,7 @@ eof
 env: |
 $(env | sort)
 eof
-	main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "Dumped Host Configuration into YAML File: [${dumpfile}]"
-	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Exiting Module: [${FUNCNAME[0]}]"
+	main::log_event -level "DEBUG" -message "Dumped Host Configuration into YAML File: [${dumpfile}]"
+	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]"
 	return 0
 }

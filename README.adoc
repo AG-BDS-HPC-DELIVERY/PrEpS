@@ -1,11 +1,120 @@
-= **Pr**olog/**Ep**ilog for **S**lurm (PrEpS)
+= PrEpS (**Pr**olog/**Ep**ilog for **S**lurm)
 
 == About the Project
 
-**Pr**olog/**Ep**ilog for **S**lurm (PrEpS) is a comprehensive but extensible framework for performing Prolog/Epilog execution inside the Slurm workload scheduler.
+PrEpS (**Pr**olog/**Ep**ilog for **S**lurm) is a comprehensive but extensible framework for performing Prolog/Epilog execution inside the Slurm workload scheduler.
 
-Slurm Prolog/Epilog Reference:
+Reference documentation for the Slurm Prolog/Epilog mechanism is available here:
 https://slurm.schedmd.com/prolog_epilog.html[SchedMD: Prolog / Epilog]
+
+The various Prolog/Epilog mechanisms are summarized in the table below:
+
+|===
+|Stage|Slurm Context|Configuration Parameter|Location|User
+
+|Slurm Controller Prolog
+|`prolog_slurmctld`
+|`PrologSlurmctld`
+|Head Node
+|SlurmctldUser (`slurm`)
+
+|Slurm Controller Epilog
+|`epilog_slurmctld`
+|`EpilogSlurmctld`
+|Head Node
+|SlurmctldUser (`slurm`)
+
+|Slurm Prolog
+|`prolog_slurmd`
+|`Prolog`
+|Compute Node
+|SlurmdUser (`root`)
+
+|Slurm Epilog
+|`epilog_slurmd`
+|`Epilog`
+|Compute Node
+|SlurmdUser (`root`)
+
+|srun Prolog
+|`prolog_srun`
+|`SrunProlog` +
+(`srun --prolog`)
+|srun Invocation Node
+|srun Invocation User
+
+|srun Epilog
+|`epilog_srun`
+|`SrunEpilog` +
+(`srun --epilog`)
+|srun Invocation Node
+|srun Invocation User
+
+|Task Prolog/Epilog
+|`prolog_task`
+|`TaskProlog` +
+(`srun --task-prolog`)
+|Compute Node
+|srun Invocation User
+
+|
+|`epilog_task`
+|`TaskEpilog` +
+(`srun --task-epilog`)
+|Compute Node
+|srun Invocation User
+|===
+
+== Software Architecture
+
+=== Scripts
+
+PrEpS main script is located in:
+----
+<PREFIX>/preps/bin/preps
+----
+
+This script is a single entry point which takes care of calling the proper prolog/epilog script depending on the actual Slurm context:
+
+|===
+|Stage|Slurm Context|Script
+
+|Slurm Controller Prolog
+|`prolog_slurmctld`
+|`<PREFIX>/preps/bin/preps.prolog_slurmctld`
+
+|Slurm Controller Epilog
+|`epilog_slurmctld`
+|`<PREFIX>/preps/bin/preps.epilog_slurmctld`
+
+|Slurm Prolog
+|`prolog_slurmd`
+|`<PREFIX>/preps/bin/preps.prolog_slurmd`
+
+|Slurm Epilog
+|`epilog_slurmd`
+|`<PREFIX>/preps/bin/preps.epilog_slurmd`
+
+|srun Prolog
+|`prolog_srun`
+|`<PREFIX>/preps/bin/preps.prolog_srun`
+
+|srun Epilog
+|`epilog_srun`
+|`<PREFIX>/preps/bin/preps.epilog_srun`
+
+|Task Prolog
+|`prolog_task`
+|`<PREFIX>/preps/bin/preps.prolog_task`
+
+|Task Epilog
+|`epilog_task`
+|`<PREFIX>/preps/bin/preps.epilog_task`
+|===
+
+=== Library
+
+==== Packages
 
 PrEpS is divided into several distinct, complementary packages:
 
@@ -18,11 +127,17 @@ PrEpS is divided into several distinct, complementary packages:
 |Filesystems
 |Manage filesystems
 
+|Memory
+|Manage system memory
+
 |NVIDIA
-|Manage GPU configuration
+|Manage NVIDIA GPU configuration
 
 |Operating System
 |Manage Operating System components
+
+|systemd
+|Manage systemd units
 
 |Transparent Huge Pages
 |Manage Transparent Huge Pages (THP) configuration
@@ -31,192 +146,195 @@ PrEpS is divided into several distinct, complementary packages:
 |Manage tuned profiles
 |===
 
-[NOTE]
-====
-PrEpS is capable of handling both execution under `root` account and execution under submitting user account. Second option requires `sudo` to be properly configured in order to allow standard users to perform all necessary actions.
-====
+==== Modules
 
-=== Packages
+Each PrEpS package is divided into several distinct modules.
 
-==== CPU Frequency
+===== CPU Frequency
 
 The package offers the following modules:
 
 [cols="1,1,2",options="header",width="100%"]
 |===
-|Module|Acceptable Values|Purpose
+|Function Name|Arguments|Purpose
 
-|set_boost
-|`0` +
-`1`
+|`preps::cpufreq::set_boost`
+|`{0 \| 1}`
 |Set CPU boost (Intel Turbo Boost / AMD Core Performance Boost)
 
-|set_frequency_min_max
+|`preps::cpufreq::set_frequency_min_max`
 |`<FREQ_MIN>:<FREQ_MAX>`
 |Set CPU frequency Min./Max.
 
-|set_frequency
+|`preps::cpufreq::set_frequency`
 |`<FREQ>`
 |Set CPU frequency
 
-|set_governor
+|`preps::cpufreq::set_governor`
 |`<GOVERNOR>`
 |Set CPU governor
 |===
 
-==== Filesystems
+===== Filesystems
 
 The package offers the following modules:
 
 [cols="1,1,2",options="header",width="100%"]
 |===
-|Module|Acceptable Values|Purpose
+|Function Name|Arguments|Purpose
 
-|check_mountpoints
+|`preps::fs::check_mountpoints`
 |`MOUNTPOINT[,MOUNTPOINT]`
 |Check mountpoints
 
-|cleanup_tmpdirs
+|`preps::fs::cleanup_tmpdirs`
 |`TMPDIR[,TMPDIR]`
 |Cleanup temporary directory
 |===
 
-==== NVIDIA
+===== Memory
 
 The package offers the following modules:
 
 [cols="1,1,2",options="header",width="100%"]
 |===
-|Module|Acceptable Values|Purpose
+|Function Name|Arguments|Purpose
 
-|check_pending_retirements
-|`Yes` +
-`No`
+|`preps::memory::cleanup_ipc`
+|-
+|Cleanup existing Inter-Process Communications (IPC)
+
+|`preps::memory::cleanup_memory_caches`
+|-
+|Cleanup memory caches
+
+|`preps::memory::cleanup_shared_memory_segments`
+|-
+|Cleanup residual shared memory segments
+
+|`preps::memory::set_numa_balancing`
+|`{0 \| 1}`
+|Set NUMA balancing
+|===
+
+===== NVIDIA
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Function Name|Arguments|Purpose
+
+|`preps::nvidia::check_pending_retirements`
+|-
 |Check pending retirements
 
-|check_residual_user_processes
-|`Yes` +
-`No`
+|`preps::nvidia::check_residual_user_processes`
+|-
 |Check residual user processes
 
-|cleanup_mps_processes
-|`Yes` +
-`No`
+|`preps::nvidia::cleanup_mps_processes`
+|-
 |Cleanup residual MPS processes
 
-|reload_dcgm_service
-|`MAX_ACTIVE_TIME_IN_SECONDS`
-|Reload DCGM service if runtime exceeded max. active time
+|`preps::nvidia::reset_applications_clocks`
+|-
+|Reset applications clocks
 
-|run_dcgm_diag
-|`1` +
-`2` +
-`3`
+|`preps::nvidia::run_dcgm_diag`
+|`{1 \| 2 \| 3}`
 |Run DCGM diagnostic with specified level
 
-|set_persistence_mode
-|`0` +
-`1`
-|Set persistence mode
-
-|set_applications_clocks
+|`preps::nvidia::set_applications_clocks`
 |`MEMORY,GRAPHICS`
 |Set applications clocks
 
-|set_uvm_ats_mode
-|`0` +
-`1`
-|Set UVM ATS mode
+|`preps::nvidia::set_persistence_mode`
+|`{0 \| 1}`
+|Set persistence mode
+
+|`preps::nvidia::set_power_limit`
+|`<POWER_LIMIT>`
+|Set power limit
+
+|`preps::nvidia::set_vboost_slider`
+|`{0 \| 1 \| 2 \| 3 \| 4}`
+|Set vboost Slider
 |===
 
-==== Operating System
+===== Operating System
 
 The package offers the following modules:
 
 [cols="1,1,2",options="header",width="100%"]
 |===
-|Module|Acceptable Values|Purpose
+|Function Name|Arguments|Purpose
 
-|check_residual_user_processes
-|`Yes` +
-`No`
+|`preps::os::check_residual_user_processes`
+|-
 |Check residual user processes
 
-|cleanup_ipc
-|`Yes` +
-`No`
-|Cleanup existing Inter-Process Communications
-
-|cleanup_residual_user_processes
-|`Yes` +
-`No`
+|`preps::os::cleanup_residual_user_processes`
+|-
 |Cleanup residual user processes
 
-|cleanup_memory_caches
-|`Yes` +
-`No`
-|Cleanup memory caches
-
-|cleanup_shared_memory_segments
-|`Yes` +
-`No`
-|Cleanup residual shared memory segments
-
-|set_numa_balancing
-|`0` +
-`1`
-|Set NUMA balancing
-
-|set_user_limits
+|`preps::os::set_user_limits`
 |`OPTION=VALUE[,OPTION=VALUE]`
 |Set user limits
+|===
 
-|start_failed_systemd_units
-|`Yes` +
-`No`
+===== systemd
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Function Name|Arguments|Purpose
+
+|`preps::systemd::reload_systemd_unit`
+|`UNIT` +
+`MAX_ACTIVE_TIME_IN_SECONDS`
+|Reload systemd unit if active time is above specified threshold
+
+|`preps::systemd::start_failed_systemd_units`
+|-
 |Start failed systemd units
 
-|start_systemd_units
+|`preps::systemd::start_systemd_units`
 |`UNIT[,UNIT]`
 |Start systemd units
 
-|stop_systemd_units
+|`preps::systemd::stop_systemd_units`
 |`UNIT[,UNIT]`
 |Stop systemd units
 |===
 
-==== Transparent Huge Pages (THP)
+===== Transparent Huge Pages (THP)
 
 The package offers the following modules:
 
 [cols="1,1,2",options="header",width="100%"]
 |===
-|Module|Acceptable Values|Purpose
+|Function Name|Arguments|Purpose
 
-|set_thp
-|`always` +
-`madvise` +
-`never`
+|`preps::thp::set_thp`
+|`{always \| madvise \| never}`
 |Set Transparent Huge Pages (THP) mode
 
-|set_thp_shmem
-|`always` +
-`deny` +
-`force` +
-`madvise` +
-`never`
+|`preps::thp::set_thp_shmem`
+|`{always \| deny \| force \| madvise \| never}`
 |Set Transparent Huge Pages for SHMEM (THP SHMEM) mode
 |===
 
-==== tuned
+===== tuned
 
 The package offers the following modules:
 
 [cols="1,1,2",options="header",width="100%"]
 |===
-|Module|Acceptable Values|Purpose
+|Function Name|Arguments|Purpose
 
-|enable_tuned_profile
+|`preps::tuned::enable_tuned_profile`
 |`PROFILE`
 |Apply tuned profile
 |===
@@ -237,12 +355,12 @@ git clone https://github.com/AG-BDS-HPC-DELIVERY/PrEpS/preps.git
 * Grant proper access rights to the PrEpS directory tree:
 +
 ----
-chmod --recursive g=u,g-w,o=g <PREPS_PREFIX>
+chmod --recursive g=u,g-w,o=g <PREFIX>/preps
 ----
 * Grant executive access rights to the PrEpS binary:
 +
 ----
-chmod a+x <PREPS_PREFIX>/bin/preps
+chmod a+x <PREFIX>/preps/bin/preps
 ----
 
 === Configuration
@@ -253,8 +371,8 @@ chmod a+x <PREPS_PREFIX>/bin/preps
 ################################################
 #               EPILOG & PROLOG                #
 ################################################
-Epilog=<PREPS_PREFIX>/bin/preps
-Prolog=<PREPS_PREFIX>/bin/preps
+Epilog=<PREFIX>/preps/bin/preps
+Prolog=<PREFIX>/preps/bin/preps
 ----
 +
 [NOTE]
@@ -271,83 +389,139 @@ scontrol reconfig
 ----
 scontrol show config  | awk '/^Epilog\s+=/ || /^Prolog\s+=/'
 ----
+* Build associated Prolog/Epilog scripts by populating files with requested function calls:
++
+Example: `preps.prolog_slurmd` Script for Slurm Prolog:
++
+----
+#!/usr/bin/env bash
+
+preps::fs::check_mountpoints "/home"
+preps::nvidia::check_residual_user_processes
+preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680}"
+preps::nvidia::set_vboost_slider "${NVIDIA_VBOOST_SLIDER:-0}"
+preps::thp::set_thp "${THP:-always}"
+
+----
+* Setup optional override of predefined settings whenever required using the following notation as arguments to the function calls:
++
+----
+preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680}"
+----
++
+Explanation: Default power limit value is 680, but this value can be overriden by the user on a per-job basis.
 
 == Usage
 
-* Execution options:
-+
-----
-<PREPS_PREFIX>/bin/preps -help
-----
-+
-The help message displays the executable options as well as the suported environment variables:
-+
-----
-PrEpS (Prolog & Epilog for Slurm)
-
-Usage: preps [-log-level LEVEL]
-
-Options:
-  -log-level LEVEL    Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | CRITICAL}
-
-Environment Variables:
-  PREPS_CONFIG_FILE    Absolute Path to Alternate Configuration File
-  PREPS_LOG_LEVEL      Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | CRITICAL}
-
-----
-
-=== Log Level Selection
+=== Logging
 
 The log level is defined according to the following elements **in decreasing level of priority**:
 
-. Value from the `PREPS_LOG_LEVEL` environment variable.
-+
--> Scope: Job-specific.
-+
-WARNING: SLURMD prolog/epilog does not honor extra environment variables. This mechanism is therefore not supported in this specific context.
-. Value from the `-log-level` argument to the PrEpS executable.
-+
--> Scope: Global.
-. Default value inside the PrEpS executable:
-+
-----
-LOG_LEVEL="${PREPS_LOG_LEVEL:-ERROR}"
-----
-+
--> Scope: Global.
+. Value from the `LOG_LEVEL` environment variable (See Section: Overrides) -> Scope: Job-specific.
+. Value from the `-log-level` argument to the PrEpS executable -> Scope: Prolog/Epilog-specific
+. Default value inside the PrEpS executable -> Scope: Global.
 +
 NOTE: Default log level is set to `ERROR` in order to minimize the size of the logfile.
 
-=== Configuration File Selection
+The execution of Prolog/Epilog is logged into the following files:
+----
+<PREFIX>/preps/var/log/preps.<DD>.log
+----
 
-The configuration file is selected according to the following elements **in decreasing level of priority**:
+Log file records are made of the following fields:
 
-. Configuration file specified through the `PREPS_CONFIG_FILE` environment variable.
-+
--> Scope: Job-specific.
-+
-WARNING: SLURMD prolog/epilog does not honor extra environment variables. This mechanism is therefore not supported in this specific context.
-. Configuration file inside the job submission directory, named after the target Slurm partition:
+[cols="1,2",options="header",width="100%"]
+|===
+|Field Name|Purpose
+
+|Timestamp
+|Date and time of the event
+
+|Slurm Job ID
+|Slurm ID of the job
+
+|Slurm User Name
+|Name of the submission user
+
+|Hostname
+|Name of the compute node
+
+|Slurm Context
+|Prolog/Epilog context
+
+|Log Level
+|Log level of the associated message: Trace, Debugging, Information, Warning, Error, Critical
+
+|Message
+|Content of the message
+
+|===
+
+
+Log File Example::
+
+----
+2024-07-25 12:00:47 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
+2024-07-25 12:00:48 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
+2024-07-25 12:00:55 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
+2024-07-25 12:00:57 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
+2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | No Residual User Process Found
+2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | No Residual User Process Found
+2024-07-25 12:01:00 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
+2024-07-25 12:01:02 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
+2024-07-25 12:01:09 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
+2024-07-25 12:01:10 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
+2024-07-25 12:01:12 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2024-07-25 12:01:15 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+----
+
+=== Overrides
+
+Overrides are designed to allow regular users to alter the configuration of the compute nodes at submission time, with no need to be granted sudo rights.
+
+Overrides rely on environment variables holding user-specific values.
+
+==== Passing Variables to the Prolog/Epilog
+
+The Prolog/Epilog environment **does not** inherit from the current user environment at submission time.
+
+Therefore, in order to pass environment variables to the Prolog/Epilog, it is required to use the `--comment` directive of the `sbatch` command in either of the following two ways:
+
+* As a direct argument to the `sbatch` command itself:
 +
 ----
-${SLURM_JOB_WORK_DIR}/${SLURM_JOB_PARTITION}.conf
+sbatch --comment "NVIDIA_POWER_LIMIT=680" <...>
 ----
-. Default configuration file inside the job submission directory:
+* As an explicit directive inside the job submission file:
 +
 ----
-${SLURM_JOB_WORK_DIR}/default.conf
+#SBATCH --comment="NVIDIA_POWER_LIMIT=680"
 ----
-. Configuration file inside the configuration directory, named after the Slurm partition:
-+
-----
-<PREPS_PREFIX>/etc/${SLURM_JOB_PARTITION}.conf
-----
-+
--> Scope: Global.
-. Defaut configuration file inside the configuration directory:
-+
-----
-<PREPS_PREFIX>/etc/default.conf
-----
-+
--> Scope: Global.
+
+==== Supported Overrides
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Category|Environment Variable Name|Purpose
+
+|PrEpS
+|`LOG_LEVEL`
+|Job-specific Log Level: {TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}
+
+|NVIDIA
+|`NVIDIA_POWER_LIMIT`
+|Power Limit of the CG Module/GPU Devices in Watts
+
+|
+|`NVIDIA_VBOOST_SLIDER`
+|Configuration of the Video Boost Slider: {0 \| 1 \| 2 \| 3 \| 4}
+
+|THP
+|`THP`
+|Configuration of Transparent Huge Pages (THP): {always \| madvise \| never}
+
+|
+|`THP_SHMEM`
+|Configuration of Transparent Huge Pages (THP) for SHMEM: {advise \| always \| deny \| force \| never}
+
+|===

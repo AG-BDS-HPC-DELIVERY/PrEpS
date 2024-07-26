@@ -17,13 +17,13 @@ apis::nvsmi::get_persistence_mode() {
 				shift
 				;;
 			*)
-				main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Option: [${1}]"
+				main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
 				;;
 		esac
 		shift
 	done
 	if [[ -z "${id}" ]]; then
-		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [ID]"
+		main::log_event -level "FATAL" -message "Missing Argument: [ID]"
 	fi
 	"${NVSMI_EXECBIN}" --format="csv,noheader,nounits" --id="${id}" --query-gpu="persistence_mode"
 	return 0

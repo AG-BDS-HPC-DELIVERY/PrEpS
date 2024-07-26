@@ -9,9 +9,11 @@
 ## @defgroup cpufreq CPU Frequency Management
 ## @defgroup cpupower API for cpupower
 ## @defgroup fs Shared and Local Filesystems Management
+## @defgroup memory System Memory Management
 ## @defgroup nvidia NVIDIA GPU Subsystem Management
 ## @defgroup nvsmi API for NVIDIA SMI
 ## @defgroup os Operating System Management
+## @defgroup systemd systemd Units Management
 ## @defgroup thp Transparent Huge Pages (THP) Management
 ## @defgroup tuned tuned Profile Management
 #-------------------------------------------------------------------------------
@@ -21,22 +23,23 @@
 #===============================================================================
 readonly PREPS_PREFIX="$(realpath "$(dirname "${BASH_SOURCE[0]}")"/..)"
 readonly PREPS_EXECBIN="$(basename "${BASH_SOURCE[0]}")"
+readonly PREPS_EXECBINDIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 readonly PREPS_CONFIGDIR="${PREPS_PREFIX}/etc"
 readonly PREPS_LIBEXECDIR="${PREPS_PREFIX}/libexec"
 readonly PREPS_LOGDIR="${PREPS_PREFIX}/var/log"
-readonly PREPS_LOGFILE="${PREPS_LOGDIR}/${PREPS_EXECBIN}.log"
+export PREPS_LOGFILE="${PREPS_LOGDIR}/${PREPS_EXECBIN}.$(date +"%d").log"
 readonly PREPS_RUNDIR="${PREPS_PREFIX}/var/run"
 
 #===============================================================================
 # Function: main::log_event
 #===============================================================================
-readonly LOGGER_LEVEL_TRACE=0 LOGGER_LEVEL_DEBUG=1 LOGGER_LEVEL_INFO=2 LOGGER_LEVEL_WARN=3 LOGGER_LEVEL_ERROR=4 LOGGER_LEVEL_CRIT=5
-readonly LOGGER_LEVELS=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRIT")
+declare -A LOG_LEVELS=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5)
 main::log_event() {
+  declare -A log_levels=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5) && export LOG_LEVELS
 	while (( $# > 0 )); do
 		case "${1}" in
 			-level)
-				local -i level="${2}"
+				local level="${2}"
 				shift
 				;;
 			-message)
@@ -46,15 +49,22 @@ main::log_event() {
 		esac
 		shift
 	done
-	if (( level == LOGGER_LEVEL_CRIT )); then
-		printf "%26s | %12s | %12s | %-20s | %-45s | %-5s | %s\n" "$(date "+%Y-%m-%d %H:%M:%S %:z")" "${SLURM_JOB_ID}" "$(hostname --short)" "${SLURM_SCRIPT_CONTEXT}" "${FUNCNAME[1]}" "${LOGGER_LEVELS[${level}]}" "${message:-Undefined Exception} @ ${FUNCNAME[1]}:${BASH_LINENO[0]}" &>>"${PREPS_LOGFILE}"
-		exit 1
+	[[ ${log_levels[${level}]} ]] || return 0
+	(( ${log_levels[${level}]} >= ${log_levels[${LOG_LEVEL}]} )) || return 0
+	if [[ "${level}" == "FATAL" ]]; then
+		message="${message:-Undefined Exception} @ ${FUNCNAME[1]}:${BASH_LINENO[0]}"
 	fi
-	if (( level >= LOG_LEVEL )); then
-		printf "%26s | %12s | %12s | %-20s | %-45s | %-5s | %s\n" "$(date "+%Y-%m-%d %H:%M:%S %:z")" "${SLURM_JOB_ID}" "$(hostname --short)" "${SLURM_SCRIPT_CONTEXT}" "${FUNCNAME[1]}" "${LOGGER_LEVELS[${level}]}" "${message}" &>>"${PREPS_LOGFILE}"
-	fi
+	printf "%26s | %8s | %-15s | %-15s | %-20s | %-5s | %s\n" \
+		"$(date "+%Y-%m-%d %H:%M:%S %:z")" \
+		"${SLURM_JOB_ID}" \
+		"${SLURM_JOB_USER}" \
+		"$(hostname --short)" \
+		"${SLURM_SCRIPT_CONTEXT}" \
+		"${level}" \
+		"${message}" &>>"${PREPS_LOGFILE}"
 	return 0
 }
+export -f "main::log_event"
 
 #===============================================================================
 # Function: main::help
@@ -64,26 +74,46 @@ main::help() {
 
 Prolog/Epilog for Slurm (PrEpS)
 
-Usage: $(basename "${BASH_SOURCE[0]}") [-log-level LEVEL]
+Usage: $(basename "${BASH_SOURCE[0]}") [-log_level LEVEL]
 
 Options:
-  -log-level LEVEL    Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | CRITICAL}
+  -log_level LOG_LEVEL    Prolog/Epilog-Specific Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | FATAL}
 
 Environment Variables:
-  PREPS_CONFIG_FILE    Absolute Path to Alternate Configuration File
-  PREPS_LOG_LEVEL      Log Level (Overwrites Command-Line Option)
+
+  Logging
+    LOG_LEVEL             Job-Specific Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | FATAL}
+	                        Overwrites Default Value & Prolog/Epilog-Specific Value
+
+  NVIDIA
+		NVIDIA_VBOOST_SLIDER
 
 eof
 	exit 0
 }
 
+# Log Level #1
+LOG_LEVEL="INFO"
+if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
+	LOG_LEVEL_1="$(echo "${SLURM_JOB_COMMENT}" | awk 'match($0, /LOG_LEVEL=([A-Za-z]+)/, a) {print a[1]}')"
+	if [[ -n "${LOG_LEVEL_1}" ]]; then
+		LOG_LEVEL="${LOG_LEVEL_1^^}"
+		[[ ${LOG_LEVELS[${LOG_LEVEL}]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${LOG_LEVEL}]"
+		main::log_event -level "DEBUG" -message "Job-Specific Log Level: [${LOG_LEVEL}]"
+	fi
+fi
+export LOG_LEVEL
+
 # Modules
 while IFS= read -d '' -r -u 9 modulefile; do
-	module="$(awk 'match($0, /^(preps::.*)\(\)/, a) {print a[1]}' "${modulefile}")"
-	if [[ -z "${module}" ]] || [[ "$(type -t "${module}" 2>/dev/null)" != "function" ]]; then
-		# shellcheck source=/dev/null
-		source "${modulefile}" &>/dev/null || \
-			{ main::log_event -level "${LOGGER_LEVEL_WARN}" -message "Failed to Load Module: [${module}] from Modulefile: [${modulefile}] - Skipping Module"; }
+	module="$(awk 'match($0, /^([_a-z]+::[_a-z]+::[_a-z]+)\(\)/, a) {print a[1]}' "${modulefile}")"
+	# shellcheck source=/dev/null
+	source "${modulefile}" &>/dev/null || \
+		{ main::log_event -level "WARN" -message "Failed to Load Modulefile: [${modulefile}]"; }
+	if [[ -n "${module}" ]] && [[ "$(type -t "${module}" 2>/dev/null)" == "function" ]]; then
+		# shellcheck disable=SC2163
+		export -f "${module}" || \
+			{ main::log_event -level "WARN" -message "Failed to Export Module: [${module}]"; }
 	fi
 done 9< <(find "${PREPS_LIBEXECDIR}"/ -name "*.sh" -print0)
 # Options
@@ -92,12 +122,12 @@ while (( $# > 0 )); do
 		-help|-h)
 			main::help
 			;;
-		-log-level)
-			LOG_LEVEL="${2}"
+		-log_level)
+			LOG_LEVEL_2="${2}"
 			shift
 			;;
 		-*)
-			main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Option: [${1}]"
+			main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
 			;;
 		*)
 			break
@@ -106,93 +136,49 @@ while (( $# > 0 )); do
 	shift
 done
 
-# Log Level
-LOG_LEVEL="${PREPS_LOG_LEVEL:-ERROR}"
-if [[ "${LOG_LEVEL}" != "TRACE" && "${LOG_LEVEL}" != "DEBUG" \
-		&& "${LOG_LEVEL}" != "INFO" && "${LOG_LEVEL}" != "WARN" && "${LOG_LEVEL}" != "ERROR" ]]; then
-	main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Log Level: [${LOG_LEVEL}]"
+# Log Level #2
+if [[ -z "${LOG_LEVEL_1}" ]] && [[ -n "${LOG_LEVEL_2}" ]]; then
+	LOG_LEVEL="${LOG_LEVEL_2^^}"
+	[[ ${LOG_LEVELS[${LOG_LEVEL}]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${LOG_LEVEL}]"
+	main::log_event -level "DEBUG" -message "Prolog/Epilog-Specific Log Level: [${LOG_LEVEL}]"
 fi
-LOG_LEVEL="LOGGER_LEVEL_${LOG_LEVEL}"
-LOG_LEVEL="${!LOG_LEVEL}"
 
 # Startup Message
-main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Starting PrEpS"
-
-# Configuration File
-if [[ -n "${PREPS_CONFIG_FILE}" ]]; then
-	if [[ -f "${PREPS_CONFIG_FILE}" ]]; then
-		configfile="${PREPS_CONFIG_FILE}"
-		main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "Processing User-Specific Configuration File: [${PREPS_CONFIG_FILE}]"
-	else
-		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid User-Specific Configuration File: [${PREPS_CONFIG_FILE}]"
-	fi
-else
-	for directory in "${SLURM_JOB_WORK_DIR}" "${PREPS_CONFIGDIR}"; do
-		for filename in "${SLURM_JOB_PARTITION}.conf" "default.conf"; do
-			if [[ -f "${directory}/${filename}" ]]; then
-				configfile="${directory}/${filename}"
-				break
-			fi
-		done
-		if [[ -n "${configfile}" ]]; then break; fi
-	done
-fi
-main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "Using Configuration File: [${configfile}]"
-
-# Log Level
-main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "Performing Execution with Log Level: [${LOGGER_LEVELS[${LOG_LEVEL}]}]"
+main::log_event -level "TRACE" -message "Starting PrEpS"
 
 # Root User
 if [[ -n "${SLURM_JOB_USER}" ]]; then
-	main::log_event -level "${LOGGER_LEVEL_DEBUG}" -message "Performing Execution under User Account: [$(id --name --user)] on Behalf of User Account: [${SLURM_JOB_USER}]"
+	main::log_event -level "DEBUG" -message "Performing Execution under User Account: [$(id --name --user)] on Behalf of User Account: [${SLURM_JOB_USER}]"
 fi
 if (( EUID != 0 )); then
-	readonly SUDO="sudo"
+	export SUDO="sudo"
 fi
 
-# Return Code
+#  Job-Specific Environment
+if [[ "${SLURM_SCRIPT_CONTEXT}" == "prolog_"* ]] && [[ -n "${SLURM_JOB_COMMENT}" ]]; then
+	IFS=";" read -a parameters -r <<<"${SLURM_JOB_COMMENT}"
+	for parameter in "${parameters[@]}"; do
+		IFS="=" read -r name value <<<"${parameter}"
+		if [[ "${name}" != "LOG_LEVEL" ]]; then
+			main::log_event -level "DEBUG" -message "User-Specified Environment Variable: [${name}] with Value: [${value}]"
+			printf -v "${name}" "%s" "${value}"
+			# shellcheck disable=SC2163
+			export "${name}"
+		fi
+	done
+fi
+
+# Slurm Script Execution
 rc=0
-
-while read -r package module prolog epilog; do
-	function="preps::${package}::${module}"
-	#main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Inspecting Function: [${function}]"
-	if [[ "$(type -t "${function}" 2>/dev/null)" == "function" ]]; then
-		case "${SLURM_SCRIPT_CONTEXT}" in
-			"epilog"*)
-				override="PREPS_${package^^}_${module^^}_${SLURM_SCRIPT_CONTEXT^^}"
-				override="${override//-/_}"
-				#main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Inspecting Override: [${override}]"
-				if [[ -n "${!override}" ]]; then
-					epilog="${!override}"
-					main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Overriding Configuration File Value for Package/Module: [${package}/${module}] with Value: [${epilog}]"
-				fi
-				if [[ -n "${epilog}" ]] && [[ "${epilog,,}" != "no" ]]; then
-					${function} "${epilog}"
-				fi
-				;;
-			"prolog"*)
-				override="PREPS_${package^^}_${module^^}_${SLURM_SCRIPT_CONTEXT^^}"
-				override="${override//-/_}"
-				main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Inspecting Override: [${override}]"
-				if [[ -n "${!override}" ]]; then
-					prolog="${!override}"
-					main::log_event -level "${LOGGER_LEVEL_INFO}" -message "Overriding Configuration File Value for Package/Module: [${package}/${module}] with Value: [${prolog}]"
-				fi
-				if [[ -n "${prolog}" ]] && [[ "${prolog,,}" != "no" ]]; then
-					${function} "${prolog}"
-				fi
-				;;
-		esac
-		(( rc = rc + $? ))
-	else
-		main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Invalid Package/Module: [${package}/${module}]"
-	fi
-done < <(awk 'match ($0, /(^[\-a-z]+):\s+([\-a-z]+):\s+\{\047(.*)\047,\s*\047(.*)\047\}/, a) {printf "%s %s %s %s\n", a[1], a[2], a[3], a[4]}' "${configfile}")
-if (( rc > 0 )); then
-	main::log_event -level "${LOGGER_LEVEL_ERROR}" -message "Prolog/Epilog Failed with Return Code: [${rc}]"
+execbin="${PREPS_EXECBINDIR}/preps.${SLURM_SCRIPT_CONTEXT}"
+if [[ -x "${execbin}.${SLURM_JOB_PARTITION}" ]]; then
+	execbin="${execbin}.${SLURM_JOB_PARTITION}"
 fi
+main::log_event -level "TRACE" -message "Executing Script: [${execbin}]"
+"${execbin}"
+rc=$?
 
 # Exit Message
-main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Stopping PrEpS -> Return Code: [${rc}]"
+main::log_event -level "TRACE" -message "Stopping PrEpS -> Return Code: [${rc}]"
 
 exit ${rc}

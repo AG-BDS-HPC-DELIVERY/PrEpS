@@ -17,13 +17,13 @@ apis::cpupower::set_governor() {
 				shift
 				;;
 			*)
-				main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Invalid Option: [${1}]"
+				main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
 				;;
 		esac
 		shift
 	done
 	if [[ -z "${governor}" ]]; then
-		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [Governor]"
+		main::log_event -level "FATAL" -message "Missing Argument: [Governor]"
 	fi
 	${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --governor "${governor}" &>/dev/null
 	return $?

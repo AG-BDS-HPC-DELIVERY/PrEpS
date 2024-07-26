@@ -3,20 +3,20 @@
 #===============================================================================
 # cpupower
 #===============================================================================
-readonly CPUFREQ_PATH="/sys/devices/system/cpu/cpu0/cpufreq"
-readonly CPUPOWER_EXECBIN="/usr/bin/cpupower"
+export CPUFREQ_PATH="/sys/devices/system/cpu/cpu0/cpufreq"
+export CPUPOWER_EXECBIN="/usr/bin/cpupower"
 
 #===============================================================================
 # DCGMI
 #===============================================================================
-readonly DCGMI_EXECBIN="/usr/bin/dcgmi"
+export DCGMI_EXECBIN="/usr/bin/dcgmi"
 
 #===============================================================================
 # NHC
 #===============================================================================
-NHC_PREFIX="/etc/nhc"
+export NHC_PREFIX="/etc/nhc"
 
 #===============================================================================
 # NVIDIA SMI
 #===============================================================================
-readonly NVSMI_EXECBIN="/usr/bin/nvidia-smi"
+export NVSMI_EXECBIN="/usr/bin/nvidia-smi"

@@ -2,26 +2,26 @@
 
 #-------------------------------------------------------------------------------
 ## @file
-## @fn preps::os::start_systemd_units()
+## @fn preps::systemd::start_systemd_units()
 ## @brief Start systemd Units
 ## @param units Comma-Separated List of systemd Units: unit[,unit]
 ## @return Return Code
 ## @retval 0 Successfully Started systemd Units
 ## @retval 1 Failed to Start systemd Units
-## @ingroup os
+## @ingroup systemd
 #-------------------------------------------------------------------------------
-preps::os::start_systemd_units() {
-	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Entering Module: [${FUNCNAME[0]}]"
+preps::systemd::start_systemd_units() {
+	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local units && IFS="," read -a units -r <<<"${1}"
 	if [[ -z "${units[*]}" ]]; then
-		main::log_event -level "${LOGGER_LEVEL_CRIT}" -message "Missing Argument: [Units]"
+		main::log_event -level "FATAL" -message "Missing Argument: [Units]"
 	fi
 	local unit
 	for unit in "${units[@]}"; do
 		${SUDO} systemctl start "${unit}"
 		(( rc = rc + $? ))
 	done
-	main::log_event -level "${LOGGER_LEVEL_TRACE}" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
 	return ${rc}
 }

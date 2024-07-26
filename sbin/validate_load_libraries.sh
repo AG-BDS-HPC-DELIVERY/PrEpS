@@ -1,27 +1,28 @@
-#!/usr/bin/env bash +x
+#!/usr/bin/env bash
 
 PREPS_PREFIX="$(realpath "$(dirname "${BASH_SOURCE[0]}")"/..)"
-PREPS_CONFIGDIR="${PREPS_PREFIX}/etc"
+PREPS_PREFIX="$(dirname "{BASH_SOURCE[0]}")/.."
 PREPS_LIBEXECDIR="${PREPS_PREFIX}/libexec"
 
-# Host Configuration Libraries
-while read -r -u 9 library; do
-	if source "${library}" &>/dev/null; then
-		printf "[PASSED] "
-	else
-		printf "[FAILED] "
+total=0
+invalid=0
+valid=0
+while IFS= read -r modulefile; do
+	module="$(awk 'match($0, /(.*::.*::.*)\(\)/, a) {print a[1]}' ${modulefile})"
+	#module="$(basename ${modulefile} .sh)"
+	#module="${module//./::}"
+	if [[ "$(type -t "${module}" 2>/dev/null)" != "function" ]]; then
+		(( total += 1 ))
+		# shellcheck source=/dev/null.
+		if source "${modulefile}" &>/dev/null; then
+			echo "[  OK  ] Loading Modulefile Succeeded: [${modulefile}]"
+			(( valid += 1 ))
+		else
+			echo "[FAILED] Loading Modulefile Failed: [${modulefile}]"
+			(( invalid += 1 ))
+		fi
 	fi
-	printf "Library: [%s]\n" "${library}"
-done 9< <(find ${PREPS_LIBEXECDIR} -name "*.sh")
-
-# LSF Queue Configurations
-while read -r -u 9 configfile; do
-	if source "${configfile}" &>/dev/null; then
-		printf "[PASSED] "
-	else
-		printf "[FAILED] "
-	fi
-	printf "Configuration File: [%s]\n" "${configfile}"
-done 9< <(find "${PREPS_CONFIGDIR}" -name "*.sh")
+done < <(find "${PREPS_LIBEXECDIR}/" -name "*.sh")
+printf "Summary:\nTotal Files: [%d] / Valid: [%d] / Invalid: [%d]\n" "${total}" "${valid}" "${invalid}"
 
 exit 0

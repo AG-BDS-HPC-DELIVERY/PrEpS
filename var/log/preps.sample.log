@@ -1,0 +1,12 @@
+2024-07-25 12:00:47 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
+2024-07-25 12:00:48 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
+2024-07-25 12:00:55 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
+2024-07-25 12:00:57 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
+2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | No Residual User Process Found
+2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | No Residual User Process Found
+2024-07-25 12:01:00 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
+2024-07-25 12:01:02 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
+2024-07-25 12:01:09 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
+2024-07-25 12:01:10 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
+2024-07-25 12:01:12 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2024-07-25 12:01:15 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
