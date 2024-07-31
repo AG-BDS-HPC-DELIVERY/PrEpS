@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+preps::cpufreq::set_governor "powersave"
+preps::fs::cleanup_tmpdirs "/tmp"
+preps::nvidia::set_power_limit "680"
+preps::nvidia::set_vboost_slider "0"
+preps::thp::set_thp "always"
+
+exit 0
