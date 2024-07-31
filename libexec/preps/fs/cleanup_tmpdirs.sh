@@ -14,9 +14,7 @@ preps::fs::cleanup_tmpdirs() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local tmpdirs && IFS="," read -a tmpdirs -r <<<"${1}"
-	if [[ -z "${tmpdirs[*]}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Temporary Directories]"
-	fi
+	[[ -n "${tmpdirs[*]}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Temporary Directories]"
 	local tmpdir
 	for tmpdir in "${tmpdirs[@]}"; do
 		if (( SLURM_JOB_UID > 1000 )); then

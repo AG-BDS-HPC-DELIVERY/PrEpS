@@ -27,12 +27,8 @@ apis::cpupower::set_frequency_minmax() {
 		esac
 		shift
 	done
-	if [[ -z "${frequency_max}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
-	fi
-	if [[ -z "${frequency_min}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Frequency Min.]"
-	fi
+	[[ -n "${frequency_max}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
+	[[ -n "${frequency_min}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Min.]"
 	${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --max "${frequency_max}" --min "${frequency_min}" &>/dev/null
 	return $?
 }

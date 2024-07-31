@@ -14,9 +14,7 @@ preps::os::set_user_limits() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local limits && IFS="," read -a limits -r <<<"${1}"
-	if [[ -z "${limits[*]}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Limits]"
-	fi
+	[[ -n "${limits[*]}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Limits]"
 	local limit
 	for limit in "${limits[@]}"; do
 		local option value

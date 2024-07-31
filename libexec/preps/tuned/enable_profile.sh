@@ -15,9 +15,7 @@ preps::tuned::enable_profile() {
 	local -r tuned_execbin="/usr/sbin/tuned-adm"
 	local -i rc=0
 	local profile="${1}"
-	if [[ -z "${profile}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Profile]"
-	fi
+	[[ -n "${profile}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Profile]"
 	if "${tuned_execbin}" profile "${profile}" &>/dev/null; then
 		main::log_event -level "INFO" -message "Enabled tuned Profile: [${profile}]"
 	else

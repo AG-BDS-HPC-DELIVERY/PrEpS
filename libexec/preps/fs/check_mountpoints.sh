@@ -14,9 +14,7 @@ preps::fs::check_mountpoints() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local mountpoints && IFS="," read -a mountpoints -r <<<"${1}"
-	if [[ -z "${mountpoints[*]}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Mountpoints]"
-	fi
+	[[ -n "${mountpoints[*]}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Mountpoints]"
 	local mountpoint
 	for mountpoint in "${mountpoints[@]}"; do
 		if mountpoint --quiet "${mountpoint}" &>/dev/null; then

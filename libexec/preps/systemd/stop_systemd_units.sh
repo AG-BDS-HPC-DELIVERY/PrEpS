@@ -14,9 +14,7 @@ preps::systemd::stop_systemd_units() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local units && IFS="," read -a units -r <<<"${1}"
-	if [[ -z "${units[*]}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Units]"
-	fi
+	[[ -n "${units[*]}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Units]"
 	local unit
 	for unit in "${units[@]}"; do
 		${SUDO} systemctl stop "${unit}"

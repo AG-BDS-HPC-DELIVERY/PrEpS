@@ -4,7 +4,7 @@
 ## @file
 ## @fn preps::thp::set_thp()
 ## @brief Set Transparent Huge Pages (THP)
-## @param thp Transparent Huge Pages Configuration
+## @param thp Transparent Huge Pages Configuration: {always | madvise | never}
 ## @return Return Code
 ## @retval 0 Successfully Set Transparent Huge Pages
 ## @retval 1 Failed to Set Transparent Huge Pages
@@ -15,12 +15,8 @@ preps::thp::set_thp() {
 	local -r thp_enabled="/sys/kernel/mm/transparent_hugepage/enabled"
 	local -i rc=0
 	local thp="${1}"
-	if [[ -z "${thp}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [THP]"
-	fi
-	if [[ "${thp}" != "always" && "${thp}" != "madvise" && "${thp}" != "never" ]]; then
-		main::log_event -level "FATAL" -message "Invalid THP: [${thp}]"
-	fi
+	[[ -n "${thp}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [THP]"
+	[[ "${thp}" == "always" || "${thp}" == "madvise" || "${thp}" == "never" ]] || main::log_event -level "FATAL" -message "Invalid THP: [${thp}]"
 	if ${SUDO} /bin/bash -c "echo ${thp} >${thp_enabled}" &>/dev/null; then
 		main::log_event -level "INFO" -message "Set Transparent Huge Pages (THP): [$(cat ${thp_enabled})]"
 	else

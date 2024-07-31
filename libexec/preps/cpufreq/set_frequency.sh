@@ -14,9 +14,7 @@ preps::cpufreq::set_frequency() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local frequency="${1}"
-	if [[ -z "${frequency}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
-	fi
+	[[ -n "${frequency}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [CPU Frequency]"
 	if [[ "$(apis::cpupower::get_governor)" == "userspace" ]] && [[ "$(apis::cpupower::get_frequency)" != "${frequency}" ]]; then
 		if apis::cpupower::set_frequency -frequency "${frequency}"; then
 			main::log_event -level "INFO" -message "Set CPU Frequency: [${frequency}]"

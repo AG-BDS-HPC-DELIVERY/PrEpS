@@ -16,15 +16,9 @@ preps::nvidia::restart_systemd_unit() {
 	local -i rc=0
 	local unit="${1}"
 	local max_active_time="${2}"
-	if [[ -z "${unit}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [systemd Unit]"
-	fi
-	if [[ -z "${max_active_time}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Max. Active Time]"
-	fi
-	if ! (( max_active_time > 0 )); then
-		main::log_event -level "FATAL" -message "Invalid Max. Active Time: [${max_active_time}]"
-	fi
+	[[ -n "${unit}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [systemd Unit]"
+	[[ -n "${max_active_time}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Max. Active Time]"
+	(( max_active_time > 0 )) || main::log_event -level "FATAL" -message "Invalid Max. Active Time: [${max_active_time}]"
 	if systemctl is-active "${unit}" &>/dev/null; then
 		local timestamp1 && timestamp1="$(awk '{printf "%.0f", $1}' "/proc/uptime")"
 		local timestamp2 && timestamp2="$(systemctl show "${unit}" --property=ActiveEnterTimestampMonotonic | awk -F '=' '{printf "%.0f", $2/(1000*1000)}')"

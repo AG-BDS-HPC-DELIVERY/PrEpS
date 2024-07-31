@@ -14,9 +14,8 @@ preps::nvidia::set_power_limit() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local power_limit="${1}"
-	if [[ -z "${power_limit}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Power Limit]"
-	fi
+	[[ -n "${power_limit}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Power Limit]"
+	(( power_limit > 0 )) || main::log_event -level "FATAL" -message "Invalid Power Limit Value: [${power_limit}]"
 	if apis::nvsmi::set_power_limit -power_limit "${power_limit}"; then
 		main::log_event -level "INFO" -message "Set Power Limit: [$(apis::nvsmi::get_power_limit)]"
 	else

@@ -14,9 +14,7 @@ preps::nvidia::set_applications_clocks() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local applications_clocks="${1}"
-	if [[ -z "${applications_clocks}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
-	fi
+	[[ -n "${applications_clocks}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
 	local id
 	for id in $(apis::nvsmi::get_gpu_indexes); do
 		if [[ "$(apis::nvsmi::get_applications_clocks -id "${id}")" != "${applications_clocks}" ]]; then

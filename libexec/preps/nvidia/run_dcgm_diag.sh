@@ -15,12 +15,8 @@ preps::nvidia::run_dcgm_diag() {
 	local -r DCGMI_EXECBIN="dcgmi"
 	local -i rc=0
 	local diag="${1}"
-	if [[ -z "${diag}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [DCGMI Diag Level]"
-	fi
-	if (( diag != 1 )) && (( diag != 2 )) && (( diag != 3 )) && (( diag != 4 )); then
-		main::log_event -level "FATAL" -message "Invalid DCGMI Diag Level: [${diag}]"
-	fi
+	[[ -n "${diag}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [DCGMI Diag Level]"
+	(( diag >= 1 && diag <= 4 )) || main::log_event -level "FATAL" -message "Invalid DCGMI Diag Level: [${diag}]"
 	if "${DCGMI_EXECBIN}" diag --run "${diag}" &>/dev/null; then
 		main::log_event -level "INFO" -message "DCGMI Diag with Level: [${diag}] Passed"
 	else
