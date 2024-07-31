@@ -50,14 +50,14 @@ The various Prolog/Epilog mechanisms are summarized in the table below:
 |srun Invocation Node
 |srun Invocation User
 
-|Task Prolog/Epilog
+|Task Prolog
 |`prolog_task`
 |`TaskProlog` +
 (`srun --task-prolog`)
 |Compute Node
 |srun Invocation User
 
-|
+|Task Epilog
 |`epilog_task`
 |`TaskEpilog` +
 (`srun --task-epilog`)
@@ -205,12 +205,16 @@ The package offers the following modules:
 |Cleanup existing Inter-Process Communications (IPC)
 
 |`preps::memory::cleanup_memory_caches`
-|-
+|`{1: pagecache | 2: dentries + inodes | 3: pagecache + dentries + inodes}`
 |Cleanup memory caches
 
 |`preps::memory::cleanup_shared_memory_segments`
 |-
 |Cleanup residual shared memory segments
+
+|`preps::memory::compact_memory`
+|-
+|Compact memory
 
 |`preps::memory::set_numa_balancing`
 |`{0 \| 1}`
