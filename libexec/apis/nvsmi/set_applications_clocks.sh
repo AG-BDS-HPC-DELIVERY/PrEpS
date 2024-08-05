@@ -27,12 +27,7 @@ apis::nvsmi::set_applications_clocks() {
 		esac
 		shift
 	done
-	if [[ -z "${applications_clocks}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
-	fi
-	if [[ -z "${id}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [ID]"
-	fi
-	${SUDO} "${NVSMI_EXECBIN}" --applications-clocks="${applications_clocks}" --id="${id}"
+	[[ -n "${applications_clocks}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
+	${SUDO} "${NVSMI_EXECBIN}" --applications-clocks="${applications_clocks}" ${id:+--id="${id}"}
 	return $?
 }

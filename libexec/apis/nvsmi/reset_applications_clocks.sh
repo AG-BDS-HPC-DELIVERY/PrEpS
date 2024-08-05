@@ -22,9 +22,6 @@ apis::nvsmi::reset_applications_clocks() {
 		esac
 		shift
 	done
-	if [[ -z "${id}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [ID]"
-	fi
-	${SUDO} "${NVSMI_EXECBIN}" --id="${id}" --reset-applications-clocks
+	${SUDO} "${NVSMI_EXECBIN}" ${id:+--id="${id}"} --reset-applications-clocks
 	return $?
 }

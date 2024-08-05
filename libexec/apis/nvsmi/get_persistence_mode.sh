@@ -22,9 +22,10 @@ apis::nvsmi::get_persistence_mode() {
 		esac
 		shift
 	done
-	if [[ -z "${id}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [ID]"
-	fi
-	"${NVSMI_EXECBIN}" --format="csv,noheader,nounits" --id="${id}" --query-gpu="persistence_mode"
+	local mode modes
+	while read -r -u 9 mode; do
+		modes="${modes}${modes:+";"}${mode}"
+	done 9< <("${NVSMI_EXECBIN}" --format="csv,noheader,nounits" ${id:+--id="${id}"} --query-gpu="persistence_mode")
+	printf "%s" "${modes}"
 	return 0
 }
