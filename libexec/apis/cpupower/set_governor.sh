@@ -22,9 +22,7 @@ apis::cpupower::set_governor() {
 		esac
 		shift
 	done
-	if [[ -z "${governor}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Governor]"
-	fi
+	[[ -n "${governor}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Governor]"
 	${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --governor "${governor}" &>/dev/null
 	return $?
 }

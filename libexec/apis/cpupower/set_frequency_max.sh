@@ -22,9 +22,7 @@ apis::cpupower::set_frequency_max() {
 		esac
 		shift
 	done
-	if [[ -z "${frequency_max}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
-	fi
+	[[ -n "${frequency_max}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
 	${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --max "${frequency_max}" &>/dev/null
 	return $?
 }

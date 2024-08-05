@@ -23,12 +23,8 @@ apis::nvsmi::set_boost_slider() {
 		esac
 		shift
 	done
-	if [[ -z "${vboost}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Video Boost Slider]"
-	fi
-	if (( vboost != 0 )) && (( vboost != 1 )); then
-		main::log_event -level "FATAL" -message "Invalid Video Boost Slider: [${vboost}]"
-	fi
+	[[ -n "${vboost}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Video Boost Slider]"
+	(( vboost == 0 || vboost == 1 )) || main::log_event -level "FATAL" -message "Invalid Video Boost Slider: [${vboost}]"
 	${SUDO} "${NVSMI_EXECBIN}" boost-slider --vboost "${vboost}"
 	return $?
 }

@@ -22,9 +22,7 @@ apis::cpupower::set_frequency() {
 		esac
 		shift
 	done
-	if [[ -z "${frequency}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [Frequency]"
-	fi
+	[[ -n "${frequency}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency]"
 	${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --freq "${frequency}" &>/dev/null
 	return $?
 }

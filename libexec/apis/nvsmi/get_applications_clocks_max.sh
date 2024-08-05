@@ -22,9 +22,8 @@ apis::nvsmi::get_applications_clocks_max() {
 		esac
 		shift
 	done
-	if [[ -z "${id}" ]]; then
-		main::log_event -level "FATAL" -message "Missing Argument: [ID]"
-	fi
+	[[ -n "${id}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [GPU ID]"
+	(( id >= 0 )) || main::log_event -level "FATAL" -message "Invalid GPU ID: [${id}]"
 	local clocks
 	clocks="$("${NVSMI_EXECBIN}" --format="csv,noheader,nounits" --id="${id}" --query-gpu="clocks.max.memory,clocks.max.graphics")"
 	clocks="${clocks// /}"
