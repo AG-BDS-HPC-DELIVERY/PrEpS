@@ -1,4 +1,9 @@
+:toc:
+:toc-placement!:
+
 = PrEpS (**Pr**olog/**Ep**ilog for **S**lurm)
+
+toc::[]
 
 == About the Project
 
@@ -189,7 +194,7 @@ The package offers the following modules:
 
 |`preps::fs::cleanup_tmpdirs`
 |`TMPDIR[,TMPDIR]`
-|Cleanup temporary directory
+|Cleanup temporary directories
 |===
 
 ===== Memory
@@ -205,7 +210,7 @@ The package offers the following modules:
 |Cleanup existing Inter-Process Communications (IPC)
 
 |`preps::memory::cleanup_memory_caches`
-|`{1: pagecache | 2: dentries + inodes | 3: pagecache + dentries + inodes}`
+|`{1: pagecache \| 2: dentries + inodes \| 3: pagecache + dentries + inodes}`
 |Cleanup memory caches
 
 |`preps::memory::cleanup_shared_memory_segments`
@@ -364,7 +369,7 @@ chmod --recursive g=u,g-w,o=g <PREFIX>/preps
 * Grant executive access rights to the PrEpS binary:
 +
 ----
-chmod a+x <PREFIX>/preps/bin/preps
+chmod a+x <PREFIX>/preps/bin/preps*
 ----
 
 === Configuration
@@ -414,6 +419,8 @@ preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680}"
 ----
 +
 Explanation: Default power limit value is 680, but this value can be overriden by the user on a per-job basis.
++
+cf. Section: <<Overrides>>
 
 == Usage
 
@@ -421,9 +428,9 @@ Explanation: Default power limit value is 680, but this value can be overriden b
 
 The log level is defined according to the following elements **in decreasing level of priority**:
 
-. Value from the `LOG_LEVEL` environment variable (See Section: Overrides) -> Scope: Job-specific.
-. Value from the `-log-level` argument to the PrEpS executable -> Scope: Prolog/Epilog-specific
-. Default value inside the PrEpS executable -> Scope: Global.
+* Value from the `LOG_LEVEL` environment variable (cf. Section: <<Overrides>>) -> Scope: Job-specific.
+* Value from the `-log-level` argument to the PrEpS executable -> Scope: Prolog/Epilog-specific
+* Default value inside the PrEpS executable -> Scope: Global.
 +
 NOTE: Default log level is set to `ERROR` in order to minimize the size of the logfile.
 
@@ -458,7 +465,6 @@ Log file records are made of the following fields:
 
 |Message
 |Content of the message
-
 |===
 
 
@@ -527,5 +533,4 @@ sbatch --comment "NVIDIA_POWER_LIMIT=680" <...>
 |
 |`THP_SHMEM`
 |Configuration of Transparent Huge Pages (THP) for SHMEM: {advise \| always \| deny \| force \| never}
-
 |===
