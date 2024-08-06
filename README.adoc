@@ -520,7 +520,7 @@ Example:
 ----
 ====
 
-==== Supported Overrides
+==== Typical Overrides
 
 [cols="1,1,2",options="header",width="100%"]
 |===
@@ -529,6 +529,18 @@ Example:
 |PrEpS
 |`LOG_LEVEL`
 |Job-specific Log Level: {TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}
+
+|CPU Frequency
+|`CPUFREQ_FREQUENCY_MAX`
+|CPU Frequency Max. in Hertz
+
+|
+|`CPUFREQ_FREQUENCY_MIN`
+|CPU Frequency Min. in Hertz
+
+|
+|`CPUFREQ_GOVERNOR`
+|CPU Governor
 
 |NVIDIA
 |`NVIDIA_POWER_LIMIT`
@@ -546,3 +558,13 @@ Example:
 |`THP_SHMEM`
 |Configuration of Transparent Huge Pages (THP) for SHMEM: {advise \| always \| deny \| force \| never}
 |===
+
+[NOTE]
+====
+In order for overrides to be actually enabled, the related environment variables need to be specified as part of the arguments of the related functions.
+Example:
+----
+preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680}"
+preps::nvidia::set_vboost_slider "${NVIDIA_VBOOST_SLIDER:-0}"
+----
+====
