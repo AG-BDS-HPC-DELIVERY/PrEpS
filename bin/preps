@@ -7,12 +7,13 @@
 ## @par Purpose
 ## Comprehensive and Extensive Framework for Prolog/Epilog in Slurm
 ## @defgroup cpufreq CPU Frequency Management
-## @defgroup cpupower API for cpupower
+## @defgroup cpupower API for cpupower Utility
 ## @defgroup fs Shared and Local Filesystems Management
 ## @defgroup memory System Memory Management
 ## @defgroup nvidia NVIDIA GPU Subsystem Management
-## @defgroup nvsmi API for NVIDIA SMI
+## @defgroup nvsmi API for NVIDIA SMI Utility
 ## @defgroup os Operating System Management
+## @defgroup slurm Slurm Workload Scheduler Management
 ## @defgroup systemd systemd Units Management
 ## @defgroup thp Transparent Huge Pages (THP) Management
 ## @defgroup tuned tuned Profile Management
@@ -28,14 +29,14 @@ readonly PREPS_CONFIGDIR="${PREPS_PREFIX}/etc"
 readonly PREPS_LIBEXECDIR="${PREPS_PREFIX}/libexec"
 readonly PREPS_LOGDIR="${PREPS_PREFIX}/var/log"
 export PREPS_LOGFILE="${PREPS_LOGDIR}/${PREPS_EXECBIN}.$(date +"%d").log"
-readonly PREPS_RUNDIR="${PREPS_PREFIX}/var/run"
+export PREPS_RUNDIR="${PREPS_PREFIX}/var/run"
 
 #===============================================================================
 # Function: main::log_event
 #===============================================================================
 declare -A LOG_LEVELS=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5)
 main::log_event() {
-  declare -A log_levels=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5) && export LOG_LEVELS
+  declare -A log_levels=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5)
 	while (( $# > 0 )); do
 		case "${1}" in
 			-level)
@@ -46,22 +47,24 @@ main::log_event() {
 				local message="${2}"
 				shift
 				;;
+			-singleton)
+				local -i singleton=1
+				;;
 		esac
 		shift
 	done
-	[[ ${log_levels[${level}]} ]] || return 0
 	(( ${log_levels[${level}]} >= ${log_levels[${LOG_LEVEL}]} )) || return 0
-	if [[ "${level}" == "FATAL" ]]; then
-		message="${message:-Undefined Exception} @ ${FUNCNAME[1]}:${BASH_LINENO[0]}"
-	fi
-	printf "%26s | %8s | %-15s | %-15s | %-20s | %-5s | %s\n" \
-		"$(date "+%Y-%m-%d %H:%M:%S %:z")" \
-		"${SLURM_JOB_ID}" \
-		"${SLURM_JOB_USER}" \
-		"$(hostname --short)" \
-		"${SLURM_SCRIPT_CONTEXT}" \
-		"${level}" \
-		"${message}" &>>"${PREPS_LOGFILE}"
+  ( (( "${singleton}" == 1 )) && [[ "${SLURMD_NODENAME}" != "${HEADNODE}" ]] ) && return 0
+	[[ "${level}" == "FATAL" ]] && message="${message:-Undefined Exception} @ ${FUNCNAME[1]}:${BASH_LINENO[0]}"
+  flock --exclusive --timeout 2.5 "${PREPS_LOGFILE}" \
+	  printf "%26s | %8s | %-15s | %-15s | %-20s | %-5s | %s\n" \
+    	"$(date "+%Y-%m-%d %H:%M:%S %:z")" \
+  		"${SLURM_JOB_ID}" \
+  		"${SLURM_JOB_USER}" \
+  		"$(hostname --short)" \
+  		"${SLURM_SCRIPT_CONTEXT}" \
+  		"${level}" \
+  		"${message}" >>"${PREPS_LOGFILE}"
 	return 0
 }
 export -f "main::log_event"
@@ -79,27 +82,24 @@ Usage: $(basename "${BASH_SOURCE[0]}") [-log_level LEVEL]
 Options:
   -log_level LOG_LEVEL    Prolog/Epilog-Specific Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | FATAL}
 
-Environment Variables:
-
-  Logging
-    LOG_LEVEL             Job-Specific Log Level: {TRACE | DEBUG | INFO | WARN | ERROR | FATAL}
-	                        Overwrites Default Value & Prolog/Epilog-Specific Value
-
-  NVIDIA
-		NVIDIA_VBOOST_SLIDER
-
 eof
 	exit 0
 }
 
+# Execution Time #1
+time1=$(date +"%s")
+
+# Headnode
+export HEADNODE="$(nodeset --fold --slice=0 "${SLURM_JOB_NODELIST}")"
+
 # Log Level #1
-LOG_LEVEL="INFO"
+LOG_LEVEL="WARN"
 if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
 	LOG_LEVEL_1="$(echo "${SLURM_JOB_COMMENT}" | awk 'match($0, /LOG_LEVEL=([A-Za-z]+)/, a) {print a[1]}')"
 	if [[ -n "${LOG_LEVEL_1}" ]]; then
 		LOG_LEVEL="${LOG_LEVEL_1^^}"
-		[[ ${LOG_LEVELS[${LOG_LEVEL}]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${LOG_LEVEL}]"
-		main::log_event -level "DEBUG" -message "Job-Specific Log Level: [${LOG_LEVEL}]"
+	  [[ ${LOG_LEVELS[${LOG_LEVEL}]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${LOG_LEVEL}]" -singleton
+	  main::log_event -level "DEBUG" -message "Job-Specific Log Level: [${LOG_LEVEL}]" -singleton
 	fi
 fi
 export LOG_LEVEL
@@ -108,12 +108,10 @@ export LOG_LEVEL
 while IFS= read -d '' -r -u 9 modulefile; do
 	module="$(awk 'match($0, /^([_a-z]+::[_a-z]+::[_a-z]+)\(\)/, a) {print a[1]}' "${modulefile}")"
 	# shellcheck source=/dev/null
-	source "${modulefile}" &>/dev/null || \
-		{ main::log_event -level "WARN" -message "Failed to Load Modulefile: [${modulefile}]"; }
+	source "${modulefile}" &>/dev/null || main::log_event -level "WARN" -message "Failed to Load Modulefile: [${modulefile}]" -singleton
 	if [[ -n "${module}" ]] && [[ "$(type -t "${module}" 2>/dev/null)" == "function" ]]; then
 		# shellcheck disable=SC2163
-		export -f "${module}" || \
-			{ main::log_event -level "WARN" -message "Failed to Export Module: [${module}]"; }
+		export -f "${module}" || main::log_event -level "WARN" -message "Failed to Export Module: [${module}]" -singleton
 	fi
 done 9< <(find "${PREPS_LIBEXECDIR}"/ -name "*.sh" -print0)
 # Options
@@ -139,8 +137,8 @@ done
 # Log Level #2
 if [[ -z "${LOG_LEVEL_1}" ]] && [[ -n "${LOG_LEVEL_2}" ]]; then
 	LOG_LEVEL="${LOG_LEVEL_2^^}"
-	[[ ${LOG_LEVELS[${LOG_LEVEL}]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${LOG_LEVEL}]"
-	main::log_event -level "DEBUG" -message "Prolog/Epilog-Specific Log Level: [${LOG_LEVEL}]"
+	[[ ${LOG_LEVELS[${LOG_LEVEL}]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${LOG_LEVEL}]" -singleton
+	main::log_event -level "DEBUG" -message "Prolog/Epilog-Specific Log Level: [${LOG_LEVEL}]" -singleton
 fi
 
 # Startup Message
@@ -148,7 +146,7 @@ main::log_event -level "TRACE" -message "Starting PrEpS"
 
 # Root User
 if [[ -n "${SLURM_JOB_USER}" ]]; then
-	main::log_event -level "DEBUG" -message "Performing Execution under User Account: [$(id --name --user)] on Behalf of User Account: [${SLURM_JOB_USER}]"
+	main::log_event -level "DEBUG" -message "Performing Execution under User Account: [$(id --name --user)] on Behalf of User Account: [${SLURM_JOB_USER}]" -singleton
 fi
 if (( EUID != 0 )); then
 	export SUDO="sudo"
@@ -160,7 +158,7 @@ if [[ "${SLURM_SCRIPT_CONTEXT}" == "prolog_"* ]] && [[ -n "${SLURM_JOB_COMMENT}"
 	for parameter in "${parameters[@]}"; do
 		IFS="=" read -r name value <<<"${parameter}"
 		if [[ "${name}" != "LOG_LEVEL" ]]; then
-			main::log_event -level "DEBUG" -message "User-Specified Environment Variable: [${name}] with Value: [${value}]"
+			main::log_event -level "DEBUG" -message "User-Specified Environment Variable: [${name}] with Value: [${value}]" -singleton
 			printf -v "${name}" "%s" "${value}"
 			# shellcheck disable=SC2163
 			export "${name}"
@@ -177,6 +175,11 @@ fi
 main::log_event -level "TRACE" -message "Executing Script: [${execbin}]"
 "${execbin}"
 rc=$?
+
+# Execution Time #2
+time2=$(date +"%s")
+exectime=$(( time2 - time1 ))
+main::log_event -level "DEBUG" -message "PrEpS Execution Time (Seconds): [${exectime}]"
 
 # Exit Message
 main::log_event -level "TRACE" -message "Stopping PrEpS -> Return Code: [${rc}]"
