@@ -18,16 +18,11 @@ preps::cpufreq::set_frequency_min_max() {
 	local frequency_max="${frequencies[1]}"
 	[[ -n "${frequency_max}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
 	[[ -n "${frequency_min}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Min.]"
-	(( frequency_min <= frequency_max )) || main::log_event -level "FATAL" -message "Invalid Arguments: [Frequency Min.] Is Greater Than [Frequency Max.]"
-	if [[ "$(apis::cpupower::get_frequency_max)" != "${frequency_max}" ]] || [[ "$(apis::cpupower::get_frequency_min)" != "${frequency_min}" ]]; then
-		if apis::cpupower::set_frequency_minmax -frequency_max "${frequency_max}" -frequency_min "${frequency_min}"; then
-			main::log_event -level "INFO" -message "Set CPU Frequency Min.: [$(apis::cpupower::get_frequency_hw_min)] / Max.: [$(apis::cpupower::get_frequency_hw_max))]"
-		else
-			main::log_event -level "ERROR" -message "Failed to Set CPU Frequency Min./Max. - Return Code: [$?]"
-			rc=1
-		fi
+	if apis::cpupower::set_frequency_minmax -frequency_max "${frequency_max}" -frequency_min "${frequency_min}"; then
+		main::log_event -level "INFO" -message "Set CPU Frequency Min.-Max.: [$(apis::cpupower::get_frequency_min)]-[$(apis::cpupower::get_frequency_max)] (Hardware Limits: [$(apis::cpupower::get_frequency_hw_min)]-[$(apis::cpupower::get_frequency_hw_max)])"
 	else
-		main::log_event -level "INFO" -message "Skipped Setting of CPU Frequency Min./Max."
+		main::log_event -level "ERROR" -message "Failed to Set CPU Frequency Min./Max. - Return Code: [$?]"
+		rc=1
 	fi
 	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
 	return ${rc}
