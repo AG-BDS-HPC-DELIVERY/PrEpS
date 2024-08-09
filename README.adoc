@@ -516,7 +516,7 @@ Multiple overrides can be specified as a semi-colon separated list:
 ----
 Example:
 ----
---comment="NVIDIA_POWER_LIMIT=680;VBOOST_SLIDER=1"
+--comment="NVIDIA_POWER_LIMIT=680;NVIDIA_VBOOST_SLIDER=1"
 ----
 ====
 
