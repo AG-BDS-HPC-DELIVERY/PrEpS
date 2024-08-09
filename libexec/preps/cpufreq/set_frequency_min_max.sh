@@ -19,7 +19,7 @@ preps::cpufreq::set_frequency_min_max() {
 	[[ -n "${frequency_max}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
 	[[ -n "${frequency_min}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Min.]"
 	if apis::cpupower::set_frequency_minmax -frequency_max "${frequency_max}" -frequency_min "${frequency_min}"; then
-		main::log_event -level "INFO" -message "Set CPU Frequency Min.-Max.: [$(apis::cpupower::get_frequency_min)]-[$(apis::cpupower::get_frequency_max)] (Hardware Limits: [$(apis::cpupower::get_frequency_hw_min)]-[$(apis::cpupower::get_frequency_hw_max)])"
+		main::log_event -level "INFO" -message "Set CPU Frequency Limits: [$(apis::cpupower::get_frequency_min)]-[$(apis::cpupower::get_frequency_max)] ( Hardware Limits: [$(apis::cpupower::get_frequency_hw_min)]-[$(apis::cpupower::get_frequency_hw_max)] )"
 	else
 		main::log_event -level "ERROR" -message "Failed to Set CPU Frequency Min./Max. - Return Code: [$?]"
 		rc=1
