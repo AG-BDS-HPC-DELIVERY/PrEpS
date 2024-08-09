@@ -1,12 +1,42 @@
-2024-07-25 12:00:47 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
-2024-07-25 12:00:48 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
-2024-07-25 12:00:55 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
-2024-07-25 12:00:57 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
-2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | No Residual User Process Found
-2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | No Residual User Process Found
-2024-07-25 12:01:00 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
-2024-07-25 12:01:02 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
-2024-07-25 12:01:09 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
-2024-07-25 12:01:10 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
-2024-07-25 12:01:12 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
-2024-07-25 12:01:15 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2024-08-09 17:59:04 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | DEBUG | Job-Specific Log Level: [DEBUG]
+2024-08-09 17:59:06 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [ntallet]
+2024-08-09 17:59:06 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
+2024-08-09 17:59:06 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | DEBUG | User-Specified Environment Variable: [CPUFREQ_FREQUENCY_MAX] with Value: [2000mhz]
+2024-08-09 17:59:06 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | DEBUG | User-Specified Environment Variable: [NVIDIA_POWER_LIMIT] with Value: [550]
+2024-08-09 17:59:06 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | DEBUG | User-Specified Environment Variable: [NVIDIA_VBOOST_SLIDER] with Value: [1]
+2024-08-09 17:59:07 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | DEBUG | User-Specified Environment Variable: [THP] with Value: [madvise]
+2024-08-09 17:59:07 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
+2024-08-09 17:59:08 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | No Residual User Process Found
+2024-08-09 17:59:08 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | No Residual User Process Found
+2024-08-09 17:59:09 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Set CPU Frequency Min.-Max.: [81000]-[2000000] (Hardware Limits: [81000]-[3456000])
+2024-08-09 17:59:09 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Set CPU Frequency Min.-Max.: [81000]-[2000000] (Hardware Limits: [81000]-[3411000])
+2024-08-09 17:59:09 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Set CPU Governor: [performance]
+2024-08-09 17:59:10 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Set CPU Governor: [performance]
+2024-08-09 17:59:10 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Set Power Limit: [550.00;550.00;550.00;550.00]
+2024-08-09 17:59:10 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Set Power Limit: [550.00;550.00;550.00;550.00]
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Set Video Boost Slider: [1;1;1;1]
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Set Video Boost Slider: [1;1;1;1]
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [always [madvise] never]
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [always [madvise] never]
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Dropped Memory Caches
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Dropped Memory Caches
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | INFO  | Compacted Memory
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod02       | prolog_slurmd        | DEBUG | PrEpS Execution Time (Seconds): [9]
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | INFO  | Compacted Memory
+2024-08-09 17:59:11 +02:00 |     5027 | ntallet         | pm1-nod01       | prolog_slurmd        | DEBUG | PrEpS Execution Time (Seconds): [9]
+2024-08-09 17:59:29 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | DEBUG | Job-Specific Log Level: [DEBUG]
+2024-08-09 17:59:29 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [ntallet]
+2024-08-09 17:59:32 +02:00 |     5027 | ntallet         | pm1-nod02       | epilog_slurmd        | DEBUG | Dumped System Configuration into YAML File: [/home/software/preps/var/run/slurm/history/2024/08/09/5027/nodes/pm1-nod02.yaml]
+2024-08-09 17:59:32 +02:00 |     5027 | ntallet         | pm1-nod02       | epilog_slurmd        | INFO  | Set CPU Frequency Min.-Max.: [81000]-[3411000] (Hardware Limits: [81000]-[3456000])
+2024-08-09 17:59:32 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | DEBUG | Dumped System Configuration into YAML File: [/home/software/preps/var/run/slurm/history/2024/08/09/5027/nodes/pm1-nod01.yaml]
+2024-08-09 17:59:32 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | INFO  | Set CPU Frequency Min.-Max.: [81000]-[3411000] (Hardware Limits: [81000]-[3411000])
+2024-08-09 17:59:32 +02:00 |     5027 | ntallet         | pm1-nod02       | epilog_slurmd        | INFO  | Set CPU Governor: [powersave]
+2024-08-09 17:59:33 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | INFO  | Set CPU Governor: [powersave]
+2024-08-09 17:59:34 +02:00 |     5027 | ntallet         | pm1-nod02       | epilog_slurmd        | INFO  | Set Power Limit: [680.00;680.00;680.00;680.00]
+2024-08-09 17:59:34 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | INFO  | Set Power Limit: [680.00;680.00;680.00;680.00]
+2024-08-09 17:59:36 +02:00 |     5027 | ntallet         | pm1-nod02       | epilog_slurmd        | INFO  | Set Video Boost Slider: [0;0;0;0]
+2024-08-09 17:59:36 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | INFO  | Set Video Boost Slider: [0;0;0;0]
+2024-08-09 17:59:36 +02:00 |     5027 | ntallet         | pm1-nod02       | epilog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2024-08-09 17:59:36 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2024-08-09 17:59:36 +02:00 |     5027 | ntallet         | pm1-nod02       | epilog_slurmd        | DEBUG | PrEpS Execution Time (Seconds): [8]
+2024-08-09 17:59:36 +02:00 |     5027 | ntallet         | pm1-nod01       | epilog_slurmd        | DEBUG | PrEpS Execution Time (Seconds): [8]
