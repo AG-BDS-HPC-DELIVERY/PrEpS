@@ -532,11 +532,11 @@ Example:
 
 |CPU Frequency
 |`CPUFREQ_FREQUENCY_MAX`
-|CPU Frequency Max. in Hertz
+|CPU Frequency Max. in KHz (default) or MHz / GHz
 
 |
 |`CPUFREQ_FREQUENCY_MIN`
-|CPU Frequency Min. in Hertz
+|CPU Frequency Min. in KHz (default) or MHz / GHz
 
 |
 |`CPUFREQ_GOVERNOR`
