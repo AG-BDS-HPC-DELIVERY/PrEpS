@@ -18,7 +18,8 @@ preps::slurm::archive_job() {
     subdir="${rundir}/job"
     mkdir --parent "${subdir}"
     outfile="${subdir}/${SLURM_JOB_ID}.yaml"
-  	cat >"${outfile}" <<- eof
+  	cat &>"${outfile}" <<- eof
+---
 scontrol show job: |
 $(scontrol show job "${SLURM_JOB_ID}")
 eof
@@ -36,13 +37,18 @@ eof
   subdir="${rundir}/nodes"
   mkdir --parent "${subdir}"
 	outfile="${subdir}/${SLURMD_NODENAME}.yaml"
-	cat >"${outfile}" <<- eof
+	cat &>"${outfile}" <<- eof
 ---
-hostname: |
-$(hostname)
+hostname: $(hostname)
+
+uptime: |
+$(uptime)
 
 uname -a: |
 $(uname -a)
+
+/proc/cmdline: |
+$(cat /proc/cmdline)
 
 lscpu: |
 $(lscpu)
@@ -56,20 +62,26 @@ $(cpupower frequency-info)
 free: |
 $(free -g)
 
-ps --deselect --ppid 2 -H -f -p 2: |
-$(ps --deselect --ppid 2 -H -f -p 2)
+ps auxwf: |
+$(ps auxwf)
 
 ibstatus: |
-$(ibstatus)
+$(/usr/sbin/ibstatus 2>&1)
 
 ibv_devinfo -v: |
-$(ibv_devinfo -v)
+$(/usr/bin/ibv_devinfo -v)
 
 env: |
 $(env | awk '/^[_0-9A-Za-z]+=/' | sort)
+
+dmesg --ctime: |
+$(dmesg --ctime | tail -n 250)
+
+rpm --query: |
+$(rpm --query cuda-drivers datacenter-gpu-manager gdrcopy lustre-client mlnx-ofa_kernel nvidia-driver openmpi-bull slurm)
 eof
 	if "nvidia-smi" &>/dev/null; then
-		cat >>"${outfile}" <<- eof
+		cat &>>"${outfile}" <<- eof
 
 nvidia-smi: |
 $(nvidia-smi)
