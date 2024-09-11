@@ -527,8 +527,12 @@ Example:
 |Category|Environment Variable Name|Purpose
 
 |PrEpS
-|`LOG_LEVEL`
+|`PREPS_LOG_LEVEL`
 |Job-specific Log Level: {TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}
+
+|
+|`PREPS_SKIP_PROLOG_SLURMD`
+|Skip Execution of Slurmd Prolog: {no \| yes}
 
 |CPU Frequency
 |`CPUFREQ_FREQUENCY_MAX`
