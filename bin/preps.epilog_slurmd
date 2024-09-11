@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
+rc=0
+trap '(( rc += $? ))' ERR
+
 preps::slurm::archive_job
 
-preps::cpufreq::set_frequency_min_max "81000:3411000"
-preps::cpufreq::set_governor "powersave"
+preps::cpufreq::set_governor "performance"
+preps::cpufreq::set_frequency_min_max "81000:3456000"
+preps::cpufreq::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "86400"
 preps::nvidia::set_power_limit "680"
 preps::nvidia::set_vboost_slider "0"
 preps::thp::set_thp "always"
 
 preps::fs::cleanup_tmpdirs "/tmp"
 
-exit 0
+exit ${rc}
