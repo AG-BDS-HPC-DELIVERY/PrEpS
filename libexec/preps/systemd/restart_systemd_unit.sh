@@ -5,13 +5,13 @@
 ## @fn preps::systemd::restart_systemd_unit()
 ## @brief Reload systemd Unit
 ## @param unit systemd Unit
-## @param max_active_time Maximum Active Time (Unit: Seconds))
+## @param max_active_time Maximum Active Time (Unit: Seconds)
 ## @return Return Code
 ## @retval 0 systemd Unit Has Been Successfully Restarted
 ## @retval 1 systemd Unit Daemon Could Not Be Restarted
 ## @ingroup systemd
 #-------------------------------------------------------------------------------
-preps::nvidia::restart_systemd_unit() {
+preps::systemd::restart_systemd_unit() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
 	local unit="${1}"
@@ -24,7 +24,7 @@ preps::nvidia::restart_systemd_unit() {
 		local timestamp2 && timestamp2="$(systemctl show "${unit}" --property=ActiveEnterTimestampMonotonic | awk -F '=' '{printf "%.0f", $2/(1000*1000)}')"
 		local active_time=$(( timestamp1 - timestamp2 ))
 		if (( active_time > max_active_time )); then
-				main::log_event -level "DEBUG" -message "Actual Runtime: [${active_time}] Greater Than Maximum Runtime: [${max_active_time}] - Restarting Service: [${unit}]"
+			main::log_event -level "DEBUG" -message "Actual Runtime: [${active_time}] Greater Than Maximum Runtime: [${max_active_time}] - Restarting Service: [${unit}]"
 			if ${SUDO} systemctl restart "${unit}" &>/dev/null; then
 				main::log_event -level "INFO" -message "Restarted systemd Unit: [${unit}]"
 			else
