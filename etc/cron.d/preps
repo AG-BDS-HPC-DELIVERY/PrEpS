@@ -1,0 +1,17 @@
+#  +------------------------ Minute (0-59)
+#  |    +------------------- Hour (0-23)
+#  |    |    +-------------- Day Of Month (1-31)
+#  |    |    |    +--------- Month (1 -12)
+#  |    |    |    |    +---- Day Of Week (0-6) (Sunday = 0)
+#  |    |    |    |    |
+#  *    *    *    *    *     USER COMMAND
+
+# Environment
+MAILTO=""
+PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:${PATH}"
+PREFIX="/opt/software/preps"
+SHELL="/bin/bash"
+
+# Tasks
+## Remove Next-Day Log File
+30 23 * * * root TIMESTAMP="$(date --date="+1 days" +"\%d")"; rm --force "${PREFIX}/var/log/preps.${TIMESTAMP}.log"
