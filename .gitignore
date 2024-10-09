@@ -1,1 +1,3 @@
-.vscode/settings.json
+.vscode/
+var/log/preps.[0-9]+.log
+var/run/slurm/history/
