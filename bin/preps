@@ -38,6 +38,7 @@ export PATH="/usr/sbin:${PATH}"
 declare -A LOG_LEVELS=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5)
 main::log_event() {
   declare -A log_levels=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5)
+	local -i singleton=0
 	while (( $# > 0 )); do
 		case "${1}" in
 			-level)
@@ -49,7 +50,7 @@ main::log_event() {
 				shift
 				;;
 			-singleton)
-				local -i singleton=1
+				singleton=1
 				;;
 		esac
 		shift
