@@ -14,7 +14,7 @@ preps::nvidia::check_residual_user_processes() {
 	local -i rc=0
 	if (( $(apis::nvsmi::get_gpu_count) > 0 )); then
 		local processes
-		readarray -t processes < <(${NVSMI_EXECBIN} --format=csv,noheader --query-compute-apps=pid,name 2>/dev/null | awk '!/nvidia-cuda-mps-server/')
+		readarray -t processes < <(${NVSMI_EXECBIN} --format=csv,noheader --query-compute-apps=pid,name 2>/dev/null)
 		if (( ${#processes[@]} > 0 )); then
 			main::log_event -level "ERROR" -message "Residual User Processes Found - Total Count: [${#processes[@]}] - First Process: [${processes[0]}]"
 			rc=1
