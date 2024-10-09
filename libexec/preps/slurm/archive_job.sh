@@ -65,6 +65,9 @@ $(free -g)
 ps auxwf: |
 $(ps auxwf)
 
+systemd-cgls: |
+$(systemd-cgls)
+
 ibstatus: |
 $(/usr/sbin/ibstatus 2>&1)
 
