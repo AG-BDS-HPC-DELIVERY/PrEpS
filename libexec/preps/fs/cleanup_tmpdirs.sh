@@ -21,12 +21,12 @@ preps::fs::cleanup_tmpdirs() {
 			local tmpuserdir
 			while read -r -u 9 tmpuserdir; do
 				if rm --force --recursive "${tmpuserdir}" &>/dev/null; then
-					main::log_event -level "DEBUG" -message "Removed User-Owned Temporary Directory: [${tmpuserdir}]"
+					main::log_event -level "DEBUG" -message "Removed User-Owned Temporary File: [${tmpuserdir}]"
 				else
-					main::log_event -level "ERROR" -message "Failed to Remove User-Owned Temporary Directory: [${tmpuserdir}]"
+					main::log_event -level "ERROR" -message "Failed to Remove User-Owned Temporary File: [${tmpuserdir}]"
 					rc=1
 				fi
-			done 9< <(find "${tmpdir}" -maxdepth 1 -mindepth 1 -type d -user "${SLURM_JOB_USER}")
+			done 9< <(find "${tmpdir}" -maxdepth 1 -mindepth 1 -user "${SLURM_JOB_USER}")
 		fi
 	done
 	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
