@@ -15,12 +15,12 @@ preps::nvidia::cleanup_mps_processes() {
 	# MPS Processes
 	if pgrep -f "nvidia-cuda-mps" &>/dev/null; then
 		echo quit | nvidia-cuda-mps-control
-		main::log_event -level "INFO" -message "Stopped CUDA MPS Servers - Return Code: [$?]"
+		main::log_event -level "INFO" -message "Stopped CUDA MPS Servers"
 	fi
 	# MPS Zombie Processes
 	if pgrep -f "nvidia-cuda-mps" &>/dev/null; then
 		if killall --signal SIGKILL nvidia-cuda-mps-server &>/dev/null; then
-			main::log_event -level "INFO" -message "Killed Residual CUDA MPS Servers"
+			main::log_event -level "INFO" -message "Killed Residual CUDA MPS Servers Processes"
 		fi
 	fi
 	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
