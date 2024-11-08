@@ -124,31 +124,17 @@ This script is a single entry point which takes care of calling the proper prolo
 PrEpS is divided into several distinct, complementary packages:
 
 |===
-|Package|Purpose
+|Package |Purpose
 
-|CPU Frequency
-|Manage CPU frequency
-
-|Filesystems
-|Manage filesystems
-
-|Memory
-|Manage system memory
-
-|NVIDIA
-|Manage NVIDIA GPU configuration
-
-|Operating System
-|Manage Operating System components
-
-|systemd
-|Manage systemd units
-
-|Transparent Huge Pages
-|Manage Transparent Huge Pages (THP) configuration
-
-|tuned
-|Manage tuned profiles
+|CPU Frequency |Manage CPU frequency
+|Filesystems |Manage filesystems
+|Memory |Manage system memory
+|NVIDIA |Manage NVIDIA GPU configuration
+|Operating System |Manage Operating System components
+|Slurm |Manage Slurm-internal operations
+|systemd |Manage systemd units
+|Transparent Huge Pages |Manage Transparent Huge Pages (THP) configuration
+|tuned |Manage tuned profiles
 |===
 
 ==== Modules
@@ -290,6 +276,23 @@ The package offers the following modules:
 |`preps::os::set_user_limits`
 |`OPTION=VALUE[,OPTION=VALUE]`
 |Set user limits
+|===
+
+===== Slurm
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Function Name|Arguments|Purpose
+
+|`preps::slurm::archive_job`
+|-
+|Archive job configuration environment
+
+|`preps::slurm::run_nhc`
+|-
+|Run NHC
 |===
 
 ===== systemd
@@ -547,7 +550,7 @@ Example:
 |CPU Governor
 
 |NVIDIA
-|`NVIDIA_POWER_LIMIT`
+|[`NVIDIA_POWER_LIMIT_GPU`:]`NVIDIA_POWER_LIMIT_MODULE`
 |Power Limit of the CG Module/GPU Devices in Watts
 
 |
