@@ -4,7 +4,7 @@
 ## @file
 ## @fn preps::cpufreq::set_frequency_min_max()
 ## @brief Set CPU Min./Max. Frequency
-## @param frequencies Min./Max. Frequencies: FREQ_MIN,FREQ_MAX
+## @param frequencies Min./Max. Frequencies: FREQ_MIN:FREQ_MAX
 ## @return Return Code
 ## @retval 0 Successfully Set CPU Min./Max. Frequency
 ## @retval 1 Failed to Set CPU Min./Max. Frequency
