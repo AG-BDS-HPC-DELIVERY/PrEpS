@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::check_uncorrectable_errors()
 ## @brief Check Uncorrectable Errors
@@ -8,7 +8,7 @@
 ## @retval 0 No Uncorrectable Error Found
 ## @retval 1 Uncorrectable Errors Found
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::check_uncorrectable_errors() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::slurm::archive_job()
 ## @brief Archive Job Execution Environment
 ## @return Return Code
 ## @retval 0 Archived Job Execution Environment
 ## @ingroup slurm
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::slurm::archive_job() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local rundir && rundir="${PREPS_RUNDIR}/slurm/history/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${SLURM_JOB_ID}"

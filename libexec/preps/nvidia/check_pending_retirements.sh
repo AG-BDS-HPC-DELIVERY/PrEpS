@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::check_pending_retirements()
 ## @brief Check Pending Retirements
@@ -8,7 +8,7 @@
 ## @retval 0 No Pending Retirement Found
 ## @retval 1 Pending Retirement Found
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::check_pending_retirements() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

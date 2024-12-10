@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::reset_gpu()
 ## @brief Reset GPU
@@ -8,7 +8,7 @@
 ## @retval 0 GPU Has Been Successfully Reset
 ## @retval 1 GPU Could Not Be Reset
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::reset_gpu() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

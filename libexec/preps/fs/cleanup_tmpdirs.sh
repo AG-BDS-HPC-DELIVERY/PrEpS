@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::fs::cleanup_tmpdirs()
 ## @brief Cleanup Temporary Directories
@@ -9,7 +9,7 @@
 ## @retval 0 All Temporary Directories Have Been Successfully Cleaned Up
 ## @retval 1 Not All Temporary Directories Could Be Cleaned Up
 ## @ingroup fs
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::fs::cleanup_tmpdirs() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

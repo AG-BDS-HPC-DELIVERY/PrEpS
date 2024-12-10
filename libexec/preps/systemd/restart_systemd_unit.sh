@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::systemd::restart_systemd_unit()
 ## @brief Reload systemd Unit
@@ -10,7 +10,7 @@
 ## @retval 0 systemd Unit Has Been Successfully Restarted
 ## @retval 1 systemd Unit Daemon Could Not Be Restarted
 ## @ingroup systemd
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::systemd::restart_systemd_unit() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

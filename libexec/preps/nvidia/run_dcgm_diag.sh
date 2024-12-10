@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::run_dcgm_diag()
 ## @brief Run DCGM Diagnostics
@@ -9,7 +9,7 @@
 ## @retval 0 DCGM Diagnostics Passed
 ## @retval 1 DCGM Diagnostics Failed
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::run_dcgm_diag() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -r DCGMI_EXECBIN="dcgmi"

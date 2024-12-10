@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::cpufreq::check_driver()
 ## @brief Check cpufreq Driver
@@ -9,7 +9,7 @@
 ## @retval 0 cpufreq Driver is Operational
 ## @retval 1 cpufreq Driver is Dysfunctional
 ## @ingroup cpufreq
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::cpufreq::check_driver() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

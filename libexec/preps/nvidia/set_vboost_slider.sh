@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::set_vboost_slider()
 ## @brief Set Video Boost Slider
@@ -9,7 +9,7 @@
 ## @retval 0 Successfully Set vboost
 ## @retval 1 Failed to Set vboost
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::set_vboost_slider() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

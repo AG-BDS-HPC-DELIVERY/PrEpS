@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::cpufreq::reload_cpufreq_driver_module()
 ## @brief Reload cpufreq Driver Module
@@ -11,7 +11,7 @@
 ## @retval 0 Driver Module Has Been Successfully Reloaded
 ## @retval 1 Driver Module Could Not Be Reloaded
 ## @ingroup cpufreq
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::cpufreq::reload_cpufreq_driver_module() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

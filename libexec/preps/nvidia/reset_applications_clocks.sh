@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::reset_applications_clocks()
 ## @brief Reset Applications Clocks
@@ -8,7 +8,7 @@
 ## @retval 0 Applications Clocks Have Been Successfully Reset
 ## @retval 1 Applications Clocks Could Not Be Reset
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::reset_applications_clocks() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
