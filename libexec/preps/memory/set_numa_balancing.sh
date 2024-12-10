@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::memory::set_numa_balancing()
 ## @brief Set NUMA Balancing
@@ -9,7 +9,7 @@
 ## @retval 0 Successfully Set NUMA Balancing
 ## @retval 1 Failed to Set NUMA Balancing
 ## @ingroup memory
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::memory::set_numa_balancing() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

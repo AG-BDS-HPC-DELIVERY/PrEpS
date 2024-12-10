@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::check_register_files()
 ## @brief Check Register Files
@@ -8,7 +8,7 @@
 ## @retval 0 No ECC Error Found
 ## @retval 1 ECC Errors Found
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::check_register_files() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

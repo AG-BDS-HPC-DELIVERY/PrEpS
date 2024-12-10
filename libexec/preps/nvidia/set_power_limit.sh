@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::set_power_limit()
 ## @brief Set Power Limit
@@ -9,7 +9,7 @@
 ## @retval 0 Successfully Set Power Limit
 ## @retval 1 Failed to Set Power Limit
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::set_power_limit() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

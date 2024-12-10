@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::cpufreq::set_frequency_min_max()
 ## @brief Set CPU Min./Max. Frequency
@@ -9,7 +9,7 @@
 ## @retval 0 Successfully Set CPU Min./Max. Frequency
 ## @retval 1 Failed to Set CPU Min./Max. Frequency
 ## @ingroup cpufreq
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::cpufreq::set_frequency_min_max() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

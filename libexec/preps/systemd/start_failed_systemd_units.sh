@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::systemd::start_failed_systemd_units()
 ## @brief Start Failed systemd Units
@@ -8,7 +8,7 @@
 ## @retval 0 Successfully Restarted Failed systemd Units
 ## @retval 1 Failed to Restart Failed systemd Units
 ## @ingroup systemd
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::systemd::start_failed_systemd_units() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

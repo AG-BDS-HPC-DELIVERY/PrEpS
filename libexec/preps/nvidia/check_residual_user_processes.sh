@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::nvidia::check_residual_user_processes()
 ## @brief Check Residual User Processes
@@ -8,7 +8,7 @@
 ## @retval 0 No Residual User Process Found
 ## @retval 1 Residual User Processes Found
 ## @ingroup nvidia
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::nvidia::check_residual_user_processes() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

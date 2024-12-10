@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::slurm::run_nhc()
 ## @brief Run NHC
@@ -8,7 +8,7 @@
 ## @retval 0 Executed NHC without Error
 ## @retval 1 Executed NHC with Errors
 ## @ingroup slurm
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::slurm::run_nhc() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0

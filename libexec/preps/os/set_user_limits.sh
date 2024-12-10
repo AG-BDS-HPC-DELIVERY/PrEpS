@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::os::set_user_limits()
 ## @brief Set User Limits
@@ -9,7 +9,7 @@
 ## @retval 0 Successfully Set User Limits
 ## @retval 1 Failed to Set User Limits
 ## @ingroup os
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::os::set_user_limits() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

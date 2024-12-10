@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::memory::compact_memory()
 ## @brief Compact Memory
@@ -8,7 +8,7 @@
 ## @retval 0 Compacted Memory
 ## @retval 1 Failed to Compact Memory
 ## @ingroup memory
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::memory::compact_memory() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

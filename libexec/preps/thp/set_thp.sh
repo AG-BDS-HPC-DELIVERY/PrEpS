@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::thp::set_thp()
 ## @brief Set Transparent Huge Pages (THP)
@@ -9,7 +9,7 @@
 ## @retval 0 Successfully Set Transparent Huge Pages
 ## @retval 1 Failed to Set Transparent Huge Pages
 ## @ingroup thp
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::thp::set_thp() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -r thp_enabled="/sys/kernel/mm/transparent_hugepage/enabled"

@@ -1822,7 +1822,7 @@ __argsparse_parse_options_no_usage() {
 			fi
 		else
 			# Wasnt a short option. Just strip the leading dash.
-			next_param=${next_param#--}
+			next_param=${next_param# -}
 		fi
 		if exclude=$(__argsparse_parse_options_check_exclusions "$next_param")
 		then

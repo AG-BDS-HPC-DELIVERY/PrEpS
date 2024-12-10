@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::fs::check_mountpoints()
 ## @brief Check Filesystem Mountpoints
@@ -9,7 +9,7 @@
 ## @retval 0 All Filesystem Mountpoints Are Properly Mounted
 ## @retval 1 Not All Filesystem Mountpoints Are Properly Mounted
 ## @ingroup fs
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::fs::check_mountpoints() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::memory::cleanup_memory_caches()
 ## @brief Cleanup Memory Caches
@@ -9,7 +9,7 @@
 ## @retval 0 Dropped Memory Caches
 ## @retval 1 Failed to Drop Memory Caches
 ## @ingroup memory
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::memory::cleanup_memory_caches() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0

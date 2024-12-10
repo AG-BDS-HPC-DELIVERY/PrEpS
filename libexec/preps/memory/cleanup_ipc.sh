@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## @file
 ## @fn preps::memory::cleanup_ipc()
 ## @brief Cleanup IPC
@@ -8,7 +8,7 @@
 ## @retval 0 Removed User-Owned IPC
 ## @retval 1 Failed to Remove User-Owned IPC
 ## @ingroup memory
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 preps::memory::cleanup_ipc() {
 	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
 	local -i rc=0
