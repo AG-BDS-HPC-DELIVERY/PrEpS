@@ -24,4 +24,5 @@ export NVSMI_EXECBIN="/usr/bin/nvidia-smi"
 # ==============================================================================
 # PrEpS
 # ==============================================================================
+export PREPS_MULTIPLE_VALUE_SEPARATOR="|"
 export PREPS_PRIVILEGED_USERS=("ntallet")
