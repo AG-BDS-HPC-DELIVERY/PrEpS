@@ -11,23 +11,23 @@
 ## @ingroup nvsmi
 # ------------------------------------------------------------------------------
 apis::nvsmi::set_applications_clocks() {
-	while (( $# > 0 )); do
-		case "${1}" in
-			-applications_clocks)
-				local applications_clocks="${2}"
-				shift
-				;;
-			-id)
-				local id="${2}"
-				shift
-				;;
-			*)
-				main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
-				;;
-		esac
-		shift
-	done
-	[[ -n "${applications_clocks}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
-	${SUDO} "${NVSMI_EXECBIN}" --applications-clocks="${applications_clocks}" ${id:+--id="${id}"}
-	return $?
+  while (( $# > 0 )); do
+    case "${1}" in
+      -applications_clocks)
+        local applications_clocks="${2}"
+        shift
+        ;;
+      -id)
+        local id="${2}"
+        shift
+        ;;
+      *)
+        main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
+        ;;
+    esac
+    shift
+  done
+  [[ -n "${applications_clocks}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
+  ${SUDO} "${NVSMI_EXECBIN}" --applications-clocks="${applications_clocks}" ${id:+--id="${id}"}
+  return $?
 }

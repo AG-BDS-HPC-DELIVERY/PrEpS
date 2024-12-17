@@ -10,14 +10,14 @@
 ## @ingroup nvidia
 # ------------------------------------------------------------------------------
 preps::nvidia::reset_gpu() {
-	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
-	local -i rc=0
+  main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
+  local -i rc=0
   if "${NVSMI_EXECBIN}" --gpu-reset &>/dev/null; then
-		main::log_event -level "INFO" -message "Reset GPU"
+    main::log_event -level "INFO" -message "Reset GPU"
   else
-		main::log_event -level "ERROR" -message "Failed to Reset GPU - Return Code: [$?]"
-		rc=1
+    main::log_event -level "ERROR" -message "Failed to Reset GPU - Return Code: [$?]"
+    rc=1
   fi
-	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
-	return ${rc}
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  return ${rc}
 }

@@ -9,6 +9,6 @@
 ## @ingroup cpupower
 # ------------------------------------------------------------------------------
 apis::cpupower::get_frequency_nominal() {
-	printf "%s" "$(cat "${CPUFREQ_PATH}"/cpuinfo_nominal_freq)"
-	return 0
+  printf "%s" "$(cat "${CPUFREQ_PATH}"/cpuinfo_nominal_freq)"
+  return 0
 }

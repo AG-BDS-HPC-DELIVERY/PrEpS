@@ -10,18 +10,18 @@
 ## @ingroup nvsmi
 # ------------------------------------------------------------------------------
 apis::nvsmi::reset_applications_clocks() {
-	while (( $# > 0 )); do
-		case "${1}" in
-			-id)
-				local id="${2}"
-				shift
-				;;
-			*)
-				main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
-				;;
-		esac
-		shift
-	done
-	${SUDO} "${NVSMI_EXECBIN}" ${id:+--id="${id}"} --reset-applications-clocks
-	return $?
+  while (( $# > 0 )); do
+    case "${1}" in
+      -id)
+        local id="${2}"
+        shift
+        ;;
+      *)
+        main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
+        ;;
+    esac
+    shift
+  done
+  ${SUDO} "${NVSMI_EXECBIN}" ${id:+--id="${id}"} --reset-applications-clocks
+  return $?
 }

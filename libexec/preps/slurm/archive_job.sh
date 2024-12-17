@@ -9,16 +9,16 @@
 ## @ingroup slurm
 # ------------------------------------------------------------------------------
 preps::slurm::archive_job() {
-	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
-	local rundir && rundir="${PREPS_RUNDIR}/slurm/history/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${SLURM_JOB_ID}"
+  main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
+  local rundir && rundir="${PREPS_RUNDIR}/slurm/history/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${SLURM_JOB_ID}"
   mkdir --parent "${rundir}"
-	local outfile
+  local outfile
   # Job
   if [[ "${SLURMD_NODENAME}" == "${HEADNODE}" ]]; then
     subdir="${rundir}/job"
     mkdir --parent "${subdir}"
     outfile="${subdir}/${SLURM_JOB_ID}.yaml"
-  	cat &>"${outfile}" <<- eof
+    cat &>"${outfile}" <<- eof
 ---
 scontrol show job: |
 $(scontrol show job "${SLURM_JOB_ID}")
@@ -36,8 +36,8 @@ eof
   # Nodes
   subdir="${rundir}/nodes"
   mkdir --parent "${subdir}"
-	outfile="${subdir}/${SLURMD_NODENAME}.yaml"
-	cat &>"${outfile}" <<- eof
+  outfile="${subdir}/${SLURMD_NODENAME}.yaml"
+  cat &>"${outfile}" <<- eof
 ---
 hostname: $(hostname)
 
@@ -83,8 +83,8 @@ $(dmesg --ctime | tail -n 250)
 rpm --query: |
 $(rpm --query cuda-drivers datacenter-gpu-manager gdrcopy lustre-client mlnx-ofa_kernel nvidia-driver openmpi-bull slurm)
 eof
-	if "nvidia-smi" &>/dev/null; then
-		cat &>>"${outfile}" <<- eof
+  if "nvidia-smi" &>/dev/null; then
+    cat &>>"${outfile}" <<- eof
 
 nvidia-smi: |
 $(nvidia-smi)
@@ -92,8 +92,8 @@ $(nvidia-smi)
 nvidia-smi --query: |
 $(nvidia-smi --query)
 eof
-	fi
-	main::log_event -level "DEBUG" -message "Archived Job Execution Environment into Directory: [${rundir}]"
-	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]"
-	return 0
+  fi
+  main::log_event -level "DEBUG" -message "Archived Job Execution Environment into Directory: [${rundir}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]"
+  return 0
 }

@@ -11,15 +11,15 @@
 ## @ingroup systemd
 # ------------------------------------------------------------------------------
 preps::systemd::stop_systemd_units() {
-	main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
-	local -i rc=0
-	local units && IFS="," read -a units -r <<<"${1}"
-	[[ -n "${units[*]}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Units]"
-	local unit
-	for unit in "${units[@]}"; do
-		${SUDO} systemctl stop "${unit}"
-		(( rc = rc + $? ))
-	done
-	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
-	return ${rc}
+  main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
+  local -i rc=0
+  local units && IFS="," read -a units -r <<<"${1}"
+  [[ -n "${units[*]}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Units]"
+  local unit
+  for unit in "${units[@]}"; do
+    ${SUDO} systemctl stop "${unit}"
+    (( rc = rc + $? ))
+  done
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  return ${rc}
 }

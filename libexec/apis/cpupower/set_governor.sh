@@ -10,19 +10,19 @@
 ## @ingroup cpupower
 # ------------------------------------------------------------------------------
 apis::cpupower::set_governor() {
-	while (( $# > 0 )); do
-		case "${1}" in
-			-governor)
-				local governor="${2}"
-				shift
-				;;
-			*)
-				main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
-				;;
-		esac
-		shift
-	done
-	[[ -n "${governor}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Governor]"
-	${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --governor "${governor}" &>/dev/null
-	return $?
+  while (( $# > 0 )); do
+    case "${1}" in
+      -governor)
+        local governor="${2}"
+        shift
+        ;;
+      *)
+        main::log_event -level "FATAL" -message "Invalid Option: [${1}]"
+        ;;
+    esac
+    shift
+  done
+  [[ -n "${governor}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Governor]"
+  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --governor "${governor}" &>/dev/null
+  return $?
 }

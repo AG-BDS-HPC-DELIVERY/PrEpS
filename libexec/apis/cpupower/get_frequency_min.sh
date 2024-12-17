@@ -9,6 +9,6 @@
 ## @ingroup cpupower
 # ------------------------------------------------------------------------------
 apis::cpupower::get_frequency_min() {
-	printf "%s" "$(cat "${CPUFREQ_PATH}"/scaling_min_freq)"
-	return 0
+  printf "%s" "$(cat "${CPUFREQ_PATH}"/scaling_min_freq)"
+  return 0
 }

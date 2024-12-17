@@ -9,6 +9,6 @@
 ## @ingroup cpupower
 # ------------------------------------------------------------------------------
 apis::cpupower::get_frequency_hw_max() {
-	printf "%s" "$(cat "${CPUFREQ_PATH}"/cpuinfo_max_freq)"
-	return 0
+  printf "%s" "$(cat "${CPUFREQ_PATH}"/cpuinfo_max_freq)"
+  return 0
 }
