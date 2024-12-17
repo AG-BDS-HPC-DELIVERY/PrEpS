@@ -550,12 +550,16 @@ Example:
 |CPU Governor
 
 |NVIDIA
+|`NVIDIA_APPLICATIONS_CLOCKS`
+|Applications Clocks in MHz: MEMORY,GRAPHICS
+
+|
 |[`NVIDIA_POWER_LIMIT_GPU`:]`NVIDIA_POWER_LIMIT_MODULE`
 |Power Limit of the CG Module/GPU Devices in Watts
 
 |
 |`NVIDIA_VBOOST_SLIDER`
-|Configuration of the Video Boost Slider: {0 \| 1 \| 2 \| 3 \| 4}
+|Video Boost Slider: {0 \| 1 \| 2 \| 3 \| 4}
 
 |THP
 |`THP`
