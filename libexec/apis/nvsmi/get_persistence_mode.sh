@@ -24,7 +24,7 @@ apis::nvsmi::get_persistence_mode() {
 	done
 	local mode modes
 	while read -r -u 9 mode; do
-		modes="${modes}${modes:+";"}${mode}"
+		modes="${modes}${modes:+"${PREPS_MULTIPLE_VALUE_SEPARATOR}"}${mode}"
 	done 9< <("${NVSMI_EXECBIN}" --format="csv,noheader,nounits" ${id:+--id="${id}"} --query-gpu="persistence_mode")
 	printf "%s" "${modes}"
 	return 0

@@ -19,7 +19,7 @@ apis::nvsmi::get_boost_slider() {
 	done
 	local boost_slider boost_sliders
 	while read -r boost_slider; do
-		boost_sliders="${boost_sliders}${boost_sliders:+";"}${boost_slider// /}"
+		boost_sliders="${boost_sliders}${boost_sliders:+"${PREPS_MULTIPLE_VALUE_SEPARATOR}"}${boost_slider// /}"
 	done < <("${NVSMI_EXECBIN}" boost-slider --list | awk 'match($0, /[0-9]+\s+vboost\s+[0-9]+\s+([0-9]+)/, a) {print a[1]}')
 	printf "%s" "${boost_sliders}"
 	return 0
