@@ -20,15 +20,11 @@ preps::cpufreq::set_governor() {
 		|| "${governor}" == "performance" \
 		|| "${governor}" == "powersave" \
 		|| "${governor}" == "userspace" ]] || main::log_event -level "FATAL" -message "Invalid Governor Value: [${governor}]"
-	if [[ "$(apis::cpupower::get_governor)" != "${governor}" ]]; then
-		if apis::cpupower::set_governor -governor "${governor}"; then
-			main::log_event -level "INFO" -message "Set CPU Governor: [$(apis::cpupower::get_governor)]"
-		else
-			main::log_event -level "ERROR" -message "Failed to Set CPU Governor - Return Code: [$?]"
-			rc=1
-		fi
+	if apis::cpupower::set_governor -governor "${governor}"; then
+		main::log_event -level "INFO" -message "Set CPU Governor: [$(apis::cpupower::get_governor)]"
 	else
-		main::log_event -level "INFO" -message "Skipped Setting of CPU Governor"
+		main::log_event -level "ERROR" -message "Failed to Set CPU Governor - Return Code: [$?]"
+		rc=1
 	fi
 	main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
 	return ${rc}
