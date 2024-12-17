@@ -8,14 +8,17 @@ preps::slurm::archive_job
 preps::cpufreq::set_governor "performance"
 preps::cpufreq::set_frequency_min_max "81000:3456000"
 preps::cpufreq::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "86400"
+
+preps::nvidia::cleanup_mps_processes
 preps::nvidia::set_applications_clocks "2619,1980"
 preps::nvidia::set_power_limit "680"
 preps::nvidia::set_vboost_slider "0"
+
 preps::thp::set_thp "always"
 
 preps::fs::cleanup_tmpdirs "/dev/shm,/tmp"
+
 preps::memory::cleanup_memory_caches "3"
-preps::nvidia::cleanup_mps_processes
 
 preps::slurm::run_nhc
 
