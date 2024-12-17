@@ -31,19 +31,18 @@ Usage: $(realpath "${BASH_SOURCE[0]}")
 
 User-Specified Job Parameters (Overrides)
 
-  PrEpS
-    PREPS_LOG_LEVEL               Log Level: {TRACE | DEBUG | INFO | WARN* | ERROR | FATAL}
-    PREPS_PREFIX                  Alternate Prefix
+  CPU Frequency
+    CPUFREQ_FREQUENCY_MAX         Frequency Max.
+    CPUFREQ_FREQUENCY_MIN         Frequency Min.
+    CPUFREQ_GOVERNOR              Governor
 
   NVIDIA
     NVIDIA_APPLICATIONS_CLOCKS    Applications Clocks
     NVIDIA_POWER_LIMIT            Power Limit
     NVIDIA_VBOOST_SLIDER          Video Boost Slider
 
-  CPU Frequency
-    CPUFREQ_FREQUENCY_MAX         Frequency Max.
-    CPUFREQ_FREQUENCY_MIN         Frequency Min.
-    CPUFREQ_GOVERNOR              Governor
+  PrEpS
+    PREPS_LOG_LEVEL               Log Level: {TRACE | DEBUG | INFO | WARN* | ERROR | FATAL}
 
   THP
     THP                           Transparent Huge Pages: {always* | madvise | never}
@@ -119,8 +118,7 @@ if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
     IFS="=" read -r key value <<<"${pair}"
     case "${key}" in
       "PREPS_PREFIX")
-        # shellcheck disable=SC2076,SC2199
-        [[ " ${PREPS_PRIVILEGED_USERS[@]} " =~ " $(id --name --user) " ]] && PREPS_PREFIX="${value}"
+        PREPS_PREFIX="${value}"
         ;;
       "PREPS_HEADNODE")
         PREPS_HEADNODE="${value}"
