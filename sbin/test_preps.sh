@@ -15,10 +15,10 @@ while (( $# > 0 )); do
 
 Tester for Prolog/Epilog for Slurm (PrEpS)
 
-Usage: $(basename "${BASH_SOURCE[0]}") [] [-slurm_job_comment COMMENT] [-slurm_script_context CONTEXT]
+Usage: $(basename "${BASH_SOURCE[0]}") [-slurm_job_comment COMMENT] [-slurm_script_context CONTEXT]
 
 Options:
-  -slurm_script_context CONTEXT    Context: {slurm_epilog | slurm_prolog*}
+  -slurm_script_context CONTEXT    Context: {epilog_slurmd | prolog_slurmd*}
   -slurm_job_comment COMMENT       Semi-Colon Separated List of 'Key=Value' Pairs
                                      PREPS_ALT_PREFIX=${prefix}
                                      PREPS_HEADNODE=${HOSTNAME}
