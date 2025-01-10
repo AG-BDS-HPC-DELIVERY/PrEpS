@@ -14,7 +14,7 @@ preps::slurm::archive_job() {
   mkdir --parent "${rundir}"
   local outfile
   # Job
-  if [[ "${SLURMD_NODENAME}" == "${HEADNODE}" ]]; then
+  if [[ "${SLURMD_NODENAME}" == "${PREPS_HEADNODE}" ]]; then
     subdir="${rundir}/job"
     mkdir --parent "${subdir}"
     outfile="${subdir}/${SLURM_JOB_ID}.yaml"
