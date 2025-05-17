@@ -4,7 +4,7 @@
 ## @file
 ## @fn preps::nvidia::set_power_limit()
 ## @brief Set GPU/Module Power Limit
-## @param power_limit Power Limit: [Device:]Module
+## @param power_limits Power Limits: GPU,Module
 ## @return Return Code
 ## @retval 0 Successfully Set Power Limit
 ## @retval 1 Failed to Set Power Limit
@@ -14,9 +14,8 @@ preps::nvidia::set_power_limit() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local scope=("GPU" "Module")
-  local power_limits && IFS=":" read -a power_limits -r <<<"${1}"
+  local power_limits && IFS="," read -a power_limits -r <<<"${1}"
   [[ -n "${power_limits}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Power Limits]"
-  [[ -n "${power_limits[1]}" ]] || power_limits[1]="${power_limits[0]}"
   local -i index
   for index in 1 0; do
     (( ${power_limits[index]} > 0 )) || main::log_event -level "FATAL" -message "Invalid Power Limit Value: [${power_limits[index]}] for Scope: [${index}/${scope[index]}]"
