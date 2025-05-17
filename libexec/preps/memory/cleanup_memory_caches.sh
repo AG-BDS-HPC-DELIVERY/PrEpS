@@ -13,8 +13,7 @@
 preps::memory::cleanup_memory_caches() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
-  local caches="${1}"
-  [[ -n "${caches}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Caches]"
+  local -i caches="${1}"
   (( caches == 1 || caches == 2 || caches == 3 )) || \
     main::log_event -level "FATAL" -message "Invalid Caches Value: [${caches}]"
   /usr/bin/sync
