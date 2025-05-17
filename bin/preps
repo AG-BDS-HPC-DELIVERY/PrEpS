@@ -134,14 +134,15 @@ if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
 fi
 
 # Environment
+job_nodelist=($(scontrol show hostnames))
 PREPS_EXECBIN="$(realpath "${BASH_SOURCE[0]}")"
 PREPS_PREFIX="${PREPS_PREFIX:-$(realpath "$(dirname "${PREPS_EXECBIN}")/..")}"
 PREPS_EXECBINDIR="${PREPS_PREFIX}/bin"
 PREPS_EXECID="$(basename "${PREPS_EXECBIN}")"
 PREPS_LIBEXECDIR="${PREPS_PREFIX}/libexec"
 PREPS_LOGDIR="${PREPS_PREFIX}/var/log"
-PREPS_HEADNODE="${PREPS_HEADNODE:-$(nodeset --fold --slice=0 "${SLURM_JOB_NODELIST}")}"
-PREPS_LOG_LEVEL="${PREPS_LOG_LEVEL:-WARN}"
+PREPS_HEADNODE="${PREPS_HEADNODE:-"${job_nodelist[0]}"}"
+PREPS_LOG_LEVEL="${PREPS_LOG_LEVEL:-INFO}"
 PREPS_LOGFILE="${PREPS_LOGDIR}/${PREPS_EXECID}.$(date +"%d").log"
 PREPS_RUNDIR="${PREPS_PREFIX}/var/run"
 export PREPS_HEADNODE PREPS_LOG_LEVEL PREPS_LOGFILE PREPS_RUNDIR
