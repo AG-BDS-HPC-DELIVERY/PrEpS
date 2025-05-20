@@ -200,7 +200,7 @@ fi
 # Execution Time
 time2=$(date +"%s%3N")
 exectime=$(( time2 - time1 ))
-main::log_event -level "DEBUG" -message "PrEpS Execution Time (ms): [${exectime}]"
+main::log_event -level "INFO" -message "PrEpS Execution Time (ms): [${exectime}]"
 
 # Message
 main::log_event -level "TRACE" -message "Stopping PrEpS -> Return Code: [${rc}]"
