@@ -14,10 +14,12 @@ preps::cpufreq::set_boost() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local boost="${1}"
-  [[ -n "${boost}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Boost]"
-  (( boost == 0 || boost == 1 )) || main::log_event -level "FATAL" -message "Invalid Boost Value: [${boost}]"
+  [[ -n "${boost}" ]] ||
+    { main::log_event -level "ERROR" -message "Missing Argument: [Boost]"; return ${rc}; }
+  [[ boost =~ ^(0|1)$ ]] ||
+    { main::log_event -level "ERROR" -message "Invalid Boost Value: [${boost}]"; return ${rc}; }
   echo "${boost}" >"/sys/devices/system/cpu/cpufreq/boost" || \
     { main::log_event -level "ERROR" -message "Failed to Set CPU Boost"; rc=1; } 
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

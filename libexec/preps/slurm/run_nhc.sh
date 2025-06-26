@@ -5,20 +5,22 @@
 ## @fn preps::slurm::run_nhc()
 ## @brief Run NHC
 ## @return Return Code
-## @retval 0 Executed NHC without Error
-## @retval 1 Executed NHC with Errors
+## @retval 0 Executed NHC Successfully
+## @retval 1 Executed NHC with Failed Checks
 ## @ingroup slurm
 # ------------------------------------------------------------------------------
 preps::slurm::run_nhc() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
-  [[ -x "${NHC_EXECBIN}" ]] || main::log_event -level "FATAL" -message "Invalid NHC Executable: [${NHC_EXECBIN}]"
-  if ${NHC_EXECBIN} &>/dev/null; then
-    main::log_event -level "INFO" -message "Executed NHC without Error"
+  if [[ -x "${NHC_EXECBIN}" ]]; then
+    if ${NHC_EXECBIN} &> /dev/null; then
+      main::log_event -level "INFO" -message "Executed NHC Successfully"
+    else
+      main::log_event -level "ERROR" -message "Executed NHC with Failures" -rc "${?}"
+    fi
   else
-    main::log_event -level "ERROR" -message "Executed NHC with Errors -> Return Code: [${?}]"
-    rc=1
+    main::log_event -level "ERROR" -message "Invalid NHC Executable: [${NHC_EXECBIN}]"
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
-  return 0
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
+  return ${rc}
 }

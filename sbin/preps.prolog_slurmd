@@ -1,0 +1,44 @@
+#!/bin/bash
+
+preps::cpufreq::check_driver "288"
+preps::cpufreq::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "60"
+#preps::cpufreq::set_boost
+#preps::cpufreq::set_frequency
+preps::cpufreq::set_frequency_min_max "81000:3456000"
+preps::cpufreq::set_governor "performance"
+preps::fs::check_mountpoints "/"
+preps::fs::cleanup_tmpdirs "/dev/shm,/tmp"
+preps::kernel::set_kernel_parameters "kernel.kptr_restrict=1,kernel.perf_event_paranoid=-1"
+preps::memory::cleanup_ipc
+preps::memory::cleanup_memory_caches "2"
+preps::memory::cleanup_shared_memory_segments
+preps::memory::compact_memory
+#preps::memory::set_numa_balancing
+preps::memory::set_stat_interval "120"
+preps::nvidia::check_pending_retirements
+preps::nvidia::check_register_files
+preps::nvidia::check_residual_user_processes
+preps::nvidia::check_uncorrectable_errors
+#preps::nvidia::cleanup_mps_processes
+#preps::nvidia::reset_applications_clocks
+#preps::nvidia::reset_gpu
+preps::nvidia::run_dcgm_diag "1"
+preps::nvidia::set_applications_clocks "2619,1980"
+preps::nvidia::check_applications_clocks "2619,1980"
+#preps::nvidia::set_persistence_mode
+preps::nvidia::set_power_limit "680,680"
+preps::nvidia::set_vboost_slider "1"
+preps::os::check_residual_user_processes
+#preps::os::cleanup_residual_user_processes
+#preps::os::set_user_limits
+#preps::slurm::archive_job
+preps::slurm::run_nhc
+#preps::systemd::start_failed_systemd_units
+preps::systemd::stop_systemd_units "slurmd.service"
+preps::systemd::start_systemd_units "slurmd.service"
+preps::systemd::restart_systemd_unit "slurmd.service" "5"
+preps::thp::set_thp "always"
+preps::thp::set_thp_shmem "always"
+#preps::tuned::enable_profile
+
+exit 0

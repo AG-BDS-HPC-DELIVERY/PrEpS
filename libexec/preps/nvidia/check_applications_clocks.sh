@@ -13,9 +13,10 @@ preps::nvidia::check_applications_clocks() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local applications_clocks="${1}"
-  [[ -n "${applications_clocks}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
+  [[ -n "${applications_clocks}" ]] ||
+    { main::log_event -level "ERROR" -message "Missing Argument: [Applications Clocks]"; return ${rc}; }
   local applications_clocks_1 applications_clocks_2
-  if which nvidia-smi &>/dev/null; then
+  if which nvidia-smi &> /dev/null; then
     applications_clocks_1="$(apis::nvsmi::get_applications_clocks)"
     for applications_clocks_2 in ${applications_clocks_1//${PREPS_MULTIPLE_VALUE_SEPARATOR}/ }; do
       [[ "${applications_clocks_2}" == "${applications_clocks}" ]] || { rc=1; break; }
@@ -28,6 +29,6 @@ preps::nvidia::check_applications_clocks() {
   else
     main::log_event -level "WARN" -message "No NVIDIA SMI Command Available"
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

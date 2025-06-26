@@ -15,14 +15,16 @@ preps::nvidia::run_dcgm_diag() {
   local -r DCGMI_EXECBIN="dcgmi"
   local -i rc=0
   local diag="${1}"
-  [[ -n "${diag}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [DCGMI Diag Level]"
-  (( diag >= 1 && diag <= 4 )) || main::log_event -level "FATAL" -message "Invalid DCGMI Diag Level: [${diag}]"
-  if "${DCGMI_EXECBIN}" diag --run "${diag}" &>/dev/null; then
-    main::log_event -level "INFO" -message "DCGMI Diag with Level: [${diag}] Passed"
+  [[ -n "${diag}" ]] ||
+    { main::log_event -level "ERROR" -message "Missing Argument: [DCGM Diagnostics Level]"; return ${rc}; }
+  (( diag >= 1 && diag <= 4 )) ||
+    { main::log_event -level "ERROR" -message "Invalid DCGM Diagnostics Level: [${diag}]"; return ${rc}; }
+  if "${DCGMI_EXECBIN}" diag --run "${diag}" &> /dev/null; then
+    main::log_event -level "INFO" -message "Passed DCGM Diagnostics with Level: [${diag}]"
   else
-    main::log_event -level "ERROR" -message "DCGMI Diag with Level: [${diag}] Failed - Return Code: [$?]"
+    main::log_event -level "ERROR" -message "Failed DCGM Diagnostics with Level: [${diag}] - Return Code: [$?]"
     rc=1
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

@@ -23,6 +23,6 @@ apis::cpupower::set_frequency_max() {
     shift
   done
   [[ -n "${frequency_max}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
-  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --max "${frequency_max}" &>/dev/null
+  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --max "${frequency_max}" &> /dev/null
   return $?
 }

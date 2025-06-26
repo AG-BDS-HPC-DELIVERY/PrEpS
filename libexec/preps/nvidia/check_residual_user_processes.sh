@@ -24,6 +24,6 @@ preps::nvidia::check_residual_user_processes() {
   else
     main::log_event -level "DEBUG" -message "No Visible GPU Device - Skipping Health Check"
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

@@ -21,6 +21,6 @@ preps::nvidia::check_uncorrectable_errors() {
   else
     main::log_event -level "INFO" -message "Found No Uncorrectable Errors"
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

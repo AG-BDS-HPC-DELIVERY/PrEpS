@@ -29,6 +29,6 @@ apis::cpupower::set_frequency_minmax() {
   done
   [[ -n "${frequency_max}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Max.]"
   [[ -n "${frequency_min}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Min.]"
-  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --max "${frequency_max}" --min "${frequency_min}" &>/dev/null
+  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --max "${frequency_max}" --min "${frequency_min}" &> /dev/null
   return $?
 }

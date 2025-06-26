@@ -9,6 +9,7 @@
 ## @defgroup cpufreq CPU Frequency Management
 ## @defgroup cpupower API for cpupower Utility
 ## @defgroup fs Shared and Local Filesystems Management
+## @defgroup kernel Linux Kernel Management
 ## @defgroup memory System Memory Management
 ## @defgroup nvidia NVIDIA GPU Subsystem Management
 ## @defgroup nvsmi API for NVIDIA SMI Utility
@@ -29,12 +30,18 @@ Prolog/Epilog for Slurm (PrEpS)
 
 Usage: $(realpath "${BASH_SOURCE[0]}")
 
-User-Specified Job Parameters (Overrides)
+Overrides:
 
   CPU Frequency
     CPUFREQ_FREQUENCY_MAX         Frequency Max.
     CPUFREQ_FREQUENCY_MIN         Frequency Min.
     CPUFREQ_GOVERNOR              Governor
+
+  Kernel
+    KERNEL_PERF_EVENT_PARANOID    Performance Event Paranoid: {-1 | 0 | 1 | 2*}
+
+  Memory
+    MEMORY_VM_STAT_INTERVAL       VM Stat Interval
 
   NVIDIA
     NVIDIA_APPLICATIONS_CLOCKS    Applications Clocks
@@ -58,6 +65,7 @@ eof
 declare -A LOG_LEVELS=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5)
 main::log_event() {
   declare -A log_levels=([TRACE]=0 [DEBUG]=1 [INFO]=2 [WARN]=3 [ERROR]=4 [FATAL]=5)
+  local rc
   local -i singleton=0
   while (( $# > 0 )); do
     case "${1}" in
@@ -69,6 +77,10 @@ main::log_event() {
         local message="${2}"
         shift
         ;;
+      -rc)
+        local rc="${2}"
+        shift
+        ;;
       -singleton)
         singleton=1
         ;;
@@ -76,7 +88,7 @@ main::log_event() {
     shift
   done
   (( ${log_levels[${level}]} >= ${log_levels[${PREPS_LOG_LEVEL}]} )) || return 0
-  ( (( "${singleton}" == 1 )) && [[ "${SLURMD_NODENAME}" != "${PREPS_HEADNODE}" ]] ) && return 0
+  (( "${singleton}" == 1 )) && [[ "${PREPS_HEADNODE}" != "$(hostname --short)" ]] && return 0
   [[ "${level}" == "FATAL" ]] && message="${message:-Undefined Exception} @ ${FUNCNAME[1]}:${BASH_LINENO[0]}"
   flock --exclusive --timeout 2.5 "${PREPS_LOGFILE}" \
     printf "%26s | %8s | %-15s | %-15s | %-20s | %-5s | %s\n" \
@@ -86,7 +98,7 @@ main::log_event() {
       "$(hostname --short)" \
       "${SLURM_SCRIPT_CONTEXT}" \
       "${level}" \
-      "${message}" >>"${PREPS_LOGFILE}"
+      "${message}${rc:+" (${rc})"}" >>"${PREPS_LOGFILE}"
   return 0
 }
 export -f "main::log_event"
@@ -110,21 +122,18 @@ while (( $# > 0 )); do
   shift
 done
 
-# User-Specified Job Parameters (Overrides) #1
+# Overrides #1
 if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
   declare -A parameters
   IFS=";" read -a pairs -r <<<"${SLURM_JOB_COMMENT}"
   for pair in "${pairs[@]}"; do
     IFS="=" read -r key value <<<"${pair}"
     case "${key}" in
-      "PREPS_PREFIX")
-        PREPS_PREFIX="${value}"
-        ;;
-      "PREPS_HEADNODE")
-        PREPS_HEADNODE="${value}"
-        ;;
       "PREPS_LOG_LEVEL")
         PREPS_LOG_LEVEL="${value^^}"
+        ;;
+      "PREPS_PREFIX")
+        PREPS_PREFIX="${value}"
         ;;
       *)
         parameters["${key}"]="${value}"
@@ -134,25 +143,28 @@ if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
 fi
 
 # Environment
-job_nodelist=($(scontrol show hostnames))
 PREPS_EXECBIN="$(realpath "${BASH_SOURCE[0]}")"
 PREPS_PREFIX="${PREPS_PREFIX:-$(realpath "$(dirname "${PREPS_EXECBIN}")/..")}"
 PREPS_EXECBINDIR="${PREPS_PREFIX}/bin"
 PREPS_EXECID="$(basename "${PREPS_EXECBIN}")"
+PREPS_HEADNODE="${SLURMD_NODENAME:-$(hostname --short)}"
+PREPS_CFGDIR="${PREPS_PREFIX}/etc"
+PREPS_CFGFILE="${PREPS_CFGDIR}/preps.sh"
 PREPS_LIBEXECDIR="${PREPS_PREFIX}/libexec"
 PREPS_LOGDIR="${PREPS_PREFIX}/var/log"
-PREPS_HEADNODE="${PREPS_HEADNODE:-"${job_nodelist[0]}"}"
 PREPS_LOG_LEVEL="${PREPS_LOG_LEVEL:-INFO}"
 PREPS_LOGFILE="${PREPS_LOGDIR}/${PREPS_EXECID}.$(date +"%d").log"
-PREPS_RUNDIR="${PREPS_PREFIX}/var/run"
+PREPS_RUNDIR="${PREPS_PREFIX}/run"
 export PREPS_HEADNODE PREPS_LOG_LEVEL PREPS_LOGFILE PREPS_RUNDIR
 export PATH="/usr/sbin:${PATH}"
+source "${PREPS_CFGFILE}" &> /dev/null ||
+  { main::log_event -level "ERROR" -message "Failed to Load PrEpS Configuration from File: [${PREPS_CFGFILE}] - Aborting..." -singleton; exit 0; }
 
 # Modules
 while IFS= read -d '' -r -u 9 modulefile; do
   module="$(awk 'match($0, /^([_a-z]+::[_a-z]+::[_a-z]+)\(\)/, a) {print a[1]}' "${modulefile}")"
   # shellcheck source=/dev/null
-  source "${modulefile}" &>/dev/null || main::log_event -level "WARN" -message "Failed to Load Modulefile: [${modulefile}]" -singleton
+  source "${modulefile}" &> /dev/null || main::log_event -level "WARN" -message "Failed to Load Modulefile: [${modulefile}]" -singleton
   if [[ -n "${module}" ]] && [[ "$(type -t "${module}" 2>/dev/null)" == "function" ]]; then
     # shellcheck disable=SC2163
     export -f "${module}" || main::log_event -level "WARN" -message "Failed to Export Module: [${module}]" -singleton
@@ -170,15 +182,15 @@ main::log_event -level "TRACE" -message "Starting PrEpS"
   main::log_event -level "DEBUG" -message "Performing Execution under User Account: [$(id --name --user)] on Behalf of User Account: [${SLURM_JOB_USER}]" -singleton
 (( EUID != 0 )) && export SUDO="sudo"
 
-# User-Specified Job Parameters (Overrides) #2
+# Overrides #2
 [[ -d "${PREPS_PREFIX}" ]] || main::log_event -level "FATAL" -message "Invalid Prefix: [${PREPS_PREFIX}]" -singleton
 [[ ${LOG_LEVELS["${PREPS_LOG_LEVEL}"]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${PREPS_LOG_LEVEL}]" -singleton
-if [[ "${SLURM_SCRIPT_CONTEXT,,}" == "prolog_"* && -n "${SLURM_JOB_COMMENT}" ]]; then
+if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
   for key in "${!parameters[@]}"; do
     printf -v "${key}" "%s" "${parameters["${key}"]}"
     # shellcheck disable=SC2163
     export "${key}" &&
-      main::log_event -level "DEBUG" -message "Registered User-Specified Job Parameter: [${key}] -> Value: [${parameters["${key}"]}]" -singleton
+      main::log_event -level "DEBUG" -message "Registered Override: [${key}] -> Value: [${parameters["${key}"]}]" -singleton
   done
 fi
 
@@ -203,6 +215,9 @@ exectime=$(( time2 - time1 ))
 main::log_event -level "INFO" -message "PrEpS Execution Time (ms): [${exectime}]"
 
 # Message
-main::log_event -level "TRACE" -message "Stopping PrEpS -> Return Code: [${rc}]"
+main::log_event -level "TRACE" -message "Stopping PrEpS" -rc "${?}"
+
+# Error Mode
+[[ "${PREPS_EXECUTION_MODE,,}" == "strict" ]] || rc=0
 
 exit ${rc}

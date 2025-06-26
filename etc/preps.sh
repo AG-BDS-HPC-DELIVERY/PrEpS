@@ -24,5 +24,11 @@ export NVSMI_EXECBIN="/usr/bin/nvidia-smi"
 # ==============================================================================
 # PrEpS
 # ==============================================================================
+export PREPS_EXECUTION_MODE="relaxed"  # {relaxed | strict}
 export PREPS_MULTIPLE_VALUE_SEPARATOR="|"
-export PREPS_PRIVILEGED_USERS=("ntallet")
+export PREPS_PRIVILEGED_USERS="putigny1 tallet1"
+
+# ==============================================================================
+# PrEpS Package: Kernel
+# ==============================================================================
+export KERNEL_PARAMETERS_ALLOWED="kernel.kptr_restrict kernel.perf_event_paranoid"

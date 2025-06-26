@@ -23,6 +23,6 @@ apis::cpupower::set_frequency_min() {
     shift
   done
   [[ -n "${frequency_min}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency Min.]"
-  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --min "${frequency_min}" &>/dev/null
+  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --min "${frequency_min}" &> /dev/null
   return $?
 }

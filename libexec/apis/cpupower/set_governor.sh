@@ -23,6 +23,6 @@ apis::cpupower::set_governor() {
     shift
   done
   [[ -n "${governor}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Governor]"
-  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --governor "${governor}" &>/dev/null
+  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --governor "${governor}" &> /dev/null
   return $?
 }

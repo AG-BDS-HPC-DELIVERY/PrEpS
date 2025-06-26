@@ -34,6 +34,6 @@ apis::nvsmi::set_power_limit() {
   (( power_limit > 0 )) || main::log_event -level "FATAL" -message "Invalid Power Limit: [${power_limit}]"
   [[ -n "${scope}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Scope]"
   (( scope == 0 || scope == 1 )) || main::log_event -level "FATAL" -message "Invalid Scope: [${scope}]"
-  ${SUDO} "${NVSMI_EXECBIN}" ${id:+--id="${id}"} --power-limit="${power_limit}" --scope="${scope}"
+  ${SUDO} "${NVSMI_EXECBIN}" ${id:+--id="${id}"} --power-limit="${power_limit}" --scope="${scope}" &> /dev/null
   return $?
 }

@@ -28,6 +28,6 @@ apis::nvsmi::set_applications_clocks() {
     shift
   done
   [[ -n "${applications_clocks}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Applications Clocks]"
-  ${SUDO} "${NVSMI_EXECBIN}" --applications-clocks="${applications_clocks}" ${id:+--id="${id}"}
+  ${SUDO} "${NVSMI_EXECBIN}" --applications-clocks="${applications_clocks}" ${id:+--id="${id}"} &> /dev/null
   return $?
 }

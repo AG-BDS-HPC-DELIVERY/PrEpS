@@ -12,8 +12,8 @@
 preps::nvidia::check_pending_retirements() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
-  if which nvidia-smi &>/dev/null; then
-    if (nvidia-smi --format=csv,noheader --query-gpu=retired_pages.pending 2>/dev/null | grep 'Yes' &>/dev/null); then
+  if which nvidia-smi &> /dev/null; then
+    if (nvidia-smi --format=csv,noheader --query-gpu=retired_pages.pending 2>/dev/null | grep 'Yes' &> /dev/null); then
       main::log_event -level "ERROR" -message "Pending Retirements Found"
       rc=1
     else
@@ -22,6 +22,6 @@ preps::nvidia::check_pending_retirements() {
   else
     main::log_event -level "WARN" -message "No NVIDIA SMI Command Available"
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

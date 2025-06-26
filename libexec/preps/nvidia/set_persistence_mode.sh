@@ -14,13 +14,13 @@ preps::nvidia::set_persistence_mode() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local mode="${1}"
-  [[ -n "${mode}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Persistence Mode]"
-  if "${NVSMI_EXECBIN}" --persistence-mode "${mode}" &>/dev/null; then
+  [[ -n "${mode}" ]] ||
+    { main::log_event -level "ERROR" -message "Missing Argument: [Persistence Mode]"; return ${rc}; }
+  if "${NVSMI_EXECBIN}" --persistence-mode "${mode}" &> /dev/null; then
     main::log_event -level "INFO" -message "Set Persistence Mode: [$(apis::nvsmi::get_persistence_mode)]"
   else
     main::log_event -level "ERROR" -message "Failed to Set Persistence Mode: [$(apis::nvsmi::get_persistence_mode)] - Return Code: [$?]"
-    rc=1
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

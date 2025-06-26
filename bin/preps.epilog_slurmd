@@ -3,24 +3,32 @@
 rc=0
 trap '(( rc += $? ))' ERR
 
+# Slurm
 #preps::slurm::archive_job
+preps::slurm::run_nhc
 
-preps::cpufreq::set_governor "performance"
-preps::cpufreq::set_frequency_min_max "81000:3456000"
+# CPU Frequency
+[[ -z "${CPUFREQ_GOVERNOR}" ]] || preps::cpufreq::set_governor "performance"
+[[ -z "${CPUFREQ_FREQUENCY_MIN}" ]] || preps::cpufreq::set_frequency_min_max "81000:3456000"
 preps::cpufreq::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "86400"
 
+# NVIDIA
 preps::nvidia::cleanup_mps_processes
-preps::nvidia::set_applications_clocks "2619,1980"
-#preps::nvidia::set_power_limit "680,680"
-preps::nvidia::set_vboost_slider 0
+[[ -z "${NVIDIA_APPLICATIONS_CLOCKS}" ]] || preps::nvidia::set_applications_clocks "2619,1980"
+[[ -z "${NVIDIA_POWER_LIMIT}" ]] || preps::nvidia::set_power_limit "680,680"
+[[ -z "${NVIDIA_VBOOST_SLIDER}" ]] || preps::nvidia::set_vboost_slider "0"
 
-preps::thp::set_thp "always"
+# THP
+[[ -z "${THP}" ]] || preps::thp::set_thp "always"
 
+# Filesystems
 preps::fs::cleanup_tmpdirs "/dev/shm,/tmp"
 
-preps::memory::set_stat_interval 120
-preps::memory::cleanup_memory_caches 2
+# Kernel
+[[ -z "${KERNEL_PARAMETERS}" ]] || preps::kernel::set_kernel_parameters "kernel.kptr_restrict=1,kernel.perf_event_paranoid=2"
 
-preps::slurm::run_nhc
+# Memory
+[[ -z "${MEMORY_VM_STAT_INTERVAL}" ]] || preps::memory::set_stat_interval "120"
+preps::memory::cleanup_memory_caches "2"
 
 exit ${rc}

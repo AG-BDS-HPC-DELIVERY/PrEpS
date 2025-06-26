@@ -14,17 +14,17 @@ preps::os::set_user_limits() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local limits && IFS="," read -a limits -r <<<"${1}"
-  [[ -n "${limits[*]}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Limits]"
+  [[ -n "${limits[*]}" ]] ||
+    { main::log_event -level "ERROR" -message "Missing Argument: [Limits]"; return ${rc}; }
   local limit
   for limit in "${limits[@]}"; do
     local option value
     IFS="=" read -r option value <<<"${limit}"
     if [[ -z "${option}" ]] || [[ -z "${value}" ]]; then
-      main::log_event -level "FATAL" -message "Failed to Parse Limit: [${limit}]"
+      main::log_event -level "ERROR" -message "Failed to Parse Limit: [${limit}]"
     fi
     main::log_event -level "DEBUG" -message "ulimit -${option} ${value}"
-    #(( rc = rc + $? ))
   done
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

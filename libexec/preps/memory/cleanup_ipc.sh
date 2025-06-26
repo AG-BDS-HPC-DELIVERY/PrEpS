@@ -16,7 +16,7 @@ preps::memory::cleanup_ipc() {
   local -i count_1=0
   local -i count_2=0
   while IFS= read -d '' -r -u 9 shmid; do
-    if ipcrm --shmem-id "${shmid}" &>/dev/null; then
+    if ipcrm --shmem-id "${shmid}" &> /dev/null; then
       main::log_event -level "TRACE" -message "Removed User-Owned IPC: [${shmid}]"
       (( count_1 += 1 ))
     else
@@ -29,8 +29,7 @@ preps::memory::cleanup_ipc() {
   fi
   if (( count_2 > 0 )); then
     main::log_event -level "ERROR" -message "Failed to Remove User-Owned IPC - Total Count: [${count_2}]"
-    rc=1
   fi
-  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}] -> Return Code: [${rc}]"
+  main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
   return ${rc}
 }

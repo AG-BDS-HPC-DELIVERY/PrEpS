@@ -83,7 +83,7 @@ $(dmesg --ctime | tail -n 250)
 rpm --query: |
 $(rpm --query cuda-drivers datacenter-gpu-manager gdrcopy lustre-client mlnx-ofa_kernel nvidia-driver openmpi-bull slurm)
 eof
-  if "nvidia-smi" &>/dev/null; then
+  if "nvidia-smi" &> /dev/null; then
     cat &>>"${outfile}" <<- eof
 
 nvidia-smi: |

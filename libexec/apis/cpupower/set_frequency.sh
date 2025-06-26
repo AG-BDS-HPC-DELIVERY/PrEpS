@@ -23,6 +23,6 @@ apis::cpupower::set_frequency() {
     shift
   done
   [[ -n "${frequency}" ]] || main::log_event -level "FATAL" -message "Missing Argument: [Frequency]"
-  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --freq "${frequency}" &>/dev/null
+  ${SUDO} "${CPUPOWER_EXECBIN}" frequency-set --freq "${frequency}" &> /dev/null
   return $?
 }
