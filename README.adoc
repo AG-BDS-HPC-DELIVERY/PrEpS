@@ -183,6 +183,19 @@ The package offers the following modules:
 |Cleanup temporary directories
 |===
 
+===== Kernel
+
+The package offers the following modules:
+
+[cols="1,1,2",options="header",width="100%"]
+|===
+|Function Name|Arguments|Purpose
+
+|`preps::kernel::set_kernel_parameters`
+|`KEY=VALUE[,KEY=VALUE]`
+|Set Kernel Parameters
+|===
+
 ===== Memory
 
 The package offers the following modules:
@@ -210,6 +223,10 @@ The package offers the following modules:
 |`preps::memory::set_numa_balancing`
 |`{0 \| 1}`
 |Set NUMA balancing
+
+|`preps::memory::set_stat_interval`
+|`<INTERVAL>`
+|Set Virtual Memory statistics interval (in seconds)
 |===
 
 ===== NVIDIA
@@ -303,10 +320,10 @@ The package offers the following modules:
 |===
 |Function Name|Arguments|Purpose
 
-|`preps::systemd::reload_systemd_unit`
+|`preps::systemd::restart_systemd_unit`
 |`UNIT` +
 `MAX_ACTIVE_TIME_IN_SECONDS`
-|Reload systemd unit if active time is above specified threshold
+|Restart systemd unit if active time is above specified threshold
 
 |`preps::systemd::start_failed_systemd_units`
 |-
@@ -346,7 +363,7 @@ The package offers the following modules:
 |===
 |Function Name|Arguments|Purpose
 
-|`preps::tuned::enable_tuned_profile`
+|`preps::tuned::enable_profile`
 |`PROFILE`
 |Apply tuned profile
 |===
@@ -474,18 +491,23 @@ Log file records are made of the following fields:
 Log File Example::
 
 ----
-2024-07-25 12:00:47 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
-2024-07-25 12:00:48 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | DEBUG | Performing Execution under User Account: [root] on Behalf of User Account: [patkinson]
-2024-07-25 12:00:55 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
-2024-07-25 12:00:57 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Mountpoint: [/home] Mounted
-2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | No Residual User Process Found
-2024-07-25 12:00:59 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | No Residual User Process Found
-2024-07-25 12:01:00 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
-2024-07-25 12:01:02 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Power Limit: [680.00 | 680.00 | 680.00 | 680.00]
-2024-07-25 12:01:09 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
-2024-07-25 12:01:10 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Video Boost Slider: [0 | 0 | 0 | 0]
-2024-07-25 12:01:12 +02:00 |     3238 | patkinson       | pm10-nod48      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
-2024-07-25 12:01:15 +02:00 |     3238 | patkinson       | pm10-nod68      | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2025-06-27 16:01:19 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set CPU Governor: [performance]
+2025-06-27 16:01:19 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set CPU Frequency Limits: [81000]-[3321000] ( Hardware Limits: [81000]-[3321000] )
+2025-06-27 16:01:19 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | No Residual User Process Found
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Applications Clocks: [2619,1980|2619,1980|2619,1980|2619,1980]
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Video Boost Slider: [0|0|0|0]
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Kernel Parameter: [kernel.kptr_restrict] to Value: [0]
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Kernel Parameter: [kernel.perf_event_paranoid] to Value: [-1]
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Statistics Interval: [120]
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Dropped Memory Caches
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Compacted Memory
+2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | PrEpS Execution Time (ms): [1630]
+2025-06-27 16:01:32 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Executed NHC Successfully
+2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Set Kernel Parameter: [kernel.kptr_restrict] to Value: [1]
+2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Set Kernel Parameter: [kernel.perf_event_paranoid] to Value: [2]
+2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Dropped Memory Caches
+2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | PrEpS Execution Time (ms): [1994]
 ----
 
 === Overrides
@@ -503,12 +525,12 @@ Therefore, in order to pass environment variables to the Prolog/Epilog, it is re
 * As a direct argument to the `sbatch` command itself:
 +
 ----
-sbatch --comment "NVIDIA_POWER_LIMIT=680" <...>
+sbatch --comment "NVIDIA_POWER_LIMIT=680,680" <...>
 ----
 * As an explicit directive inside the job submission file:
 +
 ----
-#SBATCH --comment="NVIDIA_POWER_LIMIT=680"
+#SBATCH --comment="NVIDIA_POWER_LIMIT=680,680"
 ----
 
 [NOTE]
@@ -519,55 +541,59 @@ Multiple overrides can be specified as a semi-colon separated list:
 ----
 Example:
 ----
---comment="NVIDIA_POWER_LIMIT=680;NVIDIA_VBOOST_SLIDER=1"
+--comment="NVIDIA_POWER_LIMIT=680,680;NVIDIA_VBOOST_SLIDER=1"
 ----
 ====
 
-==== Typical Overrides
+==== Existing Overrides
 
-[cols="1,1,2",options="header",width="100%"]
+[cols="1,2,2",options="header",width="100%"]
 |===
 |Category|Environment Variable Name|Purpose
 
 |PrEpS
 |`PREPS_LOG_LEVEL`
-|Job-specific Log Level: {TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}
+|Job-specific log level: {TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}
 
 |
 |`PREPS_SKIP_PROLOG_SLURMD`
-|Skip Execution of Slurmd Prolog: {no \| yes}
+|Skip execution of Slurmd Prolog: {no \| yes}
 
 |CPU Frequency
-|`CPUFREQ_FREQUENCY_MAX`
-|CPU Frequency Max. in KHz (default) or MHz / GHz
+|`CPUFREQ_FREQUENCY_MAX=<FREQUENCY>`
+|CPU frequency max. in KHz (default) or MHz/GHz
 
 |
-|`CPUFREQ_FREQUENCY_MIN`
-|CPU Frequency Min. in KHz (default) or MHz / GHz
+|`CPUFREQ_FREQUENCY_MIN=<FREQUENCY>`
+|CPU frequency min. in KHz (default) or MHz/GHz
 
 |
-|`CPUFREQ_GOVERNOR`
-|CPU Governor
+|`CPUFREQ_GOVERNOR=<GOVERNOR>`
+|CPU governor
+
+|Kernel
+|`KERNEL_PARAMETERS=KEY=VALUE[,KEY=VALUE]`
+|Extra kernel parameters
 
 |NVIDIA
-|`NVIDIA_APPLICATIONS_CLOCKS`
-|Applications Clocks in MHz: MEMORY,GRAPHICS
+|`NVIDIA_APPLICATIONS_CLOCKS=<MEMORY>,<GRAPHICS>`
+|Applications clocks in MHz
 
 |
-|[`NVIDIA_POWER_LIMIT_GPU`:]`NVIDIA_POWER_LIMIT_MODULE`
-|Power Limit of the CG Module/GPU Devices in Watts
+|`NVIDIA_POWER_LIMIT=<GPU>,<MODULE>`
+|Power limit of the CG GPU/Module devices in Watts
 
 |
 |`NVIDIA_VBOOST_SLIDER`
 |Video Boost Slider: {0 \| 1 \| 2 \| 3 \| 4}
 
 |THP
-|`THP`
-|Configuration of Transparent Huge Pages (THP): {always \| madvise \| never}
+|`THP={always \| madvise \| never}`
+|Configuration of Transparent Huge Pages (THP)
 
 |
-|`THP_SHMEM`
-|Configuration of Transparent Huge Pages (THP) for SHMEM: {advise \| always \| deny \| force \| never}
+|`THP_SHMEM={advise \| always \| deny \| force \| never}`
+|Configuration of Transparent Huge Pages (THP) for SHMEM
 |===
 
 [NOTE]
