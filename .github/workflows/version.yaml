@@ -21,6 +21,6 @@ jobs:
           printf "Commit ID: %s\nTimestamp: %s\n" "${{ github.sha }}" "$(date +%Y-%m-%dT%H:%M:%S)" > etc/VERSION
       - name: Commit and Push File
         run: |
-          git add -f etc/VERSION
+          git add -f etc/version
           git commit -m "Setup Code Version"
           git push
