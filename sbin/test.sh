@@ -22,7 +22,7 @@ Usage: $(basename "${BASH_SOURCE[0]}") [--comment COMMENT] [--context CONTEXT]
 Options:
   --comment COMMENT    Semi-Colon Separated List of 'Key=Value' Pairs
                          PREPS_ALT_PREFIX=${prefix}
-                         PREPS_HEADNODE=${HOSTNAME}
+                         PREPS_NODENAME=${HOSTNAME}
                          PREPS_LOG_LEVEL=TRACE
   --context CONTEXT    Context: {epilog_slurmd | prolog_slurmd*}
 

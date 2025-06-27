@@ -30,30 +30,7 @@ Prolog/Epilog for Slurm (PrEpS)
 
 Usage: $(realpath "${BASH_SOURCE[0]}")
 
-Overrides:
-
-  CPU Frequency
-    CPUFREQ_FREQUENCY_MAX         Frequency Max.
-    CPUFREQ_FREQUENCY_MIN         Frequency Min.
-    CPUFREQ_GOVERNOR              Governor
-
-  Kernel
-    KERNEL_PERF_EVENT_PARANOID    Performance Event Paranoid: {-1 | 0 | 1 | 2*}
-
-  Memory
-    MEMORY_VM_STAT_INTERVAL       VM Stat Interval
-
-  NVIDIA
-    NVIDIA_APPLICATIONS_CLOCKS    Applications Clocks
-    NVIDIA_POWER_LIMIT            Power Limit
-    NVIDIA_VBOOST_SLIDER          Video Boost Slider
-
-  PrEpS
-    PREPS_LOG_LEVEL               Log Level: {TRACE | DEBUG | INFO | WARN* | ERROR | FATAL}
-
-  THP
-    THP                           Transparent Huge Pages: {always* | madvise | never}
-    THP_SHMEM                     Transparent Huge Pages for SHMEM: {advise | always | deny | force | never}
+GitHub Repository: https://github.com/AG-BDS-HPC-DELIVERY/PrEpS/
 
 eof
   exit 0
@@ -87,8 +64,8 @@ main::log_event() {
     esac
     shift
   done
-  (( ${log_levels[${level}]} >= ${log_levels[${PREPS_LOG_LEVEL}]} )) || return 0
-  (( "${singleton}" == 1 )) && [[ "${PREPS_HEADNODE}" != "$(hostname --short)" ]] && return 0
+  (( ${log_levels[${level}]} < ${log_levels[${PREPS_LOG_LEVEL}]} )) && (( ${log_levels[${level}]} < 4 )) && return 0
+  (( "${singleton}" == 1 )) && [[ "${PREPS_NODENAME}" != "$(hostname --short)" ]] && return 0
   [[ "${level}" == "FATAL" ]] && message="${message:-Undefined Exception} @ ${FUNCNAME[1]}:${BASH_LINENO[0]}"
   flock --exclusive --timeout 2.5 "${PREPS_LOGFILE}" \
     printf "%26s | %8s | %-15s | %-15s | %-20s | %-5s | %s\n" \
@@ -112,7 +89,7 @@ time1=$(date +"%s%3N")
 # Execution Arguments
 while (( $# > 0 )); do
   case "${1}" in
-    -help|-h)
+    --help|-h)
       main::help
       ;;
     *)
@@ -146,19 +123,19 @@ fi
 PREPS_EXECBIN="$(realpath "${BASH_SOURCE[0]}")"
 PREPS_PREFIX="${PREPS_PREFIX:-$(realpath "$(dirname "${PREPS_EXECBIN}")/..")}"
 PREPS_EXECBINDIR="${PREPS_PREFIX}/bin"
-PREPS_EXECID="$(basename "${PREPS_EXECBIN}")"
-PREPS_HEADNODE="${SLURMD_NODENAME:-$(hostname --short)}"
-PREPS_CFGDIR="${PREPS_PREFIX}/etc"
-PREPS_CFGFILE="${PREPS_CFGDIR}/preps.sh"
+PREPS_BASENAME="$(basename "${PREPS_EXECBIN}")"
+PREPS_NODENAME="${SLURMD_NODENAME:-$(hostname --short)}"
+PREPS_CONFIGDIR="${PREPS_PREFIX}/etc"
+PREPS_CONFIGFILE="${PREPS_CONFIGDIR}/config.sh"
 PREPS_LIBEXECDIR="${PREPS_PREFIX}/libexec"
 PREPS_LOGDIR="${PREPS_PREFIX}/var/log"
-PREPS_LOG_LEVEL="${PREPS_LOG_LEVEL:-INFO}"
-PREPS_LOGFILE="${PREPS_LOGDIR}/${PREPS_EXECID}.$(date +"%d").log"
+PREPS_LOGFILE="${PREPS_LOGDIR}/${PREPS_BASENAME}.$(date +"%d").log"
 PREPS_RUNDIR="${PREPS_PREFIX}/run"
-export PREPS_HEADNODE PREPS_LOG_LEVEL PREPS_LOGFILE PREPS_RUNDIR
+export PREPS_LOG_LEVEL PREPS_LOGFILE PREPS_NODENAME PREPS_RUNDIR
 export PATH="/usr/sbin:${PATH}"
-source "${PREPS_CFGFILE}" &> /dev/null ||
-  { main::log_event -level "ERROR" -message "Failed to Load PrEpS Configuration from File: [${PREPS_CFGFILE}] - Aborting..." -singleton; exit 0; }
+source "${PREPS_CONFIGFILE}" &> /dev/null ||
+  { main::log_event -level "ERROR" -message "Failed to Load PrEpS Configuration from File: [${PREPS_CONFIGFILE}] - Skipping Prolog/Epilog" -singleton; exit 0; }
+PREPS_LOG_LEVEL="${PREPS_LOG_LEVEL:-PREPS_LOG_LEVEL_DEFAULT}"
 
 # Modules
 while IFS= read -d '' -r -u 9 modulefile; do
@@ -199,7 +176,7 @@ rc=0
 if [[ "${PREPS_SKIP_PROLOG_SLURMD,,}" =~ ^y([e][s])*$ && "${SLURM_SCRIPT_CONTEXT,,}" == "prolog_slurmd" ]]; then
   main::log_event -level "INFO" -message "Skipping Slurm Prolog per User Request" -singleton
 else
-  execbin="${PREPS_EXECBINDIR}/${PREPS_EXECID}.${SLURM_SCRIPT_CONTEXT,,}"
+  execbin="${PREPS_EXECBINDIR}/${PREPS_BASENAME}.${SLURM_SCRIPT_CONTEXT,,}"
   [[ -x "${execbin}.${SLURM_JOB_PARTITION}" ]] && execbin="${execbin}.${SLURM_JOB_PARTITION}"
   main::log_event -level "TRACE" -message "Executing Script: [${execbin}]"
   "${execbin}"

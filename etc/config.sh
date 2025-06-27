@@ -25,6 +25,7 @@ export NVSMI_EXECBIN="/usr/bin/nvidia-smi"
 # PrEpS
 # ==============================================================================
 export PREPS_EXECUTION_MODE="relaxed"  # {relaxed | strict}
+export PREPS_LOG_LEVEL_DEFAULT="INFO"
 export PREPS_MULTIPLE_VALUE_SEPARATOR="|"
 export PREPS_PRIVILEGED_USERS="putigny1 tallet1"
 
