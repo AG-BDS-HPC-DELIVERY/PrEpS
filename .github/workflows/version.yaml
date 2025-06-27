@@ -18,7 +18,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
       - name: Create commit info file
         run: |
-          printf "Commit ID: %s\nTimestamp: %s\n" "${{ github.sha }}" "$(date +%Y-%m-%dT%H:%M:%S)" > etc/VERSION
+          printf "%s / %s\n" "${{ github.sha }}" "$(date +"%Y-%m-%d %H:%M:%S %:z")" > etc/VERSION
       - name: Commit and Push File
         run: |
           git add -f etc/version
