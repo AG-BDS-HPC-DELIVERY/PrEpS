@@ -1,4 +1,4 @@
 **/.vscode/
-etc/VERSION
+etc/version
+run/
 var/log/preps.[0-9][0-9].log
-var/run/
