@@ -36,12 +36,11 @@ jobs:
         doxyfile-path: './etc/doxygen/Doxyfile'
         working-directory: '.'
     - name: Upload Artifact
-      #uses: actions/upload-artifact@v3
       uses: actions/upload-pages-artifact@v3
       with:
         name: 'github-pages'
         path: './share/doc/html/'
     - name: Deploy to GitHub Pages
-      uses: actions/deploy-pages@v2
+      uses: actions/deploy-pages@v3
       with:
         artifact_name: 'github-pages'
