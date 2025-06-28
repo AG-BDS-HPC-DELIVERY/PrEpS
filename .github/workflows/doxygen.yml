@@ -1,4 +1,4 @@
-name: Doxygen
+name: Generate Documentation on GitHub Pages
 
 on:
   push:
