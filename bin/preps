@@ -106,10 +106,10 @@ if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
   for pair in "${pairs[@]}"; do
     IFS="=" read -r key value <<<"${pair}"
     case "${key}" in
-      "PREPS_LOG_LEVEL")
+      PREPS_LOG_LEVEL)
         PREPS_LOG_LEVEL="${value^^}"
         ;;
-      "PREPS_PREFIX")
+      PREPS_PREFIX)
         PREPS_PREFIX="${value}"
         ;;
       *)
@@ -135,7 +135,7 @@ export PREPS_LOG_LEVEL PREPS_LOGFILE PREPS_NODENAME PREPS_RUNDIR
 export PATH="/usr/sbin:${PATH}"
 source "${PREPS_CONFIGFILE}" &> /dev/null ||
   { main::log_event -level "ERROR" -message "Failed to Load PrEpS Configuration from File: [${PREPS_CONFIGFILE}] - Skipping Prolog/Epilog" -singleton; exit 0; }
-PREPS_LOG_LEVEL="${PREPS_LOG_LEVEL:-PREPS_LOG_LEVEL_DEFAULT}"
+PREPS_LOG_LEVEL="${PREPS_LOG_LEVEL:-${PREPS_LOG_LEVEL_DEFAULT}}"
 
 # Modules
 while IFS= read -d '' -r -u 9 modulefile; do
@@ -161,13 +161,12 @@ main::log_event -level "TRACE" -message "Starting PrEpS"
 
 # Overrides #2
 [[ -d "${PREPS_PREFIX}" ]] || main::log_event -level "FATAL" -message "Invalid Prefix: [${PREPS_PREFIX}]" -singleton
-[[ ${LOG_LEVELS["${PREPS_LOG_LEVEL}"]} ]] || main::log_event -level "FATAL" -message "Invalid Log Level: [${PREPS_LOG_LEVEL}]" -singleton
+[[ ${LOG_LEVELS["${PREPS_LOG_LEVEL}"]} ]] || main::log_event -level "ERROR" -message "Invalid Log Level: [${PREPS_LOG_LEVEL}]" -singleton
 if [[ -n "${SLURM_JOB_COMMENT}" ]]; then
   for key in "${!parameters[@]}"; do
     printf -v "${key}" "%s" "${parameters["${key}"]}"
     # shellcheck disable=SC2163
-    export "${key}" &&
-      main::log_event -level "DEBUG" -message "Registered Override: [${key}] -> Value: [${parameters["${key}"]}]" -singleton
+    export "${key}" && main::log_event -level "DEBUG" -message "Registered Override: [${key}] -> Value: [${parameters["${key}"]}]" -singleton
   done
 fi
 
