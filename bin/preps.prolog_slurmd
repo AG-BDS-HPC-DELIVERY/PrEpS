@@ -8,13 +8,12 @@ preps::cpufreq::set_governor "${CPUFREQ_GOVERNOR:-performance}"
 preps::cpufreq::set_frequency_min_max "${CPUFREQ_FREQUENCY_MIN:-81000}:${CPUFREQ_FREQUENCY_MAX:-3456000}"
 
 # NVIDIA
-preps::nvidia::check_residual_user_processes
 preps::nvidia::set_applications_clocks "${NVIDIA_APPLICATIONS_CLOCKS:-2619,1980}"
 #preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680,680}"
 preps::nvidia::set_vboost_slider "${NVIDIA_VBOOST_SLIDER:-0}"
 
 # THP
-[[ -z "${THP}" ]] || preps::thp::set_thp "${THP}"
+preps::thp::set_thp "${THP:-madvise}"
 
 # Kernel
 [[ -z "${KERNEL_PARAMETERS}" ]] || preps::kernel::set_kernel_parameters "${KERNEL_PARAMETERS}"
