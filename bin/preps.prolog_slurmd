@@ -3,6 +3,9 @@
 rc=0
 trap '(( rc += $? ))' ERR
 
+# Slurm
+preps::slurm::run_nhc
+
 # CPU Frequency
 preps::cpufreq::set_governor "${CPUFREQ_GOVERNOR:-performance}"
 preps::cpufreq::set_frequency_min_max "${CPUFREQ_FREQUENCY_MIN:-81000}:${CPUFREQ_FREQUENCY_MAX:-3456000}"
