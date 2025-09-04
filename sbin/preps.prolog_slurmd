@@ -1,11 +1,12 @@
 #!/bin/bash
 
-preps::cpufreq::check_driver "288"
-preps::cpufreq::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "60"
-#preps::cpufreq::set_boost
-#preps::cpufreq::set_frequency
-preps::cpufreq::set_frequency_min_max "81000:3456000"
-preps::cpufreq::set_governor "performance"
+preps::cpu::check_driver "288"
+preps::cpu::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "60"
+#preps::cpu::set_boost
+#preps::cpu::set_frequency
+preps::cpu::set_frequency_min_max "81000:3456000"
+preps::cpu::set_governor "performance"
+preps::cpu::set_power_capping "100000000"
 preps::fs::check_mountpoints "/"
 preps::fs::cleanup_tmpdirs "/dev/shm,/tmp"
 preps::kernel::set_kernel_parameters "kernel.kptr_restrict=1,kernel.perf_event_paranoid=-1"

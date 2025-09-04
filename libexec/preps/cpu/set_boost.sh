@@ -2,15 +2,15 @@
 
 # ------------------------------------------------------------------------------
 ## @file
-## @fn preps::cpufreq::set_boost()
+## @fn preps::cpu::set_boost()
 ## @brief Enable or Disable CPU Frequency Boost
 ## @param boost Frequency Boost Status: {0 | 1}
 ## @return Return Code
 ## @retval 0 Successfully Set CPU Frequency Boost
 ## @retval 1 Failed to Set CPU Frequency Boost
-## @ingroup cpufreq
+## @ingroup cpu
 # ------------------------------------------------------------------------------
-preps::cpufreq::set_boost() {
+preps::cpu::set_boost() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local boost="${1}"

@@ -2,15 +2,15 @@
 
 # ------------------------------------------------------------------------------
 ## @file
-## @fn preps::cpufreq::set_governor()
+## @fn preps::cpu::set_governor()
 ## @brief Set CPU Power Governor
 ## @param governor CPU Power Governor: {conservative | ondemand | performance | powersave | userspace}
 ## @return Return Code
 ## @retval 0 Successfully Set CPU Power Governor
 ## @retval 1 Failed to Set CPU Power Governor
-## @ingroup cpufreq
+## @ingroup cpu
 # ------------------------------------------------------------------------------
-preps::cpufreq::set_governor() {
+preps::cpu::set_governor() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local governor="${1}"

@@ -2,15 +2,15 @@
 
 # ------------------------------------------------------------------------------
 ## @file
-## @fn preps::cpufreq::check_driver()
+## @fn preps::cpu::check_driver()
 ## @brief Check cpufreq Driver
 ## @param num_cpus Total Number of CPUs
 ## @return Return Code
 ## @retval 0 cpufreq Driver is Operational
 ## @retval 1 cpufreq Driver is Dysfunctional
-## @ingroup cpufreq
+## @ingroup cpu
 # ------------------------------------------------------------------------------
-preps::cpufreq::check_driver() {
+preps::cpu::check_driver() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local num_cpus="${1}"

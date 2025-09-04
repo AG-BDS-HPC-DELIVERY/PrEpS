@@ -6,9 +6,10 @@ trap '(( rc += $? ))' ERR
 # Slurm
 preps::slurm::run_nhc
 
-# CPU Frequency
-preps::cpufreq::set_governor "${CPUFREQ_GOVERNOR:-performance}"
-preps::cpufreq::set_frequency_min_max "${CPUFREQ_FREQUENCY_MIN:-81000}:${CPUFREQ_FREQUENCY_MAX:-3456000}"
+# CPU
+preps::cpu::set_governor "${CPU_GOVERNOR:-performance}"
+preps::cpu::set_frequency_min_max "${CPU_FREQUENCY_MIN:-81000}:${CPU_FREQUENCY_MAX:-3456000}"
+preps::cpu::set_power_capping "${CPU_POWER_CAP:-350000000}"
 
 # NVIDIA
 preps::nvidia::set_applications_clocks "${NVIDIA_APPLICATIONS_CLOCKS:-2619,1980}"

@@ -2,7 +2,7 @@
 
 # ------------------------------------------------------------------------------
 ## @file
-## @fn preps::cpufreq::reload_cpufreq_driver_module()
+## @fn preps::cpu::reload_cpufreq_driver_module()
 ## @brief Reload cpufreq Driver Module
 ## @param module Kernel Module
 ## @param systemd_unit systemd Unit
@@ -10,9 +10,9 @@
 ## @return Return Code
 ## @retval 0 Driver Module Has Been Successfully Reloaded
 ## @retval 1 Driver Module Could Not Be Reloaded
-## @ingroup cpufreq
+## @ingroup cpu
 # ------------------------------------------------------------------------------
-preps::cpufreq::reload_cpufreq_driver_module() {
+preps::cpu::reload_cpufreq_driver_module() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local module="${1}"

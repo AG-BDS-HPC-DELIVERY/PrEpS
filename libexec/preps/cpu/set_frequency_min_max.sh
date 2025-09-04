@@ -2,15 +2,15 @@
 
 # ------------------------------------------------------------------------------
 ## @file
-## @fn preps::cpufreq::set_frequency_min_max()
+## @fn preps::cpu::set_frequency_min_max()
 ## @brief Set CPU Min./Max. Frequency
 ## @param frequencies Min./Max. Frequencies: FREQ_MIN:FREQ_MAX
 ## @return Return Code
 ## @retval 0 Successfully Set CPU Min./Max. Frequency
 ## @retval 1 Failed to Set CPU Min./Max. Frequency
-## @ingroup cpufreq
+## @ingroup cpu
 # ------------------------------------------------------------------------------
-preps::cpufreq::set_frequency_min_max() {
+preps::cpu::set_frequency_min_max() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local frequencies && IFS=":" read -a frequencies -r <<<"${1}"

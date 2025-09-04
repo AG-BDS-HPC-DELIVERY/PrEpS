@@ -3,10 +3,11 @@
 rc=0
 trap '(( rc += $? ))' ERR
 
-# CPU Frequency
-[[ -z "${CPUFREQ_GOVERNOR}" ]] || preps::cpufreq::set_governor "performance"
-[[ -z "${CPUFREQ_FREQUENCY_MIN}" ]] || preps::cpufreq::set_frequency_min_max "81000:3456000"
-preps::cpufreq::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "86400"
+# CPU
+[[ -z "${CPU_GOVERNOR}" ]] || preps::cpu::set_governor "performance"
+[[ -z "${CPU_FREQUENCY_MIN}" ]] || preps::cpu::set_frequency_min_max "81000:3456000"
+preps::cpu::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "86400"
+[[ -z "${CPU_POWER_CAP}" ]] || preps::cpu::set_power_capping "350000000"
 
 # NVIDIA
 [[ -z "${NVIDIA_APPLICATIONS_CLOCKS}" ]] || preps::nvidia::set_applications_clocks "2619,1980"

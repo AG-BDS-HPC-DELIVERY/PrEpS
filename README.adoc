@@ -141,7 +141,7 @@ PrEpS is divided into several distinct, complementary packages:
 
 Each PrEpS package is divided into several distinct modules.
 
-===== CPU Frequency
+===== CPU
 
 The package offers the following modules:
 
@@ -149,21 +149,25 @@ The package offers the following modules:
 |===
 |Function Name|Arguments|Purpose
 
-|`preps::cpufreq::set_boost`
+|`preps::cpu::set_boost`
 |`{0 \| 1}`
 |Set CPU boost (Intel Turbo Boost / AMD Core Performance Boost)
 
-|`preps::cpufreq::set_frequency_min_max`
+|`preps::cpu::set_frequency_min_max`
 |`<FREQ_MIN>:<FREQ_MAX>`
 |Set CPU frequency Min./Max.
 
-|`preps::cpufreq::set_frequency`
+|`preps::cpu::set_frequency`
 |`<FREQ>`
 |Set CPU frequency
 
-|`preps::cpufreq::set_governor`
+|`preps::cpu::set_governor`
 |`<GOVERNOR>`
 |Set CPU governor
+
+|`preps::cpu::set_power_capping`
+|`<POWER_CAP>`
+|Set CPU power capping
 |===
 
 ===== Filesystems

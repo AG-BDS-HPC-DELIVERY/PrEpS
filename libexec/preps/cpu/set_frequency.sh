@@ -2,15 +2,15 @@
 
 # ------------------------------------------------------------------------------
 ## @file
-## @fn preps::cpufreq::set_frequency()
+## @fn preps::cpu::set_frequency()
 ## @brief Set CPU Frequency
 ## @param frequency CPU Frequency
 ## @return Return Code
 ## @retval 0 Successfully Set CPU Frequency
 ## @retval 1 Failed to Set CPU Frequency
-## @ingroup cpufreq
+## @ingroup cpu
 # ------------------------------------------------------------------------------
-preps::cpufreq::set_frequency() {
+preps::cpu::set_frequency() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
   local frequency="${1}"
