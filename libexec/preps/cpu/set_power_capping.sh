@@ -4,7 +4,7 @@
 ## @file
 ## @fn preps::cpu::set_power_capping()
 ## @brief Set CPU Power Capping
-## @param power_cap CPU Power Capping in Microwatt
+## @param power_cap CPU Power Capping (μW)
 ## @return Return Code
 ## @retval 0 Successfully Set CPU Power Cap
 ## @retval 1 Failed to Set CPU Power Cap
@@ -23,7 +23,7 @@ preps::cpu::set_power_capping() {
     [[ -f "${devicedir}/power1_cap" ]] ||
       { main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Missing Power Capping File: [${devicedir}/power1_cap]"; rc=1; continue; }
     if echo ${power_cap} > "${devicedir}/power1_cap" 2> /dev/null; then
-      main::log_event -level "INFO" -message "Set CPU Power Capping: [${power_cap}] (microwatt)"
+      main::log_event -level "INFO" -message "Set CPU Power Capping: [${power_cap}] (μW)"
     else
       main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Return Code: [$?]"
       rc=1
