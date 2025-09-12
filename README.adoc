@@ -76,7 +76,7 @@ The various Prolog/Epilog mechanisms are summarized in the table below:
 
 PrEpS main script is located in:
 ----
-<PREFIX>/preps/bin/preps
+PREFIX/preps/bin/preps
 ----
 
 This script is a single entry point which takes care of calling the proper prolog/epilog script depending on the actual Slurm context:
@@ -86,35 +86,35 @@ This script is a single entry point which takes care of calling the proper prolo
 
 |Slurm Controller Prolog
 |`prolog_slurmctld`
-|`<PREFIX>/preps/bin/preps.prolog_slurmctld`
+|`PREFIX/preps/bin/preps.prolog_slurmctld`
 
 |Slurm Controller Epilog
 |`epilog_slurmctld`
-|`<PREFIX>/preps/bin/preps.epilog_slurmctld`
+|`PREFIX/preps/bin/preps.epilog_slurmctld`
 
 |Slurm Prolog
 |`prolog_slurmd`
-|`<PREFIX>/preps/bin/preps.prolog_slurmd`
+|`PREFIX/preps/bin/preps.prolog_slurmd`
 
 |Slurm Epilog
 |`epilog_slurmd`
-|`<PREFIX>/preps/bin/preps.epilog_slurmd`
+|`PREFIX/preps/bin/preps.epilog_slurmd`
 
 |srun Prolog
 |`prolog_srun`
-|`<PREFIX>/preps/bin/preps.prolog_srun`
+|`PREFIX/preps/bin/preps.prolog_srun`
 
 |srun Epilog
 |`epilog_srun`
-|`<PREFIX>/preps/bin/preps.epilog_srun`
+|`PREFIX/preps/bin/preps.epilog_srun`
 
 |Task Prolog
 |`prolog_task`
-|`<PREFIX>/preps/bin/preps.prolog_task`
+|`PREFIX/preps/bin/preps.prolog_task`
 
 |Task Epilog
 |`epilog_task`
-|`<PREFIX>/preps/bin/preps.epilog_task`
+|`PREFIX/preps/bin/preps.epilog_task`
 |===
 
 === Library
@@ -126,7 +126,7 @@ PrEpS is divided into several distinct, complementary packages:
 |===
 |Package |Purpose
 
-|CPU Frequency |Manage CPU frequency
+|CPU |Manage CPU settings
 |Filesystems |Manage filesystems
 |Memory |Manage system memory
 |NVIDIA |Manage NVIDIA GPU configuration
@@ -154,19 +154,19 @@ The package offers the following modules:
 |Set CPU boost (Intel Turbo Boost / AMD Core Performance Boost)
 
 |`preps::cpu::set_frequency_min_max`
-|`<FREQ_MIN>:<FREQ_MAX>`
+|`FREQ_MIN:FREQ_MAX`
 |Set CPU frequency Min./Max.
 
 |`preps::cpu::set_frequency`
-|`<FREQ>`
+|`FREQ`
 |Set CPU frequency
 
 |`preps::cpu::set_governor`
-|`<GOVERNOR>`
+|`GOVERNOR`
 |Set CPU governor
 
 |`preps::cpu::set_power_capping`
-|`<POWER_CAP>`
+|`POWER_CAP`
 |Set CPU power capping
 |===
 
@@ -229,7 +229,7 @@ The package offers the following modules:
 |Set NUMA balancing
 
 |`preps::memory::set_stat_interval`
-|`<INTERVAL>`
+|`INTERVAL`
 |Set Virtual Memory statistics interval (in seconds)
 |===
 
@@ -270,7 +270,7 @@ The package offers the following modules:
 |Set persistence mode
 
 |`preps::nvidia::set_power_limit`
-|`<POWER_LIMIT>`
+|`POWER_LIMIT`
 |Set power limit
 
 |`preps::nvidia::set_vboost_slider`
@@ -388,12 +388,12 @@ git clone https://github.com/AG-BDS-HPC-DELIVERY/PrEpS/preps.git
 * Grant proper access rights to the PrEpS directory tree:
 +
 ----
-chmod --recursive g=u,g-w,o=g <PREFIX>/preps
+chmod --recursive g=u,g-w,o=g PREFIX/preps
 ----
 * Grant executive access rights to the PrEpS binary:
 +
 ----
-chmod a+x <PREFIX>/preps/bin/preps*
+chmod a+x PREFIX/preps/bin/preps*
 ----
 
 === Configuration
@@ -404,8 +404,8 @@ chmod a+x <PREFIX>/preps/bin/preps*
 ################################################
 #               EPILOG & PROLOG                #
 ################################################
-Epilog=<PREFIX>/preps/bin/preps
-Prolog=<PREFIX>/preps/bin/preps
+Epilog=PREFIX/preps/bin/preps
+Prolog=PREFIX/preps/bin/preps
 ----
 +
 [NOTE]
@@ -429,8 +429,6 @@ Example: `preps.prolog_slurmd` Script for Slurm Prolog:
 ----
 #!/usr/bin/env bash
 
-preps::fs::check_mountpoints "/home"
-preps::nvidia::check_residual_user_processes
 preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680}"
 preps::nvidia::set_vboost_slider "${NVIDIA_VBOOST_SLIDER:-0}"
 preps::thp::set_thp "${THP:-always}"
@@ -529,7 +527,7 @@ Therefore, in order to pass environment variables to the Prolog/Epilog, it is re
 * As a direct argument to the `sbatch` command itself:
 +
 ----
-sbatch --comment "NVIDIA_POWER_LIMIT=680,680" <...>
+sbatch --comment "NVIDIA_POWER_LIMIT=680,680" ...
 ----
 * As an explicit directive inside the job submission file:
 +
@@ -556,40 +554,44 @@ Example:
 |Category|Environment Variable Name|Purpose
 
 |PrEpS
-|`PREPS_LOG_LEVEL`
-|Job-specific log level: {TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}
+|`PREPS_LOG_LEVEL={TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}`
+|Job-specific log level
 
 |
-|`PREPS_SKIP_PROLOG_SLURMD`
-|Skip execution of Slurmd Prolog: {no \| yes}
+|`PREPS_SKIP_PROLOG_SLURMD={no \| yes}`
+|Skip execution of Slurmd Prolog
 
-|CPU Frequency
-|`CPUFREQ_FREQUENCY_MAX=<FREQUENCY>`
-|CPU frequency max. in KHz (default) or MHz/GHz
-
-|
-|`CPUFREQ_FREQUENCY_MIN=<FREQUENCY>`
-|CPU frequency min. in KHz (default) or MHz/GHz
+|CPU
+|`CPU_FREQUENCY_MAX=FREQUENCY`
+|CPU frequency max. (Unit: KHz)
 
 |
-|`CPUFREQ_GOVERNOR=<GOVERNOR>`
+|`CPU_FREQUENCY_MIN=FREQUENCY`
+|CPU frequency min. (Unit: KHz)
+
+|
+|`CPU_GOVERNOR=GOVERNOR`
 |CPU governor
+
+|
+|`CPU_POWER_CAP=CAP`
+|CPU power cap (Unit: μW)
 
 |Kernel
 |`KERNEL_PARAMETERS=KEY=VALUE[,KEY=VALUE]`
 |Extra kernel parameters
 
 |NVIDIA
-|`NVIDIA_APPLICATIONS_CLOCKS=<MEMORY>,<GRAPHICS>`
-|Applications clocks in MHz
+|`NVIDIA_APPLICATIONS_CLOCKS=MEMORY,GRAPHICS`
+|Applications clocks (Unit: MHz)
 
 |
-|`NVIDIA_POWER_LIMIT=<GPU>,<MODULE>`
-|Power limit of the CG GPU/Module devices in Watts
+|`NVIDIA_POWER_LIMIT=GPU,MODULE`
+|Power limit of the CG GPU/Module devices (Unit: W)
 
 |
-|`NVIDIA_VBOOST_SLIDER`
-|Video Boost Slider: {0 \| 1 \| 2 \| 3 \| 4}
+|`NVIDIA_VBOOST_SLIDER={0 \| 1 \| 2 \| 3 \| 4}`
+|Video Boost Slider
 
 |THP
 |`THP={always \| madvise \| never}`
