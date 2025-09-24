@@ -19,10 +19,10 @@ preps::cpu::set_power_capping() {
   (( power_cap > 0 )) ||
     { main::log_event -level "FATAL" -message "Invalid Power Cap Value: [${power_cap}]"; return ${rc}; }
   for devicedir in /sys/class/hwmon/hwmon*/device; do
-    grep 'CPU Power Socket' "${devicedir}/power1_oem_info" &> /dev/null || continue
+    grep 'Grace Power Socket' "${devicedir}/power1_oem_info" &> /dev/null || continue
     [[ -f "${devicedir}/power1_cap" ]] ||
       { main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Missing Power Capping File: [${devicedir}/power1_cap]"; rc=1; continue; }
-    if echo ${power_cap} > "${devicedir}/power1_cap" 2> /dev/null; then
+    if echo "${power_cap}" > "${devicedir}/power1_cap" 2> /dev/null; then
       main::log_event -level "INFO" -message "Set CPU Power Capping: [${power_cap}] (μW)"
     else
       main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Return Code: [$?]"
