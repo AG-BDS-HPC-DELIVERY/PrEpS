@@ -26,7 +26,7 @@ preps::cpu::set_power_capping() {
     if (( power_cap == $(cat "${devicedir}/power1_cap") )); then
       main::log_event -level "INFO" -message "Set CPU Power Capping: [${power_cap}] (μW)"
     else
-      main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Return Code: [$?]"
+      main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Requested Value: [${power_cap}] vs Actual Value: [$(cat "${devicedir}/power1_cap")]"
       rc=1
     fi
   done
