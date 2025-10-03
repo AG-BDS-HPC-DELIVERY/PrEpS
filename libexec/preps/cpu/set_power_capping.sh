@@ -22,7 +22,8 @@ preps::cpu::set_power_capping() {
     grep 'Grace Power Socket' "${devicedir}/power1_oem_info" &> /dev/null || continue
     [[ -f "${devicedir}/power1_cap" ]] ||
       { main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Missing Power Capping File: [${devicedir}/power1_cap]"; rc=1; continue; }
-    if echo "${power_cap}" > "${devicedir}/power1_cap" 2> /dev/null; then
+    echo "${power_cap}" | tee "${devicedir}/power1_cap" &> /dev/null
+    if (( power_cap == $(cat "${devicedir}/power1_cap") )); then
       main::log_event -level "INFO" -message "Set CPU Power Capping: [${power_cap}] (μW)"
     else
       main::log_event -level "ERROR" -message "Failed to Set CPU Power Capping - Return Code: [$?]"
