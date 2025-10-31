@@ -12,8 +12,6 @@
 preps::nvidia::stop_mps() {
   main::log_event -level "TRACE" -message "Entering Module: [${FUNCNAME[0]}]"
   local -i rc=0
-  export CUDA_MPS_LOG_DIRECTORY="/tmp/nvidia-log_${CUDA_VISIBLE_DEVICES//,/}"
-  export CUDA_MPS_PIPE_DIRECTORY="/tmp/nvidia-mps_${CUDA_VISIBLE_DEVICES//,/}"
   if pgrep --full "nvidia-cuda-mps" --uid "${SLURM_JOB_USER}" &> /dev/null; then
     echo quit | nvidia-cuda-mps-control
   fi
