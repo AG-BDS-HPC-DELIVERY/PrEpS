@@ -15,7 +15,6 @@ preps::cpu::set_power_capping "${CPU_POWER_CAP:-100000000}"
 preps::nvidia::set_applications_clocks "${NVIDIA_APPLICATIONS_CLOCKS:-2619,1980}"
 preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680,680}"
 preps::nvidia::set_vboost_slider "${NVIDIA_VBOOST_SLIDER:-0}"
-preps::nvidia::set_nvlink_bandwidth_mode "${NVIDIA_NVLINK_BANDWIDTH_MODE:-FULL}"
 
 # THP
 preps::thp::set_thp "${THP:-madvise}"
