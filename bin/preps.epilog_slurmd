@@ -28,6 +28,9 @@ preps::fs::cleanup_tmpdirs "/dev/shm,/tmp"
 [[ -z "${MEMORY_VM_STAT_INTERVAL}" ]] || preps::memory::set_stat_interval "120"
 preps::memory::cleanup_memory_caches "2"
 
+# Network
+preps::network::disable_internet_access "${INTERNET_ACCESS:-0}"
+
 # Slurm
 preps::slurm::run_nhc
 

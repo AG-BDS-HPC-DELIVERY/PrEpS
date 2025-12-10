@@ -28,4 +28,7 @@ preps::memory::set_stat_interval "${MEMORY_VM_STAT_INTERVAL:-120}"
 preps::memory::cleanup_memory_caches "2"
 preps::memory::compact_memory
 
+# Network
+preps::network::enable_internet_access "${INTERNET_ACCESS:-0}"
+
 exit ${rc}
