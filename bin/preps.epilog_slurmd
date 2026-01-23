@@ -13,6 +13,7 @@ preps::cpu::reload_cpufreq_driver_module "cppc_cpufreq" "cpupower.service" "8640
 [[ -z "${NVIDIA_APPLICATIONS_CLOCKS}" ]] || preps::nvidia::set_applications_clocks "2619,1980"
 [[ -z "${NVIDIA_POWER_LIMIT}" ]] || preps::nvidia::set_power_limit "680,680"
 [[ -z "${NVIDIA_VBOOST_SLIDER}" ]] || preps::nvidia::set_vboost_slider "0"
+[[ -z "${CUDA_MPS}" ]] || preps::nvidia::cleanup_mps_processes
 
 # THP
 [[ -z "${THP}" ]] || preps::thp::set_thp "madvise"
