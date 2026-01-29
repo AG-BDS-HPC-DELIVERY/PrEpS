@@ -3,6 +3,9 @@
 rc=0
 trap '(( rc += $? ))' ERR
 
+# Try to ensure cleanup
+preps::os::cleanup_residual_user_processes
+
 # CPU
 [[ -z "${CPU_GOVERNOR}" ]] || preps::cpu::set_governor "performance"
 [[ -z "${CPU_FREQUENCY_MIN}" ]] || preps::cpu::set_frequency_min_max "81000:3456000"
