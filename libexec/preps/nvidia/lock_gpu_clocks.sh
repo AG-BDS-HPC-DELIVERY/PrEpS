@@ -21,9 +21,9 @@ preps::nvidia::lock_gpu_clocks() {
   (( mode == 0 || mode == 1 )) ||
     { main::log_event -level "ERROR" -message "Invalid Locking Mode: [${mode}]"; return 1; }
   if apis::nvsmi::lock_gpu_clocks -clocks "${clocks}" -mode "${mode}"; then
-    main::log_event -level "INFO" -message "Set Clocks: [$(apis::nvsmi::get_gpu_clocks)]"
+    main::log_event -level "INFO" -message "Set Clocks to ${clocks}:  [Current clock: $(apis::nvsmi::get_gpu_clocks)]"
   else
-    main::log_event -level "ERROR" -message "Failed to Set Clocks: [$(apis::nvsmi::get_gpu_clocks)] - Return Code: [$?]"
+    main::log_event -level "ERROR" -message "Failed to Set Clocks: [Current clock: $(apis::nvsmi::get_gpu_clocks)] - Return Code: [$?]"
     rc=1
   fi
   main::log_event -level "TRACE" -message "Exiting Module: [${FUNCNAME[0]}]" -rc "${?}"
