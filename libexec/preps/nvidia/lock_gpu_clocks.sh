@@ -16,6 +16,9 @@ preps::nvidia::lock_gpu_clocks() {
   local -i rc=0
   local clocks="${1}"
   local -i mode=${2:-0}
+  if ! echo $clocks | grep -E '^[0-9]+(,[0-9]+)?$' > /dev/null; then
+    { main::log_event -level "ERROR" -message "Argument \"${clocks}\" is not a number or 2 comma-separated numbers"; return 1; }
+  fi
   [[ -n "${clocks}" ]] ||
     { main::log_event -level "ERROR" -message "Missing Argument: [Clocks]"; return 1; }
   (( mode == 0 || mode == 1 )) ||
