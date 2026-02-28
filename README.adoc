@@ -150,7 +150,7 @@ The package offers the following modules:
 |Function Name|Arguments|Purpose
 
 |`preps::cpu::set_boost`
-|`{0 \| 1}`
+|`{0\|1}`
 |Set CPU boost (Intel Turbo Boost / AMD Core Performance Boost)
 
 |`preps::cpu::set_frequency_min_max`
@@ -213,7 +213,7 @@ The package offers the following modules:
 |Cleanup existing Inter-Process Communications (IPC)
 
 |`preps::memory::cleanup_memory_caches`
-|`{1: pagecache \| 2: dentries + inodes \| 3: pagecache + dentries + inodes}`
+|`{1:pagecache\|2:dentries+inodes\|3:pagecache+dentries+inodes}`
 |Cleanup memory caches
 
 |`preps::memory::cleanup_shared_memory_segments`
@@ -225,7 +225,7 @@ The package offers the following modules:
 |Compact memory
 
 |`preps::memory::set_numa_balancing`
-|`{0 \| 1}`
+|`{0\|1}`
 |Set NUMA balancing
 
 |`preps::memory::set_stat_interval`
@@ -258,7 +258,7 @@ The package offers the following modules:
 |Reset applications clocks
 
 |`preps::nvidia::run_dcgm_diag`
-|`{1 \| 2 \| 3}`
+|`{1\|2\|3}`
 |Run DCGM diagnostic with specified level
 
 |`preps::nvidia::set_applications_clocks`
@@ -266,7 +266,7 @@ The package offers the following modules:
 |Set applications clocks
 
 |`preps::nvidia::set_persistence_mode`
-|`{0 \| 1}`
+|`{0\|1}`
 |Set persistence mode
 
 |`preps::nvidia::set_power_limit`
@@ -274,7 +274,7 @@ The package offers the following modules:
 |Set power limit
 
 |`preps::nvidia::set_vboost_slider`
-|`{0 \| 1 \| 2 \| 3 \| 4}`
+|`{0\|1\|2\|3\|4}`
 |Set vboost Slider
 |===
 
@@ -351,11 +351,11 @@ The package offers the following modules:
 |Function Name|Arguments|Purpose
 
 |`preps::thp::set_thp`
-|`{always \| madvise \| never}`
+|`{always\|madvise\|never}`
 |Set Transparent Huge Pages (THP) mode
 
 |`preps::thp::set_thp_shmem`
-|`{always \| deny \| force \| madvise \| never}`
+|`{always\|deny\|force\|madvise\|never}`
 |Set Transparent Huge Pages for SHMEM (THP SHMEM) mode
 |===
 
@@ -493,23 +493,23 @@ Log file records are made of the following fields:
 Log File Example::
 
 ----
-2025-06-27 16:01:19 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set CPU Governor: [performance]
-2025-06-27 16:01:19 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set CPU Frequency Limits: [81000]-[3321000] ( Hardware Limits: [81000]-[3321000] )
-2025-06-27 16:01:19 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | No Residual User Process Found
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Applications Clocks: [2619,1980|2619,1980|2619,1980|2619,1980]
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Video Boost Slider: [0|0|0|0]
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Kernel Parameter: [kernel.kptr_restrict] to Value: [0]
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Kernel Parameter: [kernel.perf_event_paranoid] to Value: [-1]
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Set Statistics Interval: [120]
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Dropped Memory Caches
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | Compacted Memory
-2025-06-27 16:01:20 +02:00 |    61452 | tallet1         | jpbo-123-01     | prolog_slurmd        | INFO  | PrEpS Execution Time (ms): [1630]
-2025-06-27 16:01:32 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Executed NHC Successfully
-2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Set Kernel Parameter: [kernel.kptr_restrict] to Value: [1]
-2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Set Kernel Parameter: [kernel.perf_event_paranoid] to Value: [2]
-2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | Dropped Memory Caches
-2025-06-27 16:01:33 +02:00 |    61452 | tallet1         | jpbo-123-01     | epilog_slurmd        | INFO  | PrEpS Execution Time (ms): [1994]
+2025-06-27 16:01:19 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set CPU Governor: [performance]
+2025-06-27 16:01:19 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set CPU Frequency Limits: [81000]-[3321000] ( Hardware Limits: [81000]-[3321000] )
+2025-06-27 16:01:19 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | No Residual User Process Found
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set Applications Clocks: [2619,1980|2619,1980|2619,1980|2619,1980]
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set Video Boost Slider: [0|0|0|0]
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set Transparent Huge Pages (THP): [[always] madvise never]
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set Kernel Parameter: [kernel.kptr_restrict] to Value: [0]
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set Kernel Parameter: [kernel.perf_event_paranoid] to Value: [-1]
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Set Statistics Interval: [120]
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Dropped Memory Caches
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | Compacted Memory
+2025-06-27 16:01:20 +02:00 |    61452 | user1         | node01     | prolog_slurmd        | INFO  | PrEpS Execution Time (ms): [1630]
+2025-06-27 16:01:32 +02:00 |    61452 | user1         | node01     | epilog_slurmd        | INFO  | Executed NHC Successfully
+2025-06-27 16:01:33 +02:00 |    61452 | user1         | node01     | epilog_slurmd        | INFO  | Set Kernel Parameter: [kernel.kptr_restrict] to Value: [1]
+2025-06-27 16:01:33 +02:00 |    61452 | user1         | node01     | epilog_slurmd        | INFO  | Set Kernel Parameter: [kernel.perf_event_paranoid] to Value: [2]
+2025-06-27 16:01:33 +02:00 |    61452 | user1         | node01     | epilog_slurmd        | INFO  | Dropped Memory Caches
+2025-06-27 16:01:33 +02:00 |    61452 | user1         | node01     | epilog_slurmd        | INFO  | PrEpS Execution Time (ms): [1994]
 ----
 
 === Overrides
@@ -554,11 +554,11 @@ Example:
 |Category|Environment Variable Name|Purpose
 
 |PrEpS
-|`PREPS_LOG_LEVEL={TRACE \| DEBUG \| INFO \| WARN \| ERROR \| FATAL}`
+|`PREPS_LOG_LEVEL={TRACE\|DEBUG\|INFO\|WARN\|ERROR\|FATAL}`
 |Job-specific log level
 
 |
-|`PREPS_SKIP_PROLOG_SLURMD={no \| yes}`
+|`PREPS_SKIP_PROLOG_SLURMD={no\|yes}`
 |Skip execution of Slurmd Prolog
 
 |CPU
@@ -590,15 +590,15 @@ Example:
 |Power limit of the CG GPU/Module devices (Unit: W)
 
 |
-|`NVIDIA_VBOOST_SLIDER={0 \| 1 \| 2 \| 3 \| 4}`
+|`NVIDIA_VBOOST_SLIDER={0\|1\|2\|3\|4}`
 |Video Boost Slider
 
 |THP
-|`THP={always \| madvise \| never}`
+|`THP={always\|madvise\|never}`
 |Configuration of Transparent Huge Pages (THP)
 
 |
-|`THP_SHMEM={advise \| always \| deny \| force \| never}`
+|`THP_SHMEM={advise\|always\|deny\|force\|never}`
 |Configuration of Transparent Huge Pages (THP) for SHMEM
 |===
 
