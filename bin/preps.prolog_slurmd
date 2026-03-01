@@ -12,7 +12,7 @@ preps::cpu::set_frequency_min_max "${CPU_FREQUENCY_MIN:-81000}:${CPU_FREQUENCY_M
 preps::cpu::set_power_capping "${CPU_POWER_CAP:-100000000}"
 
 # NVIDIA
-preps::nvidia::set_applications_clocks "${NVIDIA_APPLICATIONS_CLOCKS:-2619,1980}"
+[[ -z "${NVIDIA_GPU_CLOCKS}" ]] || preps::nvidia::lock_gpu_clocks "${NVIDIA_GPU_CLOCKS}"
 preps::nvidia::set_power_limit "${NVIDIA_POWER_LIMIT:-680,680}"
 preps::nvidia::set_vboost_slider "${NVIDIA_VBOOST_SLIDER:-0}"
 preps::nvidia::start_mps "${CUDA_MPS:-0}"
